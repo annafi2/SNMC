@@ -2,8 +2,8 @@
   "name": "web-seleksi-prisma",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node api/index.js",
+    "dev": "node api/index.js",
     "build": "prisma generate"
   },
   "dependencies": {

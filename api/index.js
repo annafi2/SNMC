@@ -242,20 +242,20 @@ app.post('/api/settings/:key', async (req, res) => {
   }
 });
 
-// Serve static frontend files first
-app.use(express.static(__dirname));
+// Serve static frontend files first (looking one directory level up)
+app.use(express.static(path.join(__dirname, '..')));
 
 app.get('/admin.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
+  res.sendFile(path.join(__dirname, '../admin.html'));
 });
 
 app.get('/ujian.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'ujian.html'));
+  res.sendFile(path.join(__dirname, '../ujian.html'));
 });
 
 // SPA routing fallback (Redirect non-API routes to index.html)
 app.get(/^(?!\/api).*$/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Start Server
