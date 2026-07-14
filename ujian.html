@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Ujian CBT Sertifikasi â€“ SNM 2026 Seleksi Nasional Minecrafter</title>
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Styling System matching parent grayscale theme */
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #121212;
+      --bg-tertiary: #1a1a1a;
+      --border-color: #262626;
+      --border-focus: #404040;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a3a3a3;
+      --text-muted: #737373;
+      --accent-red: #ef4444;
+      --accent-blue: #3b82f6;
+      --accent-yellow: #f59e0b;
+      --accent-green: #10b981;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --font-primary: 'Inter', sans-serif;
+      --font-display: 'Outfit', sans-serif;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Portal Layout */
+    .cbt-header {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .cbt-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+    }
+    .cbt-logo span { color: var(--text-muted); }
+
+    .cbt-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-tertiary);
+      padding: 6px 14px;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+      font-size: 13px;
+    }
+
+    .cbt-timer {
+      font-size: 18px;
+      font-weight: 700;
+      font-family: monospace;
+      color: var(--accent-red);
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 6px 15px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .main-container {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Screen States */
+    .screen {
+      display: none;
+      animation: fadeIn 0.4s ease-out;
+    }
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Auth Screen styling */
+    .auth-card {
+      max-width: 450px;
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--card-shadow);
+      padding: 40px 30px;
+      margin: 50px auto;
+      text-align: center;
+    }
+    .auth-card h2 {
+      font-family: var(--font-display);
+      margin-bottom: 8px;
+      font-size: 24px;
+    }
+    .auth-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    
+    .form-group {
+      text-align: left;
+      margin-bottom: 18px;
+    }
+    .form-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .form-control {
+      width: 100%;
+      height: 44px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 0 14px;
+      font-family: var(--font-primary);
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--border-focus);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 24px;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-gradient {
+      background: linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%);
+      color: #000;
+    }
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+    }
+    .btn-block {
+      width: 100%;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+    .btn-outline:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--border-focus);
+    }
+
+    /* Instructions Screen */
+    .instruct-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 40px;
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .instruct-card h2 {
+      font-family: var(--font-display);
+      margin-bottom: 12px;
+      font-size: 26px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+    .instruct-card ul {
+      margin: 20px 0 30px;
+      padding-left: 20px;
+    }
+    .instruct-card li {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* CBT Interface Panel */
+    .cbt-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+      width: 100%;
+    }
+
+    /* Question Grid Navigation */
+    .cbt-sidebar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      height: fit-content;
+    }
+    .cbt-sidebar h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .nav-grid-item {
+      height: 40px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-grid-item:hover {
+      border-color: var(--border-focus);
+    }
+    .nav-grid-item.active {
+      border-color: var(--text-primary);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+    }
+    .nav-grid-item.answered {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+    }
+    .nav-grid-item.doubtful {
+      background: var(--accent-yellow);
+      border-color: var(--accent-yellow);
+      color: #000;
+    }
+
+    /* Question Workspace */
+    .cbt-workspace {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 35px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+    .q-number {
+      font-size: 18px;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+    .q-weight {
+      font-size: 11px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 30px;
+      color: var(--text-secondary);
+    }
+
+    .q-body {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .option-card {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .option-card:hover {
+      border-color: var(--border-focus);
+      background: var(--bg-tertiary);
+    }
+    .option-card.selected {
+      border-color: var(--text-primary);
+      background: var(--bg-tertiary);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+    .option-label {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      margin-right: 15px;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .option-card.selected .option-label {
+      background: var(--text-primary);
+      color: #000;
+      border-color: var(--text-primary);
+    }
+    .option-text {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .cbt-footer {
+      border-top: 1px solid var(--border-color);
+      padding-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Custom doubtful check button */
+    .doubt-checkbox-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--accent-yellow);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      user-select: none;
+    }
+    .doubt-checkbox-btn input {
+      display: none;
+    }
+    .doubt-checkbox-btn.checked {
+      background: var(--accent-yellow);
+      color: #000;
+      border-color: var(--accent-yellow);
+    }
+
+    /* Finished Card */
+    .finished-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      max-width: 500px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 45px 35px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .success-badge-icon {
+      font-size: 64px;
+      color: var(--accent-green);
+      margin-bottom: 20px;
+      animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .score-banner {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 20px 0 30px;
+    }
+    .score-val {
+      font-size: 32px;
+      font-weight: 800;
+      font-family: var(--font-display);
+      color: var(--text-primary);
+    }
+
+    /* ===== SAFE EXAM & SUBTEST ADDITIONS ===== */
+
+    /* Disable text selection globally during exam */
+    body.exam-active {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Violation Warning Overlay */
+    .violation-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(239, 68, 68, 0.96);
+      z-index: 99999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+      animation: violationPulse 0.3s ease-out;
+    }
+    .violation-overlay.show { display: flex; }
+    @keyframes violationPulse {
+      0%   { transform: scale(1.04); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .violation-overlay h2 {
+      font-size: 36px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 12px;
+      font-family: var(--font-display);
+    }
+    .violation-overlay p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.88);
+      max-width: 500px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .violation-counter-badge {
+      font-size: 13px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 30px;
+      padding: 6px 18px;
+      color: #fff;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    .btn-resume-exam {
+      background: #ffffff;
+      color: #dc2626;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px 36px;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn-resume-exam:hover { transform: translateY(-2px); }
+
+    /* Custom Popup Modal Styles */
+    .custom-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .custom-popup-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .custom-popup-box {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 10px 10px -5px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 420px;
+      padding: 24px;
+      transform: scale(0.9);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+    }
+    .custom-popup-overlay.active .custom-popup-box {
+      transform: scale(1);
+    }
+    .custom-popup-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .custom-popup-icon {
+      font-size: 36px;
+    }
+    .custom-popup-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      font-family: var(--font-display);
+    }
+    .custom-popup-message {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 24px;
+      white-space: pre-line;
+    }
+    .custom-popup-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    .custom-popup-actions button {
+      min-width: 100px;
+      height: 38px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+
+    /* Subtest Tabs in Sidebar */
+    .subtest-tab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .subtest-tab {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .subtest-tab:hover { border-color: var(--border-focus); }
+    .subtest-tab.active {
+      border-color: #4285F4;
+      background: rgba(66, 133, 244, 0.08);
+      color: #4285F4;
+    }
+    .subtest-tab.completed {
+      border-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.06);
+    }
+    .subtest-tab .st-progress {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .subtest-tab.active .st-progress { color: #4285F4; }
+    .subtest-tab.completed .st-progress { color: var(--accent-green); }
+
+    /* Blocked Screen Card */
+    .blocked-card {
+      background: var(--bg-secondary);
+      border: 2px solid var(--accent-red);
+      border-radius: var(--radius-md);
+      max-width: 520px;
+      width: 100%;
+      margin: 60px auto;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(239,68,68,0.2);
+    }
+    .blocked-icon {
+      font-size: 72px;
+      color: var(--accent-red);
+      margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cbt-layout {
+        grid-template-columns: 1fr;
+      }
+      .cbt-sidebar {
+        order: 2;
+      }
+      .cbt-workspace {
+        order: 1;
+      }
+    }
+
+    /* Print media rules for Certificate */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #cert-print-area, #cert-print-area * {
+        visibility: visible;
+      }
+      #cert-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      #cert-print-modal {
+        position: absolute;
+        background: none !important;
+        padding: 0;
+        display: block !important;
+      }
+      #cert-print-modal > div {
+        box-shadow: none !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        display: block !important;
+      }
+      #cert-print-modal > div > div:first-child,
+      #cert-print-modal > div > div:last-child {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="cbt-header">
+    <a href="#" class="cbt-logo">
+      <i class="fa-solid fa-cube"></i> SNM<span>2026</span>
+    </a>
+    
+    <div id="cbt-timer-container" class="cbt-timer" style="display: none;">
+      <i class="fa-regular fa-clock"></i> <span id="timer-label">10:00</span>
+    </div>
+
+    <div class="cbt-user-badge" id="cbt-user-badge" style="display: none;">
+      <i class="fa-solid fa-cube"></i> <span id="cbt-username">Peserta</span>
+    </div>
+  </header>
+
+  <!-- BODY CONTENT -->
+  <main class="main-container">
+
+    <!-- Backend Connection Warning Banner -->
+    <div id="db-connection-warning"
+      style="background: #ef4444; color: #fff; padding: 12px 24px; text-align: center; font-size: 13px; font-weight: 600; display: none; align-items: center; justify-content: center; gap: 8px; z-index: 9999; width: 100%; box-sizing: border-box; border-radius: var(--radius-sm); margin-bottom: 20px;">
+      <i class="fa-solid fa-triangle-exclamation" style="font-size: 16px;"></i>
+      <span>Gagal terhubung ke database. Harap jalankan server backend dengan mengetikkan <code>npm run dev</code> di terminal Anda, lalu buka <a href="http://localhost:3000" style="color: #fff; text-decoration: underline; font-weight: 700;">http://localhost:3000</a>.</span>
+    </div>
+
+    <!-- SCREEN 1: LOGIN PORTAL -->
+    <div id="screen-login" class="screen active">
+      <div class="auth-card">
+        <div style="font-size: 40px; margin-bottom: 15px; color: var(--text-secondary);"><i class="fa-solid fa-lock"></i></div>
+        <h2>Masuk Sistem Ujian</h2>
+        <p>Silakan masukkan ID Pendaftaran dan Kode Ujian yang Anda miliki dari kartu pendaftaran.</p>
+        
+        <form id="cbt-login-form">
+          <div class="form-group">
+            <label for="login-id" class="form-label">Nomor ID Pendaftaran</label>
+            <input type="text" id="login-id" class="form-control" placeholder="Contoh: 001-2026-X8BF" required>
+          </div>
+          <div class="form-group">
+            <label for="login-code" class="form-label">Kode Peserta Ujian</label>
+            <input type="text" id="login-code" class="form-control" placeholder="Contoh: EXAM-2026-3NWX" required>
+          </div>
+          <button type="submit" class="btn btn-gradient btn-block" style="margin-top: 10px;"><i class="fa-solid fa-right-to-bracket"></i> Verifikasi & Lanjutkan</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: INSTRUCTIONS -->
+    <div id="screen-instruct" class="screen">
+      <div class="instruct-card">
+        <h2>Instruksi Pengerjaan Ujian</h2>
+        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">Anda akan mengikuti ujian berbasis computer (CBT) seleksi masuk sekolah dengan ketentuan sebagai berikut:</p>
+        
+        <ul>
+          <li>Ujian terdiri dari seluruh soal aktif yang disediakan oleh bank soal panitia.</li>
+          <li>Setiap soal dinilai secara terpisah berdasarkan bobot kesulitan parameter **IRT (Item Response Theory)**. Soal sulit bernilai lebih tinggi daripada soal mudah.</li>
+          <li id="cbt-instruction-time-desc">Durasi pengerjaan ujian dibatasi selama <strong>10 menit</strong>.</li>
+          <li>Apabila durasi berakhir, sistem akan melakukan **penyimpanan otomatis** dan merekam seluruh jawaban Anda yang tersimpan saat itu.</li>
+          <li>Anda diperkenankan menggunakan tombol "Ragu-ragu" untuk menandai soal.</li>
+        </ul>
+
+        <div style="display: flex; gap: 15px;">
+          <button id="btn-cancel-exam" class="btn btn-outline" style="flex: 1;">Batal</button>
+          <button id="btn-start-exam" class="btn btn-gradient" style="flex: 1;"><i class="fa-solid fa-play"></i> Mulai Ujian Sekarang</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: EXAM INTERFACE -->
+    <div id="screen-exam" class="screen">
+      <div class="cbt-layout">
+        <!-- Sidebar Navigation Grid with Subtest Tabs -->
+        <aside class="cbt-sidebar">
+          <h3>
+            <span>Subtesmu</span>
+            <span id="progress-text" style="color: var(--text-muted); font-size: 11px;">0/0</span>
+          </h3>
+          <!-- Subtest Tab List (JS renders) -->
+          <div class="subtest-tab-list" id="subtest-tab-list"></div>
+          <!-- Soal Nav Grid per Subtest (JS renders) -->
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; margin-top: 4px;" id="nav-grid-label">Soal dalam Subtes</div>
+          <div class="nav-grid" id="nav-grid">
+            <!-- JS renders items here -->
+          </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <div class="cbt-workspace">
+          <div class="q-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="q-number" id="q-num-label" style="margin-bottom: 0;">Soal Nomor -</span>
+              <span id="q-subtest-label" class="badge" style="background: rgba(66, 133, 244, 0.1); color: #4285F4; font-size: 11px; padding: 4px 8px; border-radius: 12px; font-weight: 700;">Subtes: -</span>
+            </div>
+            <span class="q-weight" id="q-weight-label">Bobot IRT: -</span>
+          </div>
+
+          <div class="q-body" id="q-text-label">
+            Loading question...
+          </div>
+
+          <!-- Options -->
+          <div class="options-list">
+            <div class="option-card" data-index="0" id="opt-card-0">
+              <span class="option-label">A</span>
+              <span class="option-text" id="opt-text-0">Pilihan A</span>
+            </div>
+            <div class="option-card" data-index="1" id="opt-card-1">
+              <span class="option-label">B</span>
+              <span class="option-text" id="opt-text-1">Pilihan B</span>
+            </div>
+            <div class="option-card" data-index="2" id="opt-card-2">
+              <span class="option-label">C</span>
+              <span class="option-text" id="opt-text-2">Pilihan C</span>
+            </div>
+            <div class="option-card" data-index="3" id="opt-card-3">
+              <span class="option-label">D</span>
+              <span class="option-text" id="opt-text-3">Pilihan D</span>
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <footer class="cbt-footer">
+            <button id="btn-prev-question" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Sebelumnya</button>
+            
+            <label class="doubt-checkbox-btn" id="doubt-btn">
+              <input type="checkbox" id="doubt-checkbox">
+              <i class="fa-solid fa-triangle-exclamation"></i> Ragu-Ragu
+            </label>
+
+            <button id="btn-next-question" class="btn btn-gradient">Berikutnya <i class="fa-solid fa-arrow-right"></i></button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: FINISHED -->
+    <div id="screen-finished" class="screen">
+      <div class="finished-card" style="max-width: 550px;">
+        <div class="success-badge-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h2 style="font-family: var(--font-display); margin-bottom: 8px;">Ujian Selesai!</h2>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">Nilai Anda telah berhasil dihitung menggunakan sistem matematika pembobotan IRT (Item Response Theory) dan tersinkronisasi ke profil pendaftaran sekolah Anda. Silakan unduh sertifikat resmi untuk melihat hasil rincian nilai ujian Anda.</p>
+        
+        <div class="score-banner" style="display: none !important; grid-template-columns: 1fr 1fr; gap: 15px; background: var(--bg-tertiary); padding: 15px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="border-right: 1px dashed var(--border-color); padding-right: 10px;">
+            <p style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Skor Ujian Utama</p>
+            <div class="score-val" id="final-score-val" style="color: #EA4335;">0</div>
+          </div>
+          <div>
+            <p style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Pendukung Essay (IRT)</p>
+            <div class="score-val" id="essay-bonus-val" style="color: #4285F4;">0</div>
+          </div>
+        </div>
+
+        <!-- Countdown download widget -->
+        <div id="cert-countdown-wrapper" style="margin: 20px 0; padding: 12px; background: rgba(66, 133, 244, 0.06); border: 1px solid rgba(66, 133, 244, 0.2); border-radius: var(--radius-sm); font-size: 13px;">
+          <i class="fa-solid fa-hourglass-half fa-spin" style="color: #4285F4; margin-right: 6px;"></i>
+          <span>Menyiapkan sertifikat skor ujian resmi... <strong id="cert-countdown-timer">5</strong> detik</span>
+        </div>
+
+        <button id="btn-download-cert" class="btn btn-gradient btn-block" disabled style="margin-bottom: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; display: none; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fa-solid fa-file-pdf"></i> Unduh & Cetak Sertifikat Skor
+        </button>
+
+        <button id="btn-finish-redirect" class="btn btn-outline btn-block"><i class="fa-solid fa-home"></i> Kembali ke Portal SNM</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: BLOCKED -->
+    <div id="screen-blocked" class="screen">
+      <div class="blocked-card">
+        <div class="blocked-icon"><i class="fa-solid fa-ban"></i></div>
+        <h2 style="font-family: var(--font-display); font-size: 26px; margin-bottom: 10px; color: var(--accent-red);">Akses Ujian Diblokir</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 24px;">
+          Sistem mendeteksi indikasi kecurangan berulang kali selama sesi ujian Anda berlangsung.
+          Akses ujian Anda telah <strong style="color: var(--accent-red);">diblokir secara permanen</strong> oleh sistem.
+        </p>
+        <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 24px; font-size: 13px; color: var(--text-secondary);">
+          <i class="fa-solid fa-circle-info" style="color: var(--accent-red); margin-right: 6px;"></i>
+          Hubungi panitia SNM 2026 untuk mengajukan keberatan atau klarifikasi dengan menyertakan Nomor ID Pendaftaran Anda.
+        </div>
+        <button id="btn-blocked-back" class="btn btn-outline btn-block"><i class="fa-solid fa-house"></i> Kembali ke Portal</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- VIOLATION OVERLAY (outside main, fixed) -->
+  <div class="violation-overlay" id="violation-overlay">
+    <div style="font-size: 80px; margin-bottom: 20px;">âš ï¸</div>
+    <h2>PERINGATAN KECURANGAN!</h2>
+    <p id="violation-msg">Sistem mendeteksi Anda berpindah tab atau meninggalkan halaman ujian. Tindakan ini dicatat sebagai pelanggaran.</p>
+    <div class="violation-counter-badge" id="violation-counter-badge">Pelanggaran: 1 / 3</div>
+    <button class="btn-resume-exam" id="btn-resume-exam"><i class="fa-solid fa-rotate-right"></i>  Lanjutkan Ujian</button>
+  </div>
+
+  <!-- MODAL: PRINT CERTIFICATE TEMPLATE -->
+  <div id="cert-print-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: white; color: black; border-radius: 8px; width: 100%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <div style="padding: 15px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-weight: 700; color: #1f2937;">Cetak Sertifikat Skor Resmi CBT</h3>
+        <button id="btn-close-cert-modal" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af;">&times;</button>
+      </div>
+      
+      <!-- Print Area Sheet -->
+      <div class="print-area" id="cert-print-area" style="padding: 40px; overflow-y: auto; flex-grow: 1; font-family: 'Times New Roman', Times, serif;">
+        <div style="border: 6px double #000000; padding: 30px; position: relative; background: #ffffff;">
+          <!-- Corner decorations -->
+          <div style="text-align: center; margin-bottom: 25px;">
+            <i class="fa-solid fa-cube" style="font-size: 48px; color: #000000; margin-bottom: 10px;"></i>
+            <h2 style="font-size: 14px; font-weight: 700; margin: 0; letter-spacing: 1px;">PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</h2>
+            <h1 style="font-size: 24px; font-weight: 800; margin: 4px 0; letter-spacing: 0.5px;">SNM 2026</h1>
+            <p style="font-size: 11px; margin: 0; color: #4b5563;">Komunitas Minecrafter Indonesia | snm2026@minecrafter.id</p>
+            <div style="height: 3px; background: #000000; margin-top: 15px;"></div>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h3 style="font-size: 18px; font-weight: 800; text-decoration: underline; letter-spacing: 0.5px; margin-bottom: 5px;">SERTIFIKAT KELAYAKAN PLAYER MINECRAFT NASIONAL</h3>
+            <p style="font-size: 12px; font-style: italic;">Nomor Sertifikat: CERT/SNM/${new Date().getFullYear()}/${Math.floor(1000 + Math.random() * 9000)}</p>
+          </div>
+
+          <p style="font-size: 13px; line-height: 1.6; margin-bottom: 20px; text-indent: 30px;">
+            Panitia Seleksi Nasional Minecrafter (SNM) Indonesia menerangkan bahwa data di bawah ini telah menyelesaikan Ujian CBT Online Sertifikasi dengan penilaian berbasis <strong>IRT (Item Response Theory)</strong>:
+          </p>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 13px;">
+            <tr>
+              <td style="padding: 6px; width: 30%; font-weight: bold; border: 1px solid #000000; background: #f3f4f6;">Nomor ID Pendaftaran</td>
+              <td style="padding: 6px; border: 1px solid #000000; font-family: monospace; font-size: 14px; font-weight: bold;" id="cert-p-id">001-2026-XXXX</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px; font-weight: bold; border: 1px solid #000000; background: #f3f4f6;">Nama Lengkap</td>
+              <td style="padding: 6px; border: 1px solid #000000; font-weight: bold;" id="cert-p-nama">BUDI SANTOSO</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px; font-weight: bold; border: 1px solid #000000; background: #f3f4f6;">Jalur Penerimaan</td>
+              <td style="padding: 6px; border: 1px solid #000000;" id="cert-p-jalur">Jalur Seleksi Ujian (CBT)</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px; font-weight: bold; border: 1px solid #000000; background: #f3f4f6;">Tanggal Ujian</td>
+              <td style="padding: 6px; border: 1px solid #000000;" id="cert-p-tanggal">13 Juli 2026</td>
+            </tr>
+          </table>
+
+          <div style="background: #f9fafb; border: 2px solid #000000; padding: 15px; border-radius: 4px; margin-bottom: 30px; text-align: center;">
+            <h4 style="font-size: 12px; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Rincian Perolehan Nilai IRT</h4>
+            <div style="display: flex; justify-content: space-around; align-items: center;">
+              <div>
+                <span style="font-size: 11px; display: block; color: #4b5563;">Skor Ujian Utama (CBT)</span>
+                <strong style="font-size: 22px; color: black;" id="cert-score-cbt">0.0</strong>
+              </div>
+              <div style="font-size: 20px; font-weight: bold;">+</div>
+              <div>
+                <span style="font-size: 11px; display: block; color: #4b5563;">Pendukung Essay (IRT)</span>
+                <strong style="font-size: 22px; color: black;" id="cert-score-essay">0.0</strong>
+              </div>
+              <div style="font-size: 20px; font-weight: bold;">=</div>
+              <div>
+                <span style="font-size: 11px; display: block; color: #4b5563; font-weight: bold;">Total Nilai Akhir</span>
+                <strong style="font-size: 24px; color: black;" id="cert-score-total">0.0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px;">
+            <div style="text-align: center;">
+              <!-- Verification Barcode -->
+              <div style="display: inline-block; padding: 4px; border: 1px solid #000;">
+                <svg id="cert-barcode" width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="2" width="2" height="35" fill="black"/>
+                  <rect x="10" y="2" width="4" height="35" fill="black"/>
+                  <rect x="18" y="2" width="1" height="35" fill="black"/>
+                  <rect x="22" y="2" width="3" height="35" fill="black"/>
+                  <rect x="28" y="2" width="2" height="35" fill="black"/>
+                  <rect x="34" y="2" width="5" height="35" fill="black"/>
+                  <rect x="42" y="2" width="1" height="35" fill="black"/>
+                  <rect x="46" y="2" width="2" height="35" fill="black"/>
+                  <rect x="52" y="2" width="4" height="35" fill="black"/>
+                  <rect x="60" y="2" width="2" height="35" fill="black"/>
+                  <rect x="64" y="2" width="1" height="35" fill="black"/>
+                  <rect x="68" y="2" width="5" height="35" fill="black"/>
+                  <rect x="76" y="2" width="3" height="35" fill="black"/>
+                  <rect x="84" y="2" width="1" height="35" fill="black"/>
+                  <rect x="88" y="2" width="2" height="35" fill="black"/>
+                  <rect x="94" y="2" width="4" height="35" fill="black"/>
+                  <rect x="102" y="2" width="2" height="35" fill="black"/>
+                  <rect x="106" y="2" width="1" height="35" fill="black"/>
+                  <rect x="110" y="2" width="5" height="35" fill="black"/>
+                </svg>
+              </div>
+              <p style="font-size: 8px; font-family: monospace; margin: 3px 0 0 0;" id="cert-barcode-text">0012026XXXX</p>
+            </div>
+            
+            <div style="text-align: center; font-size: 13px; position: relative;">
+              <p>Jakarta, <span id="cert-sig-date">13 Juli 2026</span></p>
+              <p style="margin-top: 5px;">Ketua Panitia SNM 2026,</p>
+              <div style="position: relative; height: 50px; margin: 5px 0;">
+                <img src="signature.png" alt="Tanda Tangan" style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
+              </div>
+              <p><strong>Admin SNM Indonesia</strong></p>
+              <span style="font-size: 10px; color: #4b5563; display: block;">ID Panitia: SNM-ADM-2026-001</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 10px;">
+        <button id="btn-cert-modal-close" class="btn btn-outline" style="height: 38px;">Batal</button>
+        <button id="btn-cert-modal-download" class="btn btn-success" style="height: 38px; background: #10b981; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-download"></i> Unduh PDF</button>
+        <button id="btn-cert-modal-print" class="btn btn-primary" style="height: 38px; background: #000; color: white;"><i class="fa-solid fa-print"></i> Jalankan Cetak</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM POPUP MODAL (ALERT/CONFIRM) -->
+  <div id="custom-popup-overlay" class="custom-popup-overlay">
+    <div class="custom-popup-box">
+      <div class="custom-popup-header">
+        <span class="custom-popup-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        <span class="custom-popup-title">PEMBERITAHUAN</span>
+      </div>
+      <div id="custom-popup-message" class="custom-popup-message">Pesan pemberitahuan.</div>
+      <div class="custom-popup-actions">
+        <button id="btn-popup-cancel" class="btn btn-outline">Batal</button>
+        <button id="btn-popup-ok" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+
+  </main>
+
+  <!-- html2pdf script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Initializer -->
+  <script src="firebase-init.js"></script>
+
+  <!-- CBT LOGIC ENGINE -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const API_BASE = (window.location.port === '3000' || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.hostname !== '')) ? '' : 'http://localhost:3000';
+
+      function customAlert(message) {
+        return new Promise((resolve) => {
+          const overlay = document.getElementById('custom-popup-overlay');
+          const msgEl = document.getElementById('custom-popup-message');
+          const cancelBtn = document.getElementById('btn-popup-cancel');
+          const okBtn = document.getElementById('btn-popup-ok');
+          const iconEl = document.querySelector('.custom-popup-icon i');
+
+          iconEl.className = 'fa-solid fa-triangle-exclamation';
+          iconEl.style.color = '#f59e0b';
+          
+          msgEl.innerText = message;
+          cancelBtn.classList.add('hidden');
+          
+          overlay.classList.add('active');
+
+          const handleOk = () => {
+            overlay.classList.remove('active');
+            okBtn.removeEventListener('click', handleOk);
+            resolve();
+          };
+          okBtn.addEventListener('click', handleOk);
+        });
+      }
+
+      function customConfirm(message) {
+        return new Promise((resolve) => {
+          const overlay = document.getElementById('custom-popup-overlay');
+          const msgEl = document.getElementById('custom-popup-message');
+          const cancelBtn = document.getElementById('btn-popup-cancel');
+          const okBtn = document.getElementById('btn-popup-ok');
+          const iconEl = document.querySelector('.custom-popup-icon i');
+
+          iconEl.className = 'fa-solid fa-circle-question';
+          iconEl.style.color = '#3b82f6';
+
+          msgEl.innerText = message;
+          cancelBtn.classList.remove('hidden');
+
+          overlay.classList.add('active');
+
+          const handleOk = () => {
+            overlay.classList.remove('active');
+            okBtn.removeEventListener('click', handleOk);
+            cancelBtn.removeEventListener('click', handleCancel);
+            resolve(true);
+          };
+
+          const handleCancel = () => {
+            overlay.classList.remove('active');
+            okBtn.removeEventListener('click', handleOk);
+            cancelBtn.removeEventListener('click', handleCancel);
+            resolve(false);
+          };
+
+          okBtn.addEventListener('click', handleOk);
+          cancelBtn.addEventListener('click', handleCancel);
+        });
+      }
+
+      // Fetch latest applicants from Prisma backend server
+      fetch(`${API_BASE}/api/applicants`)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch applicants');
+          const warningEl = document.getElementById('db-connection-warning');
+          if (warningEl) warningEl.style.display = 'none';
+          return res.json();
+        })
+        .then(data => {
+          localStorage.setItem('PPDB_APPLICANTS', JSON.stringify(data));
+        })
+        .catch(err => {
+          console.error("Gagal mengambil data pendaftar dari server Prisma: ", err);
+          const warningEl = document.getElementById('db-connection-warning');
+          if (warningEl) warningEl.style.display = 'flex';
+        });
+
+      // ==========================================
+      // STATE VARIABLES
+      // ==========================================
+      let student = null;
+      let questions = [];
+      let currentIdx = 0;       // global question index across all subtests
+      let userAnswers = {};     // { qId: optionIdx }
+      let doubtfulQuestions = {};
+      let timerVal = 600;
+      let timerInterval = null;
+
+      // Subtest state
+      let subtests = [];        // [ { name, questions: [q,...] }, ... ]
+      let currentSubtestIdx = 0;
+      let currentSubtestQIdx = 0; // index within current subtest
+
+      // Safe Exam state
+      const MAX_VIOLATIONS = 3;
+      let violationCount = 0;
+      let examLocked = false;   // true when violation overlay is showing
+      let safeExamActive = false;
+
+      // ==========================================
+      // SCREENS
+      // ==========================================
+      const screens = {
+        login:    document.getElementById('screen-login'),
+        instruct: document.getElementById('screen-instruct'),
+        exam:     document.getElementById('screen-exam'),
+        finished: document.getElementById('screen-finished'),
+        blocked:  document.getElementById('screen-blocked')
+      };
+
+      function changeScreen(screenName) {
+        Object.values(screens).forEach(s => s && s.classList.remove('active'));
+        if (screens[screenName]) screens[screenName].classList.add('active');
+
+        if (screenName === 'exam') {
+          document.getElementById('cbt-timer-container').style.display = 'flex';
+          document.getElementById('cbt-user-badge').style.display = 'flex';
+        } else if (screenName === 'instruct') {
+          document.getElementById('cbt-user-badge').style.display = 'flex';
+          document.getElementById('cbt-timer-container').style.display = 'none';
+        } else {
+          document.getElementById('cbt-timer-container').style.display = 'none';
+          document.getElementById('cbt-user-badge').style.display = 'none';
+        }
+      }
+
+      // ==========================================
+      // AUTO-LOGIN FROM URL PARAMS
+      // ==========================================
+      const urlParams = new URLSearchParams(window.location.search);
+      let autoId = urlParams.get('id');
+      let autoCode = urlParams.get('code');
+ 
+      // Fallback: check localStorage if URL parameters are missing
+      if (!autoId || autoId.trim() === '') {
+        autoId = localStorage.getItem('PPDB_RECENT_ID');
+        autoCode = localStorage.getItem('PPDB_RECENT_CODE');
+      }
+ 
+      if (autoId) {
+        document.getElementById('login-id').value = autoId.trim().toUpperCase();
+        if (autoCode && autoCode.trim() !== '') {
+          document.getElementById('login-code').value = autoCode.trim().toUpperCase();
+        } else {
+          // Dynamically fetch the correct code from the server to prevent mismatch
+          fetch(`${API_BASE}/api/applicants/${autoId.trim().toUpperCase()}`)
+            .then(res => {
+              if (res.ok) return res.json();
+              throw new Error();
+            })
+            .then(data => {
+              if (data && data.ujianCode) {
+                document.getElementById('login-code').value = data.ujianCode.trim().toUpperCase();
+              } else {
+                document.getElementById('login-code').value = `EXAM-2026-${autoId.split('-').pop().trim().toUpperCase()}`;
+              }
+            })
+            .catch(() => {
+              document.getElementById('login-code').value = `EXAM-2026-${autoId.split('-').pop().trim().toUpperCase()}`;
+            });
+        }
+      }
+
+      // ==========================================
+      // 1. CBT LOGIN
+      // ==========================================
+      document.getElementById('cbt-login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const searchId = document.getElementById('login-id').value.trim().toUpperCase();
+        const searchCode = document.getElementById('login-code').value.trim().toUpperCase();
+
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalBtnHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memverifikasi...';
+
+        try {
+          const res = await fetch(`${API_BASE}/api/applicants/${searchId}`);
+          if (res.status === 404) {
+            throw new Error('Nomor ID Pendaftaran tidak ditemukan!');
+          }
+          if (!res.ok) {
+            throw new Error('Gagal menghubungi server database!');
+          }
+          
+          const data = await res.json();
+          student = data;
+
+          if (student.jalur !== 'Jalur Seleksi Ujian (CBT)') {
+            await customAlert('ID Pendaftaran Anda terdaftar pada jalur seleksi berkas/non-CBT, tidak perlu menempuh ujian!');
+            return;
+          }
+
+          // Check if blocked by admin
+          if (student.cbtBlocked) {
+            changeScreen('blocked');
+            return;
+          }
+
+          // Restore previous progress if it exists in the database
+          if (student.stats && student.stats.answers) {
+            userAnswers = student.stats.answers;
+          } else {
+            // Try local storage fallback
+            const localAnswers = localStorage.getItem(`PPDB_CBT_ANSWERS_${student.id}`);
+            if (localAnswers) {
+              try { userAnswers = JSON.parse(localAnswers); } catch { userAnswers = {}; }
+            } else {
+              userAnswers = {};
+            }
+          }
+
+          const studentCode = student.ujianCode || `EXAM-2026-${student.id.split('-').pop()}`;
+          if (studentCode.toUpperCase() !== searchCode) {
+            await customAlert('Kode Peserta Ujian salah!');
+            return;
+          }
+          if (student.scoreIRT && student.scoreIRT > 0) {
+            await customAlert('Anda sudah menyelesaikan ujian seleksi sebelumnya! Skor Anda: ' + student.scoreIRT);
+            document.getElementById('final-score-val').innerText = student.scoreIRT;
+            changeScreen('finished');
+            return;
+          }
+
+          // Load Questions
+          questions = JSON.parse(localStorage.getItem('PPDB_EXAM_QUESTIONS') || '[]');
+          if (questions.length === 0) {
+            await customAlert('Maaf, panitia belum mengunggah soal ujian di admin panel!');
+            return;
+          }
+
+          const durationRes = await fetch(`${API_BASE}/api/settings/cbt_duration`);
+          const duration = await durationRes.json();
+          const minutes = parseInt(duration, 10) || 10;
+          timerVal = minutes * 60;
+
+          // Adjust timerVal based on saved state in DB or local storage
+          let savedTime = null;
+          if (student.stats && student.stats.remainingTime !== undefined) {
+            savedTime = parseInt(student.stats.remainingTime, 10);
+          }
+          const localTimer = localStorage.getItem(`PPDB_CBT_TIMER_${student.id}`);
+          if (localTimer) {
+            const parsedLocal = parseInt(localTimer, 10);
+            if (savedTime === null || parsedLocal < savedTime) {
+              savedTime = parsedLocal;
+            }
+          }
+
+          if (savedTime !== null && savedTime > 0) {
+            timerVal = savedTime;
+          }
+
+          const timeDesc = document.getElementById('cbt-instruction-time-desc');
+          if (timeDesc) timeDesc.innerHTML = `Durasi pengerjaan ujian dibatasi selama <strong>${minutes} menit</strong>.`;
+          const timerLabel = document.getElementById('timer-label');
+          if (timerLabel) {
+            const min = String(Math.floor(timerVal / 60)).padStart(2, '0');
+            const sec = String(timerVal % 60).padStart(2, '0');
+            timerLabel.innerText = `${min}:${sec}`;
+          }
+
+          document.getElementById('cbt-username').innerText = student.nama;
+          changeScreen('instruct');
+
+        } catch (err) {
+          await customAlert(err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHTML;
+        }
+      });
+
+      document.getElementById('btn-cancel-exam').addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+
+      // ==========================================
+      // 2. EXAM START (fullscreen + safe exam)
+      // ==========================================
+      document.getElementById('btn-start-exam').addEventListener('click', () => {
+        if (!student) return;
+
+        const startBtn = document.getElementById('btn-start-exam');
+        const originalBtnHTML = startBtn.innerHTML;
+        startBtn.disabled = true;
+        startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memulai...';
+
+        fetch(`${API_BASE}/api/applicants/${student.id}`)
+          .then(res => res.json())
+          .then(async data => {
+            if (data.cbtBlocked) {
+              await customAlert('Ujian Anda telah diblokir oleh sistem/admin!');
+              changeScreen('blocked');
+              return;
+            }
+
+            // Request fullscreen
+            const docEl = document.documentElement;
+            if (docEl.requestFullscreen) {
+              docEl.requestFullscreen().catch(() => {});
+            } else if (docEl.webkitRequestFullscreen) {
+              docEl.webkitRequestFullscreen();
+            }
+
+            safeExamActive = true;
+            document.body.classList.add('exam-active');
+            changeScreen('exam');
+            initExam();
+            startTimer();
+            initSafeExam();
+          })
+          .catch(() => {
+            // Fallback safe local check
+            if (student.cbtBlocked) {
+              changeScreen('blocked');
+            } else {
+              const docEl = document.documentElement;
+              if (docEl.requestFullscreen) {
+                docEl.requestFullscreen().catch(() => {});
+              }
+              safeExamActive = true;
+              document.body.classList.add('exam-active');
+              changeScreen('exam');
+              initExam();
+              startTimer();
+              initSafeExam();
+            }
+          })
+          .finally(() => {
+            startBtn.disabled = false;
+            startBtn.innerHTML = originalBtnHTML;
+          });
+      });
+
+      let blockCheckInterval = null;
+
+      // ==========================================
+      // 3. TIMER
+      // ==========================================
+      function startTimer() {
+        // Periodic check to prevent access immediately if admin blocks during exam
+        blockCheckInterval = setInterval(() => {
+          if (!safeExamActive || !student) {
+            clearInterval(blockCheckInterval);
+            return;
+          }
+          fetch(`${API_BASE}/api/applicants/${student.id}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.cbtBlocked) {
+                clearInterval(blockCheckInterval);
+                stopSafeExam();
+                clearInterval(timerInterval);
+                changeScreen('blocked');
+              }
+            })
+            .catch(() => {});
+        }, 4000);
+
+        timerInterval = setInterval(() => {
+          timerVal--;
+          const min = String(Math.floor(timerVal / 60)).padStart(2, '0');
+          const sec = String(timerVal % 60).padStart(2, '0');
+          document.getElementById('timer-label').innerText = `${min}:${sec}`;
+
+          // Auto-save progress to local storage and DB every 10 seconds
+          if (timerVal % 10 === 0) {
+            saveCbtProgress();
+          }
+
+          if (timerVal <= 0) {
+            clearInterval(timerInterval);
+            clearInterval(blockCheckInterval);
+            customAlert('Waktu ujian Anda telah habis! Jawaban Anda akan langsung dikirim.')
+              .then(() => {
+                submitExamResults();
+              });
+          }
+        }, 1000);
+      }
+
+      function saveCbtProgress() {
+        if (!student) return;
+        localStorage.setItem(`PPDB_CBT_ANSWERS_${student.id}`, JSON.stringify(userAnswers));
+        localStorage.setItem(`PPDB_CBT_TIMER_${student.id}`, timerVal.toString());
+
+        // Background save progress to the server using the existing stats field as JSON storage
+        fetch(`${API_BASE}/api/applicants/${student.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            stats: {
+              answers: userAnswers,
+              remainingTime: timerVal
+            }
+          })
+        }).catch(err => {
+          console.warn("Koneksi bermasalah: Progress disimpan di local storage komputer ini saja.", err);
+        });
+      }
+
+      // ==========================================
+      // 4. SAFE EXAM ENGINE
+      // ==========================================
+      function initSafeExam() {
+        // Tab visibility change
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        // Window blur (alt-tab, taskbar click, etc.)
+        window.addEventListener('blur', handleWindowBlur);
+        // Fullscreen exit
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        // Block context menu
+        document.addEventListener('contextmenu', blockEvent, true);
+        // Block dangerous keys
+        document.addEventListener('keydown', blockKeydown, true);
+      }
+
+      function handleVisibilityChange() {
+        if (!safeExamActive || examLocked) return;
+        if (document.hidden) {
+          triggerViolation('Sistem mendeteksi Anda berpindah tab atau meminimize jendela browser. Tindakan ini dicatat sebagai pelanggaran integritas ujian.');
+        }
+      }
+
+      function handleWindowBlur() {
+        if (!safeExamActive || examLocked) return;
+        // Only trigger if we are in exam screen and not blocked
+        if (screens.exam && screens.exam.classList.contains('active')) {
+          triggerViolation('Sistem mendeteksi jendela browser Anda kehilangan fokus. Ini dapat mengindikasikan perpindahan aplikasi atau program lain.');
+        }
+      }
+
+      function handleFullscreenChange() {
+        if (!safeExamActive || examLocked) return;
+        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        if (!isFullscreen && screens.exam && screens.exam.classList.contains('active')) {
+          triggerViolation('Sistem mendeteksi Anda keluar dari mode layar penuh (fullscreen). Ujian wajib dilakukan dalam mode fullscreen.');
+        }
+      }
+
+      function blockEvent(e) {
+        if (safeExamActive) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      }
+
+      const BLOCKED_KEYS = [
+        'F12', 'F11', 'F5',
+        'PrintScreen', 'ContextMenu'
+      ];
+      function blockKeydown(e) {
+        if (!safeExamActive) return;
+        // Block F12, F11, F5, PrintScreen
+        if (BLOCKED_KEYS.includes(e.key)) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        // Block Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S, Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+P
+        if (e.ctrlKey && ['i','I','j','J','u','U','s','S','a','A','c','C','v','V','p','P'].includes(e.key)) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        // Block Alt+F4, Alt+Tab
+        if (e.altKey && (e.key === 'F4' || e.key === 'Tab')) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        // Block Meta/Windows key
+        if (e.metaKey) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+
+      function triggerViolation(msg) {
+        if (!safeExamActive) return;
+        violationCount++;
+        examLocked = true;
+
+        // Send to server
+        if (student) {
+          fetch(`${API_BASE}/api/applicants/${student.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cbtViolations: violationCount })
+          }).catch(() => {});
+        }
+
+        if (violationCount >= MAX_VIOLATIONS) {
+          // Auto-block: stop exam, mark blocked
+          stopSafeExam();
+          clearInterval(timerInterval);
+          clearInterval(blockCheckInterval);
+          if (student) {
+            fetch(`${API_BASE}/api/applicants/${student.id}/block`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            }).catch(() => {});
+            // Also PATCH local storage
+            const list = JSON.parse(localStorage.getItem('PPDB_APPLICANTS') || '[]');
+            const idx = list.findIndex(a => a.id === student.id);
+            if (idx !== -1) {
+              list[idx].cbtBlocked = true;
+              localStorage.setItem('PPDB_APPLICANTS', JSON.stringify(list));
+            }
+          }
+          changeScreen('blocked');
+          return;
+        }
+
+        // Show warning overlay
+        const overlay = document.getElementById('violation-overlay');
+        document.getElementById('violation-msg').innerText = msg;
+        document.getElementById('violation-counter-badge').innerText = `Pelanggaran: ${violationCount} / ${MAX_VIOLATIONS} — Jika mencapai ${MAX_VIOLATIONS} pelanggaran, ujian Anda akan diblokir otomatis!`;
+        overlay.classList.add('show');
+      }
+
+      function stopSafeExam() {
+        safeExamActive = false;
+        document.body.classList.remove('exam-active');
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('blur', handleWindowBlur);
+        document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.removeEventListener('contextmenu', blockEvent, true);
+        document.removeEventListener('keydown', blockKeydown, true);
+        // Exit fullscreen
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      }
+
+      // Resume exam after warning
+      document.getElementById('btn-resume-exam').addEventListener('click', () => {
+        examLocked = false;
+        const overlay = document.getElementById('violation-overlay');
+        overlay.classList.remove('show');
+        // Re-request fullscreen
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        }
+      });
+
+      // Blocked back button
+      const blockedBackBtn = document.getElementById('btn-blocked-back');
+      if (blockedBackBtn) {
+        blockedBackBtn.addEventListener('click', () => {
+          window.location.href = 'index.html';
+        });
+      }
+
+      // ==========================================
+      // 5. SUBTEST NAVIGATION ENGINE
+      // ==========================================
+      function buildSubtests(qs) {
+        // Group questions by subtest name, preserve order
+        const order = [];
+        const map = {};
+        qs.forEach(q => {
+          const st = q.subtest || 'Soal-soal Minecraft';
+          if (!map[st]) {
+            map[st] = [];
+            order.push(st);
+          }
+          map[st].push(q);
+        });
+        return order.map(name => ({ name, questions: map[name] }));
+      }
+
+      function initExam() {
+        currentIdx = 0;
+        currentSubtestIdx = 0;
+        currentSubtestQIdx = 0;
+        userAnswers = {};
+        doubtfulQuestions = {};
+
+        subtests = buildSubtests(questions);
+        renderSubtestTabs();
+        renderNavGrid();
+        renderQuestion();
+      }
+
+      function renderSubtestTabs() {
+        const list = document.getElementById('subtest-tab-list');
+        list.innerHTML = '';
+        subtests.forEach((st, stIdx) => {
+          const answeredInSt = st.questions.filter(q => userAnswers[q.id] !== undefined).length;
+          const tab = document.createElement('div');
+          tab.className = 'subtest-tab' + (stIdx === currentSubtestIdx ? ' active' : '') +
+                          (answeredInSt === st.questions.length ? ' completed' : '');
+          tab.innerHTML = `
+            <span><i class="fa-solid fa-layer-group" style="margin-right:6px;font-size:11px;"></i>${st.name}</span>
+            <span class="st-progress">${answeredInSt}/${st.questions.length}</span>
+          `;
+          tab.addEventListener('click', () => {
+            currentSubtestIdx = stIdx;
+            currentSubtestQIdx = 0;
+            renderSubtestTabs();
+            renderNavGrid();
+            renderQuestion();
+          });
+          list.appendChild(tab);
+        });
+      }
+
+      function renderNavGrid() {
+        const grid = document.getElementById('nav-grid');
+        grid.innerHTML = '';
+        const st = subtests[currentSubtestIdx];
+        if (!st) return;
+
+        document.getElementById('nav-grid-label').innerText = `Soal â€“ ${st.name}`;
+
+        st.questions.forEach((q, qIdx) => {
+          const item = document.createElement('div');
+          item.className = 'nav-grid-item';
+          item.id = `nav-item-${currentSubtestIdx}-${qIdx}`;
+          item.innerText = globalQIndex(currentSubtestIdx, qIdx) + 1;
+
+          if (doubtfulQuestions[q.id]) {
+            item.classList.add('doubtful');
+          } else if (userAnswers[q.id] !== undefined) {
+            item.classList.add('answered');
+          }
+          if (qIdx === currentSubtestQIdx) item.classList.add('active');
+
+          item.addEventListener('click', () => {
+            currentSubtestQIdx = qIdx;
+            renderNavGrid();
+            renderQuestion();
+          });
+          grid.appendChild(item);
+        });
+      }
+
+      function globalQIndex(stIdx, qIdx) {
+        let total = 0;
+        for (let i = 0; i < stIdx; i++) total += subtests[i].questions.length;
+        return total + qIdx;
+      }
+
+      function renderQuestion() {
+        if (!subtests.length) return;
+        const st = subtests[currentSubtestIdx];
+        if (!st) return;
+        const q = st.questions[currentSubtestQIdx];
+        if (!q) return;
+
+        const globalNum = globalQIndex(currentSubtestIdx, currentSubtestQIdx) + 1;
+        const totalQ = questions.length;
+
+        document.getElementById('q-num-label').innerText = `Soal Nomor ${globalNum}`;
+        document.getElementById('q-subtest-label').innerText = `Subtes: ${q.subtest || 'Soal-soal Minecraft'}`;
+        document.getElementById('q-weight-label').innerText = `Bobot: Diskriminasi a=${q.a.toFixed(1)} | Kesulitan b=${q.b.toFixed(1)}`;
+        document.getElementById('q-text-label').innerText = q.text;
+
+        // Options
+        document.getElementById('opt-text-0').innerText = q.options[0];
+        document.getElementById('opt-text-1').innerText = q.options[1];
+        document.getElementById('opt-text-2').innerText = q.options[2];
+        document.getElementById('opt-text-3').innerText = q.options[3];
+
+        // Highlight selected
+        const cards = document.querySelectorAll('.option-card');
+        cards.forEach(card => card.classList.remove('selected'));
+        const prevAns = userAnswers[q.id];
+        if (prevAns !== undefined) {
+          document.getElementById(`opt-card-${prevAns}`).classList.add('selected');
+        }
+
+        // Doubtful sync
+        const doubtCheck = document.getElementById('doubt-checkbox');
+        const doubtBtnEl = document.getElementById('doubt-btn');
+        const isDoubtful = doubtfulQuestions[q.id] || false;
+        doubtCheck.checked = isDoubtful;
+        if (isDoubtful) { doubtBtnEl.classList.add('checked'); }
+        else { doubtBtnEl.classList.remove('checked'); }
+
+        // Active nav item
+        renderNavGrid();
+
+        // Next / Selesai button label
+        const nextBtn = document.getElementById('btn-next-question');
+        const isLastInSubtest = currentSubtestQIdx === st.questions.length - 1;
+        const isLastSubtest = currentSubtestIdx === subtests.length - 1;
+
+        if (isLastInSubtest && isLastSubtest) {
+          nextBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Selesai Ujian';
+          nextBtn.style.background = 'var(--accent-green)';
+        } else if (isLastInSubtest && !isLastSubtest) {
+          nextBtn.innerHTML = 'Subtes Berikutnya <i class="fa-solid fa-forward-step"></i>';
+          nextBtn.style.background = 'linear-gradient(135deg, #4285F4 0%, #2563eb 100%)';
+        } else {
+          nextBtn.innerHTML = 'Berikutnya <i class="fa-solid fa-arrow-right"></i>';
+          nextBtn.style.background = 'linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%)';
+        }
+
+        // Progress
+        const answeredCount = Object.keys(userAnswers).length;
+        document.getElementById('progress-text').innerText = `${answeredCount}/${totalQ}`;
+      }
+
+      // ==========================================
+      // 6. ANSWER SELECTION
+      // ==========================================
+      const optionCards = document.querySelectorAll('.option-card');
+      optionCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const index = parseInt(card.getAttribute('data-index'), 10);
+          const st = subtests[currentSubtestIdx];
+          if (!st) return;
+          const qId = st.questions[currentSubtestQIdx].id;
+ 
+          optionCards.forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          userAnswers[qId] = index;
+ 
+          renderNavGrid();
+          const answeredCount = Object.keys(userAnswers).length;
+          document.getElementById('progress-text').innerText = `${answeredCount}/${questions.length}`;
+          renderSubtestTabs();
+          saveCbtProgress();
+        });
+      });
+ 
+      // Doubtful button
+      const doubtBtn = document.getElementById('doubt-btn');
+      const doubtCheck = document.getElementById('doubt-checkbox');
+      doubtBtn.addEventListener('click', () => {
+        const st = subtests[currentSubtestIdx];
+        if (!st) return;
+        const qId = st.questions[currentSubtestQIdx].id;
+        const checked = !doubtCheck.checked;
+        doubtCheck.checked = checked;
+        doubtfulQuestions[qId] = checked;
+        if (checked) { doubtBtn.classList.add('checked'); }
+        else { doubtBtn.classList.remove('checked'); }
+        renderNavGrid();
+        saveCbtProgress();
+      });
+
+      // ==========================================
+      // 7. PREV / NEXT NAVIGATION
+      // ==========================================
+      document.getElementById('btn-prev-question').addEventListener('click', () => {
+        if (currentSubtestQIdx > 0) {
+          currentSubtestQIdx--;
+          renderQuestion();
+        } else if (currentSubtestIdx > 0) {
+          // Go to last question of previous subtest
+          currentSubtestIdx--;
+          currentSubtestQIdx = subtests[currentSubtestIdx].questions.length - 1;
+          renderSubtestTabs();
+          renderNavGrid();
+          renderQuestion();
+        }
+      });
+
+      document.getElementById('btn-next-question').addEventListener('click', () => {
+        const st = subtests[currentSubtestIdx];
+        if (!st) return;
+        const isLastInSubtest = currentSubtestQIdx === st.questions.length - 1;
+        const isLastSubtest = currentSubtestIdx === subtests.length - 1;
+
+        if (!isLastInSubtest) {
+          currentSubtestQIdx++;
+          renderQuestion();
+        } else if (!isLastSubtest) {
+          // Move to next subtest
+          currentSubtestIdx++;
+          currentSubtestQIdx = 0;
+          renderSubtestTabs();
+          renderNavGrid();
+          renderQuestion();
+        } else {
+          // Last question -> confirm submit
+          const unanswered = questions.length - Object.keys(userAnswers).length;
+          let msg = 'Apakah Anda yakin ingin menyelesaikan ujian ini?';
+          if (unanswered > 0) {
+            msg = `Terdapat ${unanswered} soal yang belum dijawab. Apakah Anda tetap ingin menyelesaikan ujian ini?`;
+          }
+          customConfirm(msg).then((confirmed) => {
+            if (confirmed) {
+              stopSafeExam();
+              submitExamResults();
+            }
+          });
+        }
+      });
+
+      // ==========================================
+      // 8. SUBMIT & IRT SCORING
+      // ==========================================
+      function submitExamResults() {
+        clearInterval(timerInterval);
+        stopSafeExam();
+
+        // Build response vector for all questions in order
+        const responses = [];
+        questions.forEach(q => {
+          const ans = userAnswers[q.id];
+          responses.push((ans !== undefined && ans === q.answer) ? 1 : 0);
+        });
+
+        const score = calculateCBTIRTScore(responses);
+
+        const applicants = JSON.parse(localStorage.getItem('PPDB_APPLICANTS') || '[]');
+        const targetIdx = applicants.findIndex(a => a.id.toUpperCase() === student.id.toUpperCase());
+
+        let essayScore = 0;
+        if (targetIdx !== -1) {
+          essayScore = applicants[targetIdx].essayScoreIRT || 0;
+          applicants[targetIdx].scoreIRT = score;
+          applicants[targetIdx].status = 'Dalam Proses';
+          localStorage.setItem('PPDB_APPLICANTS', JSON.stringify(applicants));
+ 
+          // Clear progress from database stats field
+          fetch(`${API_BASE}/api/applicants/${student.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scoreIRT: score, status: 'Dalam Proses', stats: null })
+          }).catch(err => console.error("Gagal menyimpan skor ujian ke server Prisma: ", err));
+ 
+          // Clear local storage progress
+          localStorage.removeItem(`PPDB_CBT_ANSWERS_${student.id}`);
+          localStorage.removeItem(`PPDB_CBT_TIMER_${student.id}`);
+        }
+
+        document.getElementById('final-score-val').innerText = score;
+        document.getElementById('essay-bonus-val').innerText = essayScore;
+        changeScreen('finished');
+
+        // Countdown for cert download
+        let count = 5;
+        const countdownTimer = document.getElementById('cert-countdown-timer');
+        const countdownWrapper = document.getElementById('cert-countdown-wrapper');
+        const downloadBtn = document.getElementById('btn-download-cert');
+
+        if (countdownTimer && countdownWrapper && downloadBtn) {
+          countdownTimer.innerText = count;
+          countdownWrapper.style.display = 'block';
+          downloadBtn.style.display = 'none';
+          downloadBtn.disabled = true;
+
+          const timer = setInterval(() => {
+            count--;
+            countdownTimer.innerText = count;
+            if (count <= 0) {
+              clearInterval(timer);
+              countdownWrapper.style.display = 'none';
+              downloadBtn.style.display = 'inline-flex';
+              downloadBtn.disabled = false;
+            }
+          }, 1000);
+        }
+      }
+
+      function calculateCBTIRTScore(uVector) {
+        const totalCorrect = uVector.reduce((sum, val) => sum + val, 0);
+        if (totalCorrect === 0) return 30;
+        if (totalCorrect === questions.length) return 100;
+
+        let theta = 0.0;
+        const maxIterations = 8;
+        const tolerance = 1e-4;
+
+        for (let iter = 0; iter < maxIterations; iter++) {
+          let g = 0;
+          let h = 0;
+          for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const u = uVector[i];
+            const expVal = Math.exp(-q.a * (theta - q.b));
+            const p = 1 / (1 + expVal);
+            g += q.a * (u - p);
+            h -= q.a * q.a * p * (1 - p);
+          }
+          if (Math.abs(h) < 1e-5) break;
+          const delta = g / h;
+          const prevTheta = theta;
+          theta -= Math.max(-1.0, Math.min(1.0, delta));
+          theta = Math.max(-3.5, Math.min(3.5, theta));
+          if (Math.abs(theta - prevTheta) < tolerance) break;
+        }
+
+        let baseScore = Math.round(30 + ((theta + 3.5) / 7.0) * 65);
+        return Math.min(100, Math.max(30, baseScore));
+      }
+
+      // ==========================================
+      // 9. CERTIFICATE PRINTING
+      // ==========================================
+      const certModal = document.getElementById('cert-print-modal');
+      const downloadBtn = document.getElementById('btn-download-cert');
+
+      if (downloadBtn && certModal) {
+        downloadBtn.addEventListener('click', () => {
+          if (!student) return;
+          const cbtScore = parseFloat(document.getElementById('final-score-val').innerText) || 0;
+          const essayScore = parseFloat(document.getElementById('essay-bonus-val').innerText) || 0;
+          const totalScore = Math.min(100, cbtScore + essayScore);
+
+          document.getElementById('cert-p-id').innerText = student.id;
+          document.getElementById('cert-p-nama').innerText = student.nama.toUpperCase();
+          document.getElementById('cert-p-jalur').innerText = student.jalur;
+
+          const today = new Date();
+          const monthsLong = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+          const formattedDate = `${today.getDate()} ${monthsLong[today.getMonth()]} ${today.getFullYear()}`;
+
+          document.getElementById('cert-p-tanggal').innerText = formattedDate;
+          document.getElementById('cert-sig-date').innerText = formattedDate;
+          document.getElementById('cert-score-cbt').innerText = cbtScore.toFixed(1);
+          document.getElementById('cert-score-essay').innerText = essayScore.toFixed(1);
+          document.getElementById('cert-score-total').innerText = totalScore.toFixed(1);
+          document.getElementById('cert-barcode-text').innerText = student.id;
+
+          certModal.style.display = 'flex';
+        });
+      }
+
+      const btnCloseCert = document.getElementById('btn-close-cert-modal');
+      const btnCancelCert = document.getElementById('btn-cert-modal-close');
+      if (btnCloseCert) btnCloseCert.addEventListener('click', () => certModal.style.display = 'none');
+      if (btnCancelCert) btnCancelCert.addEventListener('click', () => certModal.style.display = 'none');
+
+      const btnPrintCert = document.getElementById('btn-cert-modal-print');
+      if (btnPrintCert) btnPrintCert.addEventListener('click', () => window.print());
+
+      const btnDownloadCert = document.getElementById('btn-cert-modal-download');
+      if (btnDownloadCert) {
+        btnDownloadCert.addEventListener('click', () => {
+          const original = document.getElementById('cert-print-area');
+          if (!original) return;
+          const id = document.getElementById('cert-p-id').innerText || 'cert';
+
+          const scrollPos = window.scrollY;
+          window.scrollTo(0, 0);
+          const parent = original.parentNode;
+          const nextSibling = original.nextSibling;
+          const originalStyle = original.getAttribute('style') || '';
+
+          original.style.position = 'absolute';
+          original.style.left = '0';
+          original.style.top = '0';
+          original.style.width = '1040px';
+          original.style.height = 'auto';
+          original.style.maxHeight = 'none';
+          original.style.overflow = 'visible';
+          original.style.background = '#ffffff';
+          original.style.color = '#000000';
+          original.style.zIndex = '99999';
+          document.body.appendChild(original);
+
+          const opt = {
+            margin: [10, 10, 10, 10],
+            filename: `Sertifikat_Skor_CBT_${id}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 1040 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+          };
+
+          html2pdf().set(opt).from(original).save().then(() => {
+            original.setAttribute('style', originalStyle);
+            if (nextSibling) { parent.insertBefore(original, nextSibling); }
+            else { parent.appendChild(original); }
+            window.scrollTo(0, scrollPos);
+          }).catch(err => {
+            console.error('Error generating PDF:', err);
+            original.setAttribute('style', originalStyle);
+            if (nextSibling) { parent.insertBefore(original, nextSibling); }
+            else { parent.appendChild(original); }
+            window.scrollTo(0, scrollPos);
+          });
+        });
+      }
+
+      // ==========================================
+      // 10. FINISH REDIRECT
+      // ==========================================
+      document.getElementById('btn-finish-redirect').addEventListener('click', () => {
+        if (student) {
+          window.location.href = `index.html?searchId=${student.id}&searchDob=${student.tanggalLahir}#cek-status`;
+        } else {
+          window.location.href = 'index.html#cek-status';
+        }
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>

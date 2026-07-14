@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNM 2026 – Seleksi Nasional Minecrafter Indonesia</title>
+  <meta name="description"
+    content="Daftar Seleksi Nasional Minecrafter (SNM) 2026. Buktikan kemampuan Minecraft Bedrock-mu dan raih pengakuan resmi nasional.">
+  <!-- Google Fonts - Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Style CSS -->
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Header & Navigation -->
+  <header class="main-header">
+    <div class="container navbar-container">
+      <a href="#home" class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+        <span class="logo-text">SNM<span>2026</span></span>
+      </a>
+
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="#home" class="nav-link active"><i class="fa-solid fa-house"></i> Beranda</a></li>
+          <li><a href="#daftar" class="nav-link"><i class="fa-solid fa-user-plus"></i> Daftar</a></li>
+          <li><a href="#cek-status" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Cek Status</a></li>
+          <li><a href="#faq" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Google Profile Widget -->
+        <div id="google-profile-widget" class="google-profile-widget hidden">
+          <div class="profile-badge" id="google-profile-badge">
+            <span class="profile-initials" id="google-profile-initials">U</span>
+            <img id="google-profile-avatar" src="" alt="Google Avatar" class="hidden">
+          </div>
+          <div class="profile-dropdown" id="google-profile-dropdown">
+            <div class="dropdown-user-info">
+              <strong id="dropdown-user-name">Nama User</strong>
+              <span id="dropdown-user-email">email@gmail.com</span>
+            </div>
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+            <button id="btn-google-logout" class="dropdown-item text-danger"><i
+                class="fa-solid fa-right-from-bracket"></i> Keluar Akun</button>
+          </div>
+        </div>
+
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Ganti Tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button id="menu-toggle" class="menu-toggle-btn" aria-label="Buka Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-content">
+
+    <!-- Backend Connection Warning Banner -->
+    <div id="db-connection-warning"
+      style="background: #ef4444; color: #fff; padding: 12px 24px; text-align: center; font-size: 13px; font-weight: 600; display: none; align-items: center; justify-content: center; gap: 8px; z-index: 9999; width: 100%; box-sizing: border-box;">
+      <i class="fa-solid fa-triangle-exclamation" style="font-size: 16px;"></i>
+      <span>Gagal terhubung ke database. Harap jalankan server backend dengan mengetikkan <code>npm run dev</code> di terminal Anda, lalu buka <a href="http://localhost:3000" style="color: #fff; text-decoration: underline; font-weight: 700;">http://localhost:3000</a>.</span>
+    </div>
+
+    <!-- SECTION 1: HOME / BERANDA -->
+    <section id="home-section" class="app-section active">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="container hero-container">
+          <div class="hero-text">
+            <span class="badge badge-primary"><i class="fa-solid fa-cube"></i> Pendaftaran SNM 2026 Resmi Dibuka!</span>
+            <h1>Jadilah <span>Minecrafter Terbaik</span> Indonesia Secara Resmi!</h1>
+            <p>Seleksi Nasional Minecrafter (SNM) 2026 hadir untuk memberi pengakuan resmi kepada para player, builder,
+              dan miner Minecraft terbaik di Indonesia. Daftarkan dirimu sekarang!</p>
+            <div class="hero-actions">
+              <a href="#daftar" class="btn btn-gradient btn-lg"><i class="fa-solid fa-cube"></i> Daftar Sekarang</a>
+              <a href="#cek-status" class="btn btn-outline btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Cek
+                Status Seleksi</a>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-card-decoration">
+              <div class="deco-circle deco-1"></div>
+              <div class="deco-circle deco-2"></div>
+              <div class="interactive-hero-card">
+                <div class="card-header-mock">
+                  <div class="circle-btn red"></div>
+                  <div class="circle-btn yellow"></div>
+                  <div class="circle-btn green"></div>
+                </div>
+                <div class="card-body-mock">
+                  <div class="mock-profile">
+                    <div class="mock-avatar"><i class="fa-solid fa-cube"></i></div>
+                    <div class="mock-details">
+                      <div class="mock-line title-line"></div>
+                      <div class="mock-line sub-line"></div>
+                    </div>
+                  </div>
+                  <div class="mock-steps">
+                    <div class="mock-step active"><i class="fa-solid fa-check"></i> <span>Daftar</span></div>
+                    <div class="mock-step active"><i class="fa-solid fa-check"></i> <span>Seleksi</span></div>
+                    <div class="mock-step animate-pulse"><i class="fa-solid fa-spinner"></i> <span>Resmi
+                        Minecrafter</span></div>
+                  </div>
+                  <div class="mock-badge">Hanya untuk Hiburan</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-section container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary-soft"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-total" class="counter">0</h3>
+              <p>Total Pendaftar</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-success-soft"><i class="fa-solid fa-trophy"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-accepted" class="counter">0</h3>
+              <p>Minecrafter Lolos</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-warning-soft"><i class="fa-solid fa-cube"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-quota" class="counter">350</h3>
+              <p>Kuota Tersedia</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-info-soft"><i class="fa-solid fa-file-shield"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-verified" class="counter">0</h3>
+              <p>Dokumen Terverifikasi</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+
+    <!-- SECTION 2: REGISTRATION FORM -->
+    <section id="daftar-section" class="app-section">
+      <div class="container form-wrapper">
+        <div class="section-title text-center">
+          <h2>Formulir Pendaftaran <span>SNM 2026</span></h2>
+          <p>Pilih jalur pendaftaran yang sesuai dan lengkapi data dirimu untuk mendapatkan nomor peserta Seleksi
+            Nasional Minecrafter.</p>
+        </div>
+
+        <!-- Registration Closed Card (Shown when admin disables registration) -->
+        <div id="registration-closed-card" class="google-login-prompt-card hidden"
+          style="border-top-color: #ef4444; max-width: 600px; margin: 0 auto 24px;">
+          <div class="text-center" style="padding: 24px;">
+            <div style="font-size: 48px; color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-circle-xmark"></i>
+            </div>
+            <h3 style="color: var(--text-primary); font-size: 20px; font-weight: 700; margin-bottom: 10px;">Pendaftaran
+              Telah Ditutup</h3>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.6;">Maaf, proses
+              pendaftaran Seleksi Nasional Minecrafter (SNM) 2026 saat ini telah ditutup secara resmi oleh panitia. Anda
+              tidak dapat melakukan pendaftaran baru, selalu cek website secara berkala.</p>
+            <a href="#cek-status" class="btn btn-gradient btn-lg"
+              style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px;"><i
+                class="fa-solid fa-magnifying-glass"></i> Cek Hasil Seleksi</a>
+          </div>
+        </div>
+
+        <!-- Google Login Prompt Card (Shown when not authenticated) -->
+        <div id="google-login-prompt-card" class="google-login-prompt-card">
+          <div class="google-login-content text-center">
+            <div class="google-login-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+                <path fill="#EA4335"
+                  d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4"
+                  d="M46.5 24.5c0-1.61-.15-3.16-.42-4.66H24v8.8h12.7c-.55 2.87-2.17 5.3-4.61 6.94l7.15 5.54C43.43 36.3 46.5 30.93 46.5 24.5z" />
+                <path fill="#FBBC05"
+                  d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.98-6.19z" />
+                <path fill="#34A853"
+                  d="M24 38.5c-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48c6.48 0 11.93-2.13 15.89-5.81l-7.15-5.54c-2.33 1.57-5.32 2.85-8.74 2.85z" />
+              </svg>
+            </div>
+            <h3>Masuk dengan Google</h3>
+            <p>Untuk mendaftar SNM 2026, Anda diwajibkan masuk terlebih dahulu menggunakan akun Google aktif guna
+              memverifikasi identitas Anda secara aman.</p>
+            <button type="button" id="btn-google-login" class="btn btn-google-login-action">
+              <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo"
+                style="width: 18px; height: 18px; margin-right: 10px; vertical-align: middle;">
+              <span>Masuk dengan Google</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Alert: Already Registered (Hidden by default) -->
+        <div id="already-registered-card" class="google-login-prompt-card hidden"
+          style="border-top-color: #10b981; max-width: 600px;">
+          <div class="text-center">
+            <div style="font-size: 40px; color: #10b981; margin-bottom: 15px;"><i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 style="color: var(--text-primary);">Pendaftaran Sudah Selesai!</h3>
+            <p style="margin-bottom: 20px;">Anda telah terdaftar pada sistem kami menggunakan email ini. Anda tidak
+              dapat membuat pendaftaran baru sebelum hasil seleksi diumumkan secara resmi.</p>
+
+            <div id="already-registered-details-box" style="margin-bottom: 20px;">
+              <!-- Renders receipt copy here dynamically -->
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button id="btn-print-slip-already" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak Kartu
+                Peserta</button>
+              <a href="#cek-status" class="btn btn-outline"
+                style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;"><i
+                  class="fa-solid fa-magnifying-glass"></i> Hasil Seleksi</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Element -->
+        <!-- Form Element -->
+        <form id="ppdb-form" class="wizard-form hidden" novalidate>
+          <!-- Google Authenticated Profile Banner -->
+          <div id="google-auth-banner" class="google-auth-banner">
+            <div class="auth-banner-left">
+              <i class="fa-solid fa-circle-check" style="margin-right: 8px; color: #10b981;"></i>
+              <span>Terautentikasi sebagai: <strong id="auth-banner-email">email@gmail.com</strong></span>
+            </div>
+            <button type="button" id="btn-google-switch" class="btn-google-switch-btn"><i
+                class="fa-solid fa-right-from-bracket"></i> Keluar</button>
+          </div>
+
+          <!-- Langkah 1: Pilih Jalur Pendaftaran -->
+          <div class="form-step-container" style="margin-bottom: 24px;">
+            <h3 class="step-title"
+              style="font-size: 15px; font-weight: 700; margin-bottom: 15px; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+              <span
+                style="display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--border-focus); color: #ffffff; align-items: center; justify-content: center; font-size: 12px;">1</span>
+              Pilih Jalur Pendaftaran SNM 2026
+            </h3>
+
+            <div class="track-cards-grid"
+              style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+              <!-- Card 1: Stats Minecraft -->
+              <div class="track-card" data-value="Jalur Stats Minecraft (Bedrock)"
+                style="padding: 20px; border: 2px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); cursor: pointer; text-align: center; transition: all 0.2s ease; position: relative;">
+                <div class="track-card-icon" style="font-size: 24px; margin-bottom: 10px; color: #FBBC05;"><i
+                    class="fa-solid fa-gamepad"></i></div>
+                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Stats Minecraft</h4>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 0;">Minecrafter
+                  Bedrock — upload screenshot statistik gameplay sebagai bukti resmi</p>
+                <div class="track-check-indicator"
+                  style="position: absolute; top: 10px; right: 10px; color: #10b981; font-size: 14px; opacity: 0; transition: opacity 0.2s ease;">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+              <!-- Card 2: Beasiswa Miner/Builder -->
+              <div class="track-card" data-value="Jalur Beasiswa Miner/Builder"
+                style="padding: 20px; border: 2px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); cursor: pointer; text-align: center; transition: all 0.2s ease; position: relative;">
+                <div class="track-card-icon" style="font-size: 24px; margin-bottom: 10px; color: #34A853;"><i
+                    class="fa-solid fa-hammer"></i></div>
+                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Beasiswa Miner/Builder</h4>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 0;">Tulis essay
+                  tentang proyek Minecraft terbaikmu — dinilai menggunakan skor IRT</p>
+                <div class="track-check-indicator"
+                  style="position: absolute; top: 10px; right: 10px; color: #10b981; font-size: 14px; opacity: 0; transition: opacity 0.2s ease;">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+              <!-- Card 3: Sertifikasi CBT -->
+              <div class="track-card" data-value="Jalur Seleksi Ujian (CBT)"
+                style="padding: 20px; border: 2px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); cursor: pointer; text-align: center; transition: all 0.2s ease; position: relative;">
+                <div class="track-card-icon" style="font-size: 24px; margin-bottom: 10px; color: #EA4335;"><i
+                    class="fa-solid fa-laptop-code"></i></div>
+                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Sertifikasi CBT</h4>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 0;">Ikuti ujian
+                  online dan dapatkan sertifikat kelayakan resmi player Minecraft nasional</p>
+                <div class="track-check-indicator"
+                  style="position: absolute; top: 10px; right: 10px; color: #10b981; font-size: 14px; opacity: 0; transition: opacity 0.2s ease;">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- Hidden input for state validation -->
+            <input type="hidden" id="jalur-pendaftaran" name="jalur" required>
+            <div id="track-error-msg" class="error-msg text-center"
+              style="display: none; color: #ef4444; font-size: 11.5px; margin-top: 10px;">Silakan pilih salah satu jalur
+              pendaftaran di atas.</div>
+          </div>
+
+          <!-- Langkah 2: Formulir Pendaftaran (Hidden initially, slides open when track is selected) -->
+          <div id="form-step-2-container" class="hidden-step-container"
+            style="max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease; opacity: 0; border-top: 1px dashed var(--border-color); padding-top: 24px;">
+            <h3 class="step-title"
+              style="font-size: 15px; font-weight: 700; margin-bottom: 20px; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+              <span
+                style="display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--border-focus); color: #ffffff; align-items: center; justify-content: center; font-size: 12px;">2</span>
+              Lengkapi Data Diri & Persyaratan
+            </h3>
+
+            <div class="form-grid">
+              <div class="form-group col-12">
+                <label for="nama-lengkap" class="form-label required">Nama Lengkap / Gamer Tag</label>
+                <input type="text" id="nama-lengkap" name="nama" class="form-control input-locked"
+                  placeholder="Terisi otomatis dari akun Google" readonly required>
+                <div class="error-msg">Nama wajib diisi (minimal 3 karakter).</div>
+              </div>
+
+              <div class="form-group col-12">
+                <label for="email" class="form-label required">Email Aktif</label>
+                <input type="email" id="email" name="email" class="form-control input-locked"
+                  placeholder="Terisi otomatis dari akun Google" readonly required>
+                <div class="error-msg">Masukkan email aktif yang valid.</div>
+              </div>
+
+              <div class="form-group col-12">
+                <label for="tanggal-lahir" class="form-label required">Tanggal Lahir</label>
+                <input type="date" id="tanggal-lahir" name="tanggalLahir" class="form-control" required>
+                <div class="error-msg">Tanggal lahir wajib diisi.</div>
+              </div>
+
+              <div class="form-group col-12">
+                <label for="sekolah-minecraft" class="form-label required">Sekolah Minecraft</label>
+                <select id="sekolah-minecraft" name="sekolahMinecraft" class="form-control" required style="height: 44px; font-size: 14px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); width: 100%; box-sizing: border-box; padding: 0 12px;">
+                  <option value="" disabled selected>Pilih Sekolah Minecraft...</option>
+                </select>
+                <div class="error-msg">Sekolah Minecraft wajib dipilih.</div>
+              </div>
+
+              <div class="form-group col-12">
+                <label for="role-minecraft" class="form-label required">Sertifikasi Role Minecraft</label>
+                <select id="role-minecraft" name="roleMinecraft" class="form-control" required style="height: 44px; font-size: 14px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); width: 100%; box-sizing: border-box; padding: 0 12px;">
+                  <option value="" disabled selected>Pilih Role...</option>
+                </select>
+                <div class="error-msg">Sertifikasi Role wajib dipilih.</div>
+              </div>
+
+              <!-- DYNAMIC FIELD: Stats Upload (shown for Jalur Stats Minecraft) -->
+              <div id="field-stats-upload" class="form-group col-12" style="display:none;">
+                <label for="minecraft-stats-upload" class="form-label required"><i class="fa-solid fa-gamepad"
+                    style="color:#FBBC05;"></i> Upload Screenshot Stats Minecraft Bedrock</label>
+                <div
+                  style="border:2px dashed var(--border-color);border-radius:var(--radius-sm);padding:24px;text-align:center;background:var(--bg-tertiary);cursor:pointer;"
+                  id="upload-drop-zone" onclick="document.getElementById('minecraft-stats-upload').click()">
+                  <i class="fa-solid fa-cloud-arrow-up"
+                    style="font-size:32px;color:var(--text-muted);margin-bottom:10px;"></i>
+                  <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px;">Klik atau drag &amp; drop gambar di
+                    sini</p>
+                  <p style="font-size:11px;color:var(--text-light);margin:0;">Format: JPG, PNG, WEBP (Maks. 5MB)</p>
+                  <input type="file" id="minecraft-stats-upload" name="statsUpload" accept="image/*"
+                    style="display:none;">
+                </div>
+                <div id="scanning-wrapper" class="hidden"
+                  style="margin-top:12px; padding: 15px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); position: relative; overflow: hidden;">
+                  <div class="scan-line"></div>
+                  <p style="font-size: 13px; color: var(--text-main); margin-bottom: 8px;"><i
+                      class="fa-solid fa-sync fa-spin" style="color: #34A853;"></i> Menganalisis Gambar & Mengekstrak
+                    Data Stats...</p>
+                  <div
+                    style="height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin-bottom: 12px;">
+                    <div id="scanning-progress-bar"
+                      style="width: 0%; height: 100%; background: #34A853; transition: width 0.1s ease;"></div>
+                  </div>
+                  <div id="extracted-stats-log"
+                    style="font-family: monospace; font-size: 11px; text-align: left; color: var(--text-muted); max-height: 100px; overflow-y: auto; line-height: 1.5; padding: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+                    <!-- Scanning log steps inserted here -->
+                  </div>
+                </div>
+
+                <div id="stats-extracted-results" class="hidden"
+                  style="margin-top: 15px; padding: 15px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary);">
+                  <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-main);"><i
+                      class="fa-solid fa-square-poll-vertical" style="color: #34A853;"></i> Data Statistik Terdeteksi
+                    (Hasil Scan)</h4>
+                  <div class="stats-display-grid">
+                    <div class="stat-metric-card">
+                      <span class="stat-metric-label">Time Played</span>
+                      <div class="stat-metric-val" id="stat-val-time">0h</div>
+                    </div>
+                    <div class="stat-metric-card">
+                      <span class="stat-metric-label">Blocks Mined</span>
+                      <div class="stat-metric-val" id="stat-val-mined">0</div>
+                    </div>
+                    <div class="stat-metric-card">
+                      <span class="stat-metric-label">Blocks Placed</span>
+                      <div class="stat-metric-val" id="stat-val-placed">0</div>
+                    </div>
+                    <div class="stat-metric-card">
+                      <span class="stat-metric-label">Diamonds Found</span>
+                      <div class="stat-metric-val" id="stat-val-diamonds">0</div>
+                    </div>
+                  </div>
+                  <div id="stats-irt-status-note"
+                    style="margin-top: 12px; font-size: 11px; text-align: center; font-weight: 600;">
+                    <i class="fa-solid fa-circle-check"></i> Validasi IRT: Mengevaluasi performa...
+                  </div>
+                  <input type="hidden" id="raw-stat-time" name="statTime" value="0">
+                  <input type="hidden" id="raw-stat-mined" name="statMined" value="0">
+                  <input type="hidden" id="raw-stat-placed" name="statPlaced" value="0">
+                  <input type="hidden" id="raw-stat-diamonds" name="statDiamonds" value="0">
+                </div>
+
+                <div id="upload-preview-wrapper" class="hidden" style="margin-top:12px;text-align:center;">
+                  <img id="upload-preview-img" src="" alt="Preview Stats"
+                    style="max-width:100%;max-height:220px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                  <p id="upload-preview-name" style="font-size:11px;color:var(--text-muted);margin-top:6px;"></p>
+                </div>
+                <div class="error-msg" id="stats-upload-error">Upload screenshot stats Minecraft Bedrock-mu.</div>
+              </div>
+
+              <!-- DYNAMIC FIELD: Essay (shown for Beasiswa Miner/Builder) -->
+              <div id="field-essay" class="form-group col-12" style="display:none;">
+                <label for="essay-diterima" class="form-label required"><i class="fa-solid fa-hammer"
+                    style="color:#34A853;"></i> Ceritakan proyek Minecraft terbaikmu &amp; alasan layak mendapat
+                  beasiswa!</label>
+                <textarea id="essay-diterima" name="essay" class="form-control" rows="5"
+                  placeholder="Ceritakan kreasi terbaikmu (survival base, mega build, redstone farm, dll). Semakin detail, semakin tinggi skor IRT-mu!"></textarea>
+                <div class="error-msg">Wajib diisi minimal 30 karakter untuk penilaian IRT.</div>
+              </div>
+
+              <!-- DYNAMIC FIELD: CBT Note + optional essay (shown for CBT track) -->
+              <div id="field-cbt-note" class="form-group col-12" style="display:none;">
+                <div
+                  style="background:rgba(234,67,53,0.06);border:1px solid rgba(234,67,53,0.3);border-radius:var(--radius-sm);padding:16px;">
+                  <h4 style="color:#EA4335;font-size:14px;margin-bottom:8px;"><i class="fa-solid fa-laptop-code"></i>
+                    Informasi Jalur Sertifikasi CBT</h4>
+                  <p style="font-size:13px;color:var(--text-secondary);margin:0;">Setelah mendaftar, kamu mendapat
+                    <strong>Kode Ujian</strong> unik. Kerjakan ujian CBT online berbasis <strong>IRT</strong> untuk
+                    mendapatkan Sertifikat Kelayakan Player Minecraft resmi.
+                  </p>
+                </div>
+              </div>
+              <div id="field-essay-cbt" class="form-group col-12" style="display:none;">
+                <label for="essay-diterima-cbt" class="form-label"><i class="fa-solid fa-pen-nib"
+                    style="color:#4285F4;"></i> Mengapa kamu layak dapat Sertifikat Player? <span
+                    style="font-size:11px;color:var(--text-muted);font-weight:400;">(Opsional – mendukung skor
+                    IRT)</span></label>
+                <textarea id="essay-diterima-cbt" name="essay" class="form-control" rows="3"
+                  placeholder="Ceritakan pengalaman bermain Minecraft-mu (opsional)"></textarea>
+              </div>
+            </div>
+
+            <!-- Checkbox Agreement -->
+            <div class="agreement-box" style="margin-top: 24px;">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="pernyataan-setuju" name="pernyataan" required>
+                <span class="checkmark"></span>
+                <span class="label-text">Saya menyatakan bahwa seluruh data dan bukti yang diisikan dalam formulir
+                  pendaftaran SNM 2026 ini adalah benar, dan saya bersedia mematuhi aturan seleksi yang berlaku.</span>
+              </label>
+              <div class="error-msg">Anda wajib menyetujui pernyataan kebenaran data untuk mengirimkan formulir.</div>
+            </div>
+
+            <!-- Actions -->
+            <div class="wizard-actions" style="justify-content: center; margin-top: 24px;">
+              <button type="submit" id="btn-submit" class="btn btn-gradient btn-lg"><i class="fa-solid fa-cube"></i>
+                Finalisasi </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Form Success Card (Hidden initially) -->
+        <div id="form-success-card" class="success-card hidden">
+          <div class="success-icon-animation">
+            <div class="success-checkmark">
+              <div class="check-icon">
+                <span class="icon-line line-tip"></span>
+                <span class="icon-line line-long"></span>
+                <div class="icon-circle"></div>
+                <div class="icon-fix"></div>
+              </div>
+            </div>
+          </div>
+          <h2>Pendaftaran SNM 2026 Berhasil!</h2>
+          <p>Selamat! Data kamu telah tersimpan di sistem SNM. Silakan cetak kartu bukti pendaftaran di bawah ini.</p>
+
+          <div class="registration-receipt">
+            <div class="receipt-header">
+              <h3>KARTU PESERTA SNM 2026</h3>
+              <span>Seleksi Nasional Minecrafter</span>
+            </div>
+            <div class="receipt-body">
+              <div class="receipt-row">
+                <span class="receipt-label">ID Pendaftaran:</span>
+                <strong class="receipt-val highlight" id="receipt-id">001-2026-XXXX</strong>
+              </div>
+              <div class="receipt-row">
+                <span class="receipt-label">Nama / Gamer Tag:</span>
+                <strong class="receipt-val" id="receipt-nama">Nama Pendaftar</strong>
+              </div>
+              <div class="receipt-row">
+                <span class="receipt-label">Email Terdaftar:</span>
+                <strong class="receipt-val" id="receipt-email">contoh@email.com</strong>
+              </div>
+              <div class="receipt-row">
+                <span class="receipt-label">Tanggal Daftar:</span>
+                <span class="receipt-val" id="receipt-tanggal">13 Juli 2026</span>
+              </div>
+              <!-- Exam Details Block (Only shown for Jalur Ujian) -->
+              <div id="receipt-exam-row" class="receipt-row hidden"
+                style="border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 10px;">
+                <span class="receipt-label" style="color: #EA4335; font-weight: 700;"><i
+                    class="fa-solid fa-laptop-code"></i> Kode Peserta Ujian:</span>
+                <strong class="receipt-val" id="receipt-exam-code"
+                  style="color: #EA4335; font-family: monospace; font-size: 14px;">EXAM-2026-XXXX</strong>
+              </div>
+              <div class="receipt-row-barcode">
+                <div class="mock-barcode-svg">
+                  <svg id="barcode-svg" width="100%" height="60" viewBox="0 0 200 60"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="15" y="5" width="4" height="50" fill="currentColor" />
+                    <rect x="22" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="26" y="5" width="3" height="50" fill="currentColor" />
+                    <rect x="34" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="40" y="5" width="5" height="50" fill="currentColor" />
+                    <rect x="48" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="52" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="58" y="5" width="4" height="50" fill="currentColor" />
+                    <rect x="66" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="70" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="74" y="5" width="5" height="50" fill="currentColor" />
+                    <rect x="82" y="5" width="3" height="50" fill="currentColor" />
+                    <rect x="90" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="94" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="100" y="5" width="4" height="50" fill="currentColor" />
+                    <rect x="108" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="114" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="120" y="5" width="5" height="50" fill="currentColor" />
+                    <rect x="128" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="134" y="5" width="3" height="50" fill="currentColor" />
+                    <rect x="142" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="146" y="5" width="4" height="50" fill="currentColor" />
+                    <rect x="154" y="5" width="2" height="50" fill="currentColor" />
+                    <rect x="160" y="5" width="5" height="50" fill="currentColor" />
+                    <rect x="168" y="5" width="1" height="50" fill="currentColor" />
+                    <rect x="174" y="5" width="3" height="50" fill="currentColor" />
+                    <rect x="180" y="5" width="4" height="50" fill="currentColor" />
+                    <rect x="188" y="5" width="2" height="50" fill="currentColor" />
+                  </svg>
+                  <p class="barcode-text" id="barcode-id-text">0012026XXXX</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="success-actions">
+            <a id="btn-start-exam-success" href="#" class="btn btn-danger hidden"
+              style="background: #EA4335; border-color: #EA4335; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;"><i
+                class="fa-solid fa-play"></i> Mulai Ujian Online</a>
+            <button id="btn-print-slip" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak Kartu
+              Peserta</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: CHECK STATUS KELULUSAN -->
+    <section id="cek-status-section" class="app-section">
+      <div class="container status-tracker-wrapper">
+        <div class="section-title text-center">
+          <h2>Cek Hasil <span>Seleksi</span></h2>
+          <p>Masukkan Nomor Pendaftaran dan Tanggal Lahir untuk melihat status seleksi Anda secara berkala.</p>
+        </div>
+
+        <!-- Real-time Countdown Banner -->
+        <div id="status-countdown-banner" class="status-countdown-banner hidden"
+          style="margin-bottom: 24px; padding: 20px; text-align: center; background: linear-gradient(135deg, rgba(66, 133, 244, 0.1) 0%, rgba(52, 168, 83, 0.1) 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+          <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 8px;"><i
+              class="fa-solid fa-stopwatch text-primary" style="margin-right: 8px;"></i> Countdown Pengumuman
+            Kelulusan</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Hasil kelulusan Seleksi Nasional
+            Minecrafter 2026 akan dibuka dalam:</p>
+          <div style="display: flex; justify-content: center; gap: 15px;">
+            <div class="countdown-unit"
+              style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px 15px; min-width: 60px;">
+              <span id="countdown-days"
+                style="display: block; font-size: 20px; font-weight: 800; font-family: monospace;">00</span>
+              <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Hari</span>
+            </div>
+            <div class="countdown-unit"
+              style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px 15px; min-width: 60px;">
+              <span id="countdown-hours"
+                style="display: block; font-size: 20px; font-weight: 800; font-family: monospace;">00</span>
+              <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Jam</span>
+            </div>
+            <div class="countdown-unit"
+              style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px 15px; min-width: 60px;">
+              <span id="countdown-minutes"
+                style="display: block; font-size: 20px; font-weight: 800; font-family: monospace;">00</span>
+              <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Menit</span>
+            </div>
+            <div class="countdown-unit"
+              style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px 15px; min-width: 60px;">
+              <span id="countdown-seconds"
+                style="display: block; font-size: 20px; font-weight: 800; font-family: monospace;">00</span>
+              <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Detik</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-search-card">
+          <form id="status-search-form" class="search-form">
+            <div class="search-grid">
+              <div class="form-group">
+                <label for="search-id" class="form-label">Nomor ID Pendaftaran</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-id-card"></i>
+                  <input type="text" id="search-id" class="form-control" placeholder="Contoh: 001-2026-X8BF" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="search-dob" class="form-label">Tanggal Lahir</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  <input type="date" id="search-dob" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group search-btn-container">
+                <button type="submit" class="btn btn-gradient btn-block"><i class="fa-solid fa-magnifying-glass"></i>
+                  Cari Data</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Status Result Display (Hidden initially) -->
+        <div id="status-result-container" class="status-result-container hidden">
+          <div class="status-main-info">
+            <div class="applicant-profile-mini">
+              <div class="profile-avatar"><i class="fa-solid fa-user-graduate"></i></div>
+              <div class="profile-details">
+                <h3 id="res-nama-siswa">Budi Santoso</h3>
+                <p id="res-id-siswa">001-2026-X8BF</p>
+                <span id="res-dob-siswa" class="badge badge-secondary-soft">Tgl Lahir: -</span>
+              </div>
+            </div>
+
+            <div class="status-badge-container">
+              <div class="status-label">Status Terkini:</div>
+              <div id="res-status-badge" class="status-badge status-pending">Menunggu Verifikasi</div>
+            </div>
+          </div>
+
+          <!-- QR Verification Section -->
+          <div class="status-qr-section text-center"
+            style="margin: 20px 0; padding: 15px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;"><i
+                class="fa-solid fa-qrcode"></i> Scan barcode di bawah untuk memverifikasi status kelulusan</p>
+            <div class="qr-code-wrapper"
+              style="display: inline-block; padding: 10px; background: #ffffff; border-radius: var(--radius-sm); box-shadow: var(--card-shadow);">
+              <img id="res-qr-code" src="" alt="QR Code Status Kelulusan"
+                style="width: 130px; height: 130px; display: block; filter: contrast(1.2);">
+            </div>
+            <p id="res-qr-text"
+              style="font-size: 11px; font-family: monospace; color: var(--text-muted); margin-top: 8px; letter-spacing: 0.5px;">
+            </p>
+          </div>
+
+          <!-- Visual Progress Tracker -->
+          <div class="progress-tracker" style="display: none !important;">
+            <div class="tracker-line">
+              <div class="tracker-line-fill" id="tracker-line-fill"></div>
+            </div>
+            <div class="tracker-step" id="tracker-step-1">
+              <div class="step-circle"><i class="fa-solid fa-file-import"></i></div>
+              <div class="step-text">
+                <h4>Diajukan</h4>
+                <p class="date" id="tracker-date-1">12 Juli 2026</p>
+              </div>
+            </div>
+            <div class="tracker-step" id="tracker-step-2">
+              <div class="step-circle"><i class="fa-solid fa-file-shield"></i></div>
+              <div class="step-text">
+                <h4>Verifikasi Berkas</h4>
+                <p class="date" id="tracker-date-2">Menunggu</p>
+              </div>
+            </div>
+            <div class="tracker-step" id="tracker-step-3">
+              <div class="step-circle"><i class="fa-solid fa-graduation-cap"></i></div>
+              <div class="step-text">
+                <h4>Proses Seleksi</h4>
+                <p class="date" id="tracker-date-3">Menunggu</p>
+              </div>
+            </div>
+            <div class="tracker-step" id="tracker-step-4">
+              <div class="step-circle"><i class="fa-solid fa-award"></i></div>
+              <div class="step-text">
+                <h4>Hasil Akhir</h4>
+                <p class="date" id="tracker-date-4">Menunggu</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Information Box Dynamic -->
+          <div id="status-info-box" class="info-box status-info-pending">
+            <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+            <div class="info-text">
+              <h4 id="status-box-title">Berkas Sedang Ditinjau</h4>
+              <p id="status-box-desc">Halo Budi Santoso, pendaftaran Anda telah berhasil diserahkan. Saat ini tim
+                administrasi kami sedang memproses dan memverifikasi pendaftaran Anda. Pantau terus halaman ini.</p>
+            </div>
+            <div class="info-action" id="status-box-action">
+              <!-- Printable SK download button shows up only when Accepted -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Not Found Error -->
+        <div id="status-notfound-container" class="status-notfound-container hidden">
+          <div class="error-visual"><i class="fa-solid fa-folder-open"></i></div>
+          <h3>Data Pendaftaran Tidak Ditemukan</h3>
+          <p>Maaf, tidak ada data pendaftaran yang cocok dengan ID Pendaftaran dan Tanggal Lahir yang Anda masukkan.
+            Silakan periksa kembali ketikan Anda atau pastikan Anda sudah melakukan proses pendaftaran secara lengkap.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: FAQ (TANYA JAWAB) -->
+    <section id="faq-section" class="app-section">
+      <div class="container faq-wrapper">
+        <div class="section-title text-center">
+          <h2>Tanya Jawab <span>(FAQ)</span></h2>
+          <p>Temukan jawaban cepat untuk pertanyaan umum seputar proses Seleksi Nasional Minecrafter (SNM) 2026.
+          </p>
+        </div>
+
+        <div class="faq-search-bar">
+          <div class="input-with-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="faq-search-input" class="form-control"
+              placeholder="Ketik kata kunci pertanyaan... (misal: ijazah, biaya, umur)">
+          </div>
+        </div>
+
+        <div class="faq-list" id="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h4>Kapan batas akhir pendaftaran online SNM 2026?</h4>
+              <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+              <p>Batas akhir pendaftaran online dan upload dokumen administrasi adalah tanggal 15 Agustus 2026. Kami
+                menyarankan untuk melakukan pendaftaran lebih awal guna menghindari beban server yang tinggi menjelang
+                hari penutupan.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h4>Dokumen apa saja yang wajib diunggah saat pendaftaran?</h4>
+              <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+              <p>Anda cukup mengunggah berkas sesuai jalur yang dipilih. Jalur Stats memerlukan unggahan screenshot
+                bukti statistik dari game Minecraft Bedrock. Jalur Beasiswa mengharuskan Anda menuliskan essay. Format
+                gambar yang didukung adalah JPG/PNG/WEBP maksimal 5MB.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h4>Apakah ada biaya pendaftaran untuk SNM 2026?</h4>
+              <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+              <p>Pendaftaran secara online pada website resmi SNM 2026 sepenuhnya gratis dan tidak dipungut biaya apa
+                pun. Semua tahapan seleksi diselenggarakan secara terbuka oleh Komunitas Minecrafter Indonesia.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h4>Bagaimana jika saya mengunggah berkas yang salah atau ingin mengubah pilihan jurusan?</h4>
+              <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+              <p>Data pendaftaran yang sudah terkirim tidak dapat diubah sendiri oleh pendaftar. Apabila ada kesalahan
+                input data penting atau kekeliruan unggah berkas, harap segera menghubungi Panitia SNM via Discord
+                Server
+                (tersedia di bagian footer) dengan menyertakan nama dan ID Pendaftaran.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h4>Apakah ada tes masuk bagi pendaftar jalur Stats Minecraft?</h4>
+              <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+              <p>Pendaftar jalur Stats Minecraft tidak perlu mengikuti ujian CBT. Seleksi dilakukan murni berdasarkan
+                keaslian dan nilai pencapaian dalam statistik gameplay yang diunggah.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h4>Bagaimana cara mengetahui bahwa pendaftaran saya sudah diverifikasi?</h4>
+              <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+              <p>Anda dapat mengecek status verifikasi secara berkala melalui menu "Cek Status" menggunakan ID
+                Pendaftaran dan tanggal lahir Anda. Apabila berkas Anda sudah benar dan lengkap, status Anda akan
+                berubah dari "Menunggu Verifikasi" menjadi "Verifikasi Berkas Berhasil". Kami juga mengirimkan
+                notifikasi status melalui email aktif terdaftar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+          <span class="logo-text">SNM<span>2026</span></span>
+        </div>
+        <p class="brand-desc">Portal resmi pendaftaran Seleksi Nasional Minecrafter (SNM) 2026. Wadah bagi para player
+          Minecraft berbakat di seluruh Indonesia.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h3>Navigasi Cepat</h3>
+        <ul>
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#daftar">Formulir Pendaftaran</a></li>
+          <li><a href="#cek-status">Cek Status</a></li>
+          <li><a href="#faq">Pertanyaan & Jawaban</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h3>Hubungi Kami</h3>
+        <p><i class="fa-brands fa-discord"></i> discord.gg/snm2026 (Komunitas Resmi)</p>
+        <p><i class="fa-solid fa-envelope"></i> snm2026@minecrafter.id</p>
+        <p><i class="fa-brands fa-whatsapp text-success"></i> +62 812-3456-7890 (WA Admin SNM)</p>
+      </div>
+    </div>
+    <div class="footer-bottom text-center">
+      <p>&copy; 2026 SNM Indonesia. Hak Cipta Dilindungi. Hubungi Admin Discord jika Anda mengalami kendala teknis.</p>
+    </div>
+  </footer>
+
+  <!-- MODAL: PRINT SLIP / KARTU PENDAFTARAN -->
+  <div id="print-slip-modal" class="modal-wrapper">
+    <div class="modal-content-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-id-card"></i> Kartu Peserta SNM 2026</h3>
+        <button class="modal-close-btn" data-close="print-slip-modal">&times;</button>
+      </div>
+      <div class="modal-body print-area" id="print-slip-area">
+        <!-- Inside print layout -->
+        <div class="print-card-layout">
+          <div class="print-header-brand">
+            <i class="fa-solid fa-cube logo-large"></i>
+            <div>
+              <h2>PANITIA SELEKSI NASIONAL MINECRAFTER</h2>
+              <h1>SNM 2026</h1>
+              <p>Komunitas Minecrafter Indonesia | snm2026@minecrafter.id | discord.gg/snm2026</p>
+            </div>
+          </div>
+
+          <hr class="print-divider">
+
+          <h3 class="print-title">KARTU TANDA PESERTA SELEKSI NASIONAL MINECRAFTER 2026</h3>
+
+          <div class="print-grid">
+            <div class="print-avatar-box">
+              <div class="avatar-photo-box">Pas Foto<br>3 x 4</div>
+            </div>
+            <div class="print-details-box">
+              <table class="print-table-details">
+                <tr>
+                  <td>Nomor Peserta</td>
+                  <td>:</td>
+                  <td><strong id="print-p-id">001-2026-X8BF</strong></td>
+                </tr>
+                <tr>
+                  <td>Nama / Gamer Tag</td>
+                  <td>:</td>
+                  <td><span id="print-p-nama">Budi Santoso</span></td>
+                </tr>
+                <tr>
+                  <td>Tanggal Lahir</td>
+                  <td>:</td>
+                  <td><span id="print-p-dob">-</span></td>
+                </tr>
+                <tr>
+                  <td>Jalur Pendaftaran</td>
+                  <td>:</td>
+                  <td><span id="print-p-jalur">-</span></td>
+                </tr>
+                <tr>
+                  <td>Email Terdaftar</td>
+                  <td>:</td>
+                  <td><span id="print-p-email">budisantoso@gmail.com</span></td>
+                </tr>
+                <tr>
+                  <td>Tanggal Daftar</td>
+                  <td>:</td>
+                  <td><span id="print-p-tanggal">12 Juli 2026</span></td>
+                </tr>
+                <tr>
+                  <td>Sekolah Minecraft</td>
+                  <td>:</td>
+                  <td><span id="print-p-sekolah">-</span></td>
+                </tr>
+                <tr>
+                  <td>Role Minecraft</td>
+                  <td>:</td>
+                  <td><span id="print-p-role">-</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="print-footer-info">
+            <div class="print-qrcode-mock">
+              <!-- MOCK SVG QR Code -->
+              <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="80" height="80" fill="white" />
+                <rect x="5" y="5" width="20" height="20" fill="black" />
+                <rect x="7" y="7" width="16" height="16" fill="white" />
+                <rect x="10" y="10" width="10" height="10" fill="black" />
+                <rect x="55" y="5" width="20" height="20" fill="black" />
+                <rect x="57" y="7" width="16" height="16" fill="white" />
+                <rect x="60" y="60" width="10" height="10" fill="black" />
+                <rect x="5" y="55" width="20" height="20" fill="black" />
+                <rect x="7" y="57" width="16" height="16" fill="white" />
+                <rect x="10" y="60" width="10" height="10" fill="black" />
+                <rect x="35" y="15" width="5" height="5" fill="black" />
+                <rect x="45" y="5" width="5" height="5" fill="black" />
+                <rect x="30" y="30" width="10" height="10" fill="black" />
+                <rect x="45" y="45" width="10" height="10" fill="black" />
+                <rect x="60" y="35" width="5" height="10" fill="black" />
+                <rect x="35" y="55" width="10" height="5" fill="black" />
+                <rect x="65" y="55" width="5" height="5" fill="black" />
+                <rect x="15" y="35" width="5" height="5" fill="black" />
+                <rect x="50" y="25" width="5" height="5" fill="black" />
+              </svg>
+            </div>
+            <div class="print-signatures" style="position: relative;">
+              <p>Jakarta, <span id="print-signature-date">12 Juli 2026</span></p>
+              <p style="margin-top: 5px;">Ketua Panitia SNM 2026,</p>
+              <div style="position: relative; height: 50px; margin: 5px 0;">
+                <img src="signature.png" alt="Tanda Tangan" style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
+              </div>
+              <p><strong>Admin SNM Indonesia</strong></p>
+              <span class="nip-text">ID Panitia: SNM-ADM-2026-001</span>
+            </div>
+          </div>
+
+          <div class="print-note">
+            <p><strong>Catatan:</strong> Kartu ini adalah bukti pendaftaran resmi Seleksi Nasional Minecrafter (SNM)
+              2026. Harap disimpan sebagai referensi selama proses seleksi berlangsung. Seleksi bersifat transparan dan
+              menggunakan sistem penilaian IRT.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close="print-slip-modal">Tutup</button>
+        <button id="btn-download-slip-pdf" class="btn btn-success"><i class="fa-solid fa-download"></i> Unduh PDF</button>
+        <button id="btn-do-print-slip" class="btn btn-primary"><i class="fa-solid fa-print"></i> Jalankan Cetak</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRINT CBT SCORE CERTIFICATE -->
+  <div id="print-cbt-modal" class="modal-wrapper">
+    <div class="modal-content-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-award"></i> Sertifikat Skor CBT</h3>
+        <button class="modal-close-btn" data-close="print-cbt-modal">&times;</button>
+      </div>
+      <div class="modal-body print-area" id="print-cbt-area">
+        <!-- Inside print layout -->
+        <div class="print-card-layout">
+          <div class="print-header-brand">
+            <i class="fa-solid fa-cube logo-large"></i>
+            <div>
+              <h2>PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</h2>
+              <h1>SNM 2026</h1>
+              <p>Komunitas Minecrafter Indonesia | snm2026@minecrafter.id | discord.gg/snm2026</p>
+            </div>
+          </div>
+
+          <hr class="print-divider">
+
+          <div style="text-align: center; margin: 20px 0 15px;">
+            <h2 style="font-size: 18px; font-weight: 800; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: #000;">SERTIFIKAT HASIL UJIAN CBT</h2>
+            <p style="font-size: 11px; color: #666; margin-top: 4px;">Computer Based Test – Seleksi Nasional Minecrafter 2026</p>
+          </div>
+
+          <div class="letter-body">
+            <p>Yang bertanda tangan di bawah ini, Panitia Seleksi Nasional Minecrafter (SNM) Indonesia 2026 menerangkan bahwa:</p>
+
+            <table class="table-letter-result">
+              <tr>
+                <td width="30%">Nomor Pendaftaran</td>
+                <td width="3%">:</td>
+                <td><strong id="cbt-cert-id">-</strong></td>
+              </tr>
+              <tr>
+                <td>Nama Lengkap</td>
+                <td>:</td>
+                <td><strong id="cbt-cert-nama">-</strong></td>
+              </tr>
+              <tr>
+                <td>Email Terdaftar</td>
+                <td>:</td>
+                <td><span id="cbt-cert-email">-</span></td>
+              </tr>
+              <tr>
+                <td>Jalur Seleksi</td>
+                <td>:</td>
+                <td><strong id="cbt-cert-jalur">JALUR SELEKSI UJIAN (CBT)</strong></td>
+              </tr>
+              <tr>
+                <td>Sekolah Minecraft</td>
+                <td>:</td>
+                <td><strong id="cbt-cert-sekolah">-</strong></td>
+              </tr>
+              <tr>
+                <td>Role Minecraft</td>
+                <td>:</td>
+                <td><strong id="cbt-cert-role">-</strong></td>
+              </tr>
+              <tr>
+                <td>Kode Peserta Ujian</td>
+                <td>:</td>
+                <td><strong id="cbt-cert-code" style="color: #EA4335; font-family: monospace;">-</strong></td>
+              </tr>
+            </table>
+
+            <div style="text-align: center; margin: 25px 0; padding: 20px; border: 2px solid #000; border-radius: 8px;">
+              <p style="font-size: 12px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Skor Ujian CBT (Item Response Theory)</p>
+              <p id="cbt-cert-score" style="font-size: 48px; font-weight: 900; margin: 0; line-height: 1;">0</p>
+              <p style="font-size: 12px; color: #666; margin: 5px 0 0;">Poin IRT</p>
+            </div>
+
+            <p>Telah menyelesaikan <strong>Ujian Seleksi Berbasis Komputer (CBT)</strong> yang diselenggarakan secara resmi oleh Panitia SNM Indonesia 2026 dengan perolehan skor di atas.</p>
+
+            <p>Skor dihitung menggunakan metode <strong>Item Response Theory (IRT)</strong>, di mana setiap soal memiliki bobot kesulitan (<em>difficulty parameter, b</em>) dan daya beda (<em>discrimination parameter, a</em>) yang berbeda-beda. Skor akhir peserta mencerminkan kemampuan estimasi (<em>ability, θ</em>) yang disesuaikan dengan karakteristik butir soal.</p>
+
+            <p>Sertifikat ini diterbitkan sebagai bukti resmi penyelesaian ujian CBT dan hanya berlaku untuk proses seleksi SNM 2026.</p>
+          </div>
+
+          <div class="print-footer-info">
+            <div class="print-qrcode-mock">
+              <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="80" height="80" fill="white" />
+                <rect x="5" y="5" width="20" height="20" fill="black" />
+                <rect x="7" y="7" width="16" height="16" fill="white" />
+                <rect x="10" y="10" width="10" height="10" fill="black" />
+                <rect x="55" y="5" width="20" height="20" fill="black" />
+                <rect x="57" y="7" width="16" height="16" fill="white" />
+                <rect x="60" y="60" width="10" height="10" fill="black" />
+                <rect x="5" y="55" width="20" height="20" fill="black" />
+                <rect x="7" y="57" width="16" height="16" fill="white" />
+                <rect x="10" y="60" width="10" height="10" fill="black" />
+                <rect x="35" y="15" width="5" height="5" fill="black" />
+                <rect x="45" y="5" width="5" height="5" fill="black" />
+                <rect x="30" y="30" width="10" height="10" fill="black" />
+                <rect x="45" y="45" width="10" height="10" fill="black" />
+                <rect x="60" y="35" width="5" height="10" fill="black" />
+                <rect x="35" y="55" width="10" height="5" fill="black" />
+                <rect x="65" y="55" width="5" height="5" fill="black" />
+                <rect x="15" y="35" width="5" height="5" fill="black" />
+                <rect x="50" y="25" width="5" height="5" fill="black" />
+              </svg>
+            </div>
+            <div class="print-signatures" style="position: relative;">
+              <p id="cbt-cert-date">Jakarta, Juli 2026</p>
+              <p>Ketua Panitia SNM 2026,</p>
+              <div style="position: relative; height: 50px; margin: 5px 0;">
+                <img src="signature.png" alt="Tanda Tangan" style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
+              </div>
+              <p><strong>Admin SNM Indonesia</strong></p>
+              <span class="nip-text">ID Panitia: SNM-ADM-2026-001</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close="print-cbt-modal">Tutup</button>
+        <button id="btn-download-cbt-pdf" class="btn btn-success"><i class="fa-solid fa-download"></i> Unduh PDF</button>
+        <button id="btn-do-print-cbt" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak Sertifikat CBT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRINT GRADUATION / SURAT KEPUTUSAN KELULUSAN -->
+  <div id="print-sk-modal" class="modal-wrapper">
+    <div class="modal-content-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-trophy"></i> Sertifikat Minecrafter Nasional</h3>
+        <button class="modal-close-btn" data-close="print-sk-modal">&times;</button>
+      </div>
+      <div class="modal-body print-area" id="print-sk-area">
+        <!-- Inside print layout -->
+        <div class="print-card-layout">
+          <div class="print-header-brand">
+            <i class="fa-solid fa-cube logo-large"></i>
+            <div>
+              <h2>PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</h2>
+              <h1>SNM 2026</h1>
+              <p>Komunitas Minecrafter Indonesia | snm2026@minecrafter.id | discord.gg/snm2026</p>
+            </div>
+          </div>
+
+          <hr class="print-divider">
+
+          <div class="letter-meta-details">
+            <table class="table-meta-left">
+              <tr>
+                <td>Nomor</td>
+                <td>:</td>
+                <td>421.3/082/SNM-ID/2026</td>
+              </tr>
+              <tr>
+                <td>Lampiran</td>
+                <td>:</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Perihal</td>
+                <td>:</td>
+                <td><strong>Keputusan Kelulusan Seleksi Nasional Minecrafter 2026</strong></td>
+              </tr>
+            </table>
+            <div class="date-right">Jakarta, 25 Agustus 2026</div>
+          </div>
+
+          <div class="letter-body">
+            <p>Kepada Yth.<br>Peserta Seleksi Nasional Minecrafter<br>Di Tempat</p>
+
+            <p class="letter-salutation">Dengan hormat,</p>
+            <p>Berdasarkan hasil verifikasi dan proses evaluasi seleksi secara online oleh Panitia Seleksi Nasional
+              Minecrafter (SNM) Indonesia 2026, dengan ini Panitia memutuskan bahwa:</p>
+
+            <table class="table-letter-result">
+              <tr>
+                <td width="30%">Nomor Pendaftaran</td>
+                <td width="3%">:</td>
+                <td><strong id="letter-p-id">001-2026-X8BF</strong></td>
+              </tr>
+              <tr>
+                <td>Nama Lengkap</td>
+                <td>:</td>
+                <td><strong id="letter-p-nama">BUDI SANTOSO</strong></td>
+              </tr>
+              <tr>
+                <td>Jalur Seleksi</td>
+                <td>:</td>
+                <td><strong id="letter-p-jalur">-</strong></td>
+              </tr>
+              <tr>
+                <td>Email Terdaftar</td>
+                <td>:</td>
+                <td><span id="letter-p-email">budisantoso@gmail.com</span></td>
+              </tr>
+              <tr>
+                <td>Sekolah Minecraft</td>
+                <td>:</td>
+                <td><strong id="letter-p-sekolah">-</strong></td>
+              </tr>
+              <tr>
+                <td>Role Minecraft</td>
+                <td>:</td>
+                <td><strong id="letter-p-role">-</strong></td>
+              </tr>
+              <tr>
+                <td>Status Kelulusan</td>
+                <td>:</td>
+                <td><span class="badge-print-accepted"><strong>DITERIMA</strong></span></td>
+              </tr>
+            </table>
+
+            <p>Dinyatakan <strong>LOLOS SELEKSI NASIONAL MINECRAFTER 2026</strong> dan berhak mendapatkan pengakuan
+              resmi sebagai <strong>Minecrafter Nasional Terpilih Indonesia Tahun 2026</strong>.
+            </p>
+            <p style="font-size: 14px; line-height: 1.6; margin-top: 10px; margin-bottom: 20px; font-weight: bold; color: #15803d; text-align: center;" id="letter-p-statement">
+              Anda lulus seleksi pada pilihan sekolah <span id="letter-statement-sekolah">-</span> dan role <span id="letter-statement-role">-</span>
+            </p>
+
+            <p>Selanjutnya, bagi calon siswa yang dinyatakan diterima diwajibkan untuk melaksanakan proses
+              <strong>Konfirmasi Kelulusan</strong> yang akan dilaksanakan pada tanggal <strong>26 Agustus s/d 31
+                Agustus 2026</strong> dengan melengkapi persyaratan sebagai berikut:
+            </p>
+            <ol>
+              <li>Menyimpan sertifikat kelulusan SNM 2026 yang telah dicetak dari portal resmi.</li>
+              <li>Bergabung ke server Discord resmi Komunitas Minecrafter Indonesia (discord.gg/snm2026).</li>
+              <li>Mengisi formulir konfirmasi kelulusan secara online di portal SNM.</li>
+            </ol>
+
+            <p>Apabila sampai dengan batas tanggal yang ditentukan peserta tidak melakukan konfirmasi, maka yang
+              bersangkutan dianggap <strong>mengundurkan diri</strong>.</p>
+
+            <p>Demikian sertifikat kelulusan ini diterbitkan. Selamat atas prestasi yang telah diraih!</p>
+          </div>
+
+          <div class="print-footer-info">
+            <div class="print-qrcode-mock">
+              <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="80" height="80" fill="white" />
+                <rect x="5" y="5" width="20" height="20" fill="black" />
+                <rect x="7" y="7" width="16" height="16" fill="white" />
+                <rect x="10" y="10" width="10" height="10" fill="black" />
+                <rect x="55" y="5" width="20" height="20" fill="black" />
+                <rect x="57" y="7" width="16" height="16" fill="white" />
+                <rect x="60" y="60" width="10" height="10" fill="black" />
+                <rect x="5" y="55" width="20" height="20" fill="black" />
+                <rect x="7" y="57" width="16" height="16" fill="white" />
+                <rect x="10" y="60" width="10" height="10" fill="black" />
+                <rect x="35" y="15" width="5" height="5" fill="black" />
+                <rect x="45" y="5" width="5" height="5" fill="black" />
+                <rect x="30" y="30" width="10" height="10" fill="black" />
+                <rect x="45" y="45" width="10" height="10" fill="black" />
+                <rect x="60" y="35" width="5" height="10" fill="black" />
+                <rect x="35" y="55" width="10" height="5" fill="black" />
+                <rect x="65" y="55" width="5" height="5" fill="black" />
+                <rect x="15" y="35" width="5" height="5" fill="black" />
+                <rect x="50" y="25" width="5" height="5" fill="black" />
+              </svg>
+            </div>
+            <div class="print-signatures" style="position: relative;">
+              <p>Ketua Panitia SNM 2026,</p>
+              <div style="position: relative; height: 50px; margin: 5px 0;">
+                <img src="signature.png" alt="Tanda Tangan" style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
+              </div>
+              <p><strong>Admin SNM Indonesia</strong></p>
+              <span class="nip-text">ID Panitia: SNM-ADM-2026-001</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close="print-sk-modal">Tutup</button>
+        <button id="btn-download-sk-pdf" class="btn btn-success"><i class="fa-solid fa-download"></i> Unduh PDF</button>
+        <button id="btn-do-print-sk" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak Sertifikat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOCK GOOGLE ACCOUNT CHOOSER MODAL -->
+  <div id="google-oauth-modal" class="modal-wrapper">
+    <div class="modal-card google-oauth-card" style="max-width: 400px; padding: 24px; border-radius: var(--radius-md);">
+      <div class="google-oauth-header text-center" style="margin-bottom: 20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"
+          style="margin: 0 auto 12px; display: block;">
+          <path fill="#EA4335"
+            d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+          <path fill="#4285F4"
+            d="M46.5 24.5c0-1.61-.15-3.16-.42-4.66H24v8.8h12.7c-.55 2.87-2.17 5.3-4.61 6.94l7.15 5.54C43.43 36.3 46.5 30.93 46.5 24.5z" />
+          <path fill="#FBBC05"
+            d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.98-6.19z" />
+          <path fill="#34A853"
+            d="M24 38.5c-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48c6.48 0 11.93-2.13 15.89-5.81l-7.15-5.54c-2.33 1.57-5.32 2.85-8.74 2.85z" />
+        </svg>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">Pilih Akun Google Anda</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">untuk melanjutkan ke pendaftaran <strong>SNM 2026
+            (Seleksi Nasional Minecrafter)</strong></p>
+      </div>
+
+      <!-- Account Chooser Views -->
+
+      <!-- Option 2: user.test@gmail.com -->
+      <div class="google-account-item" data-email="user.test@gmail.com" data-name="User Test">
+        <div class="google-avatar-circle" style="background: #34A853;">T</div>
+        <div class="google-account-details">
+          <span class="name" style="font-weight: 700; display: block; font-size: 13px;">User Test</span>
+          <span class="email"
+            style="display: block; font-size: 11px; color: var(--text-muted);">user.test@gmail.com</span>
+        </div>
+      </div>
+
+      <!-- Option 3: Gunakan akun lain -->
+      <div class="google-account-item-new" id="btn-use-custom-google">
+        <div class="google-avatar-circle"
+          style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary);">
+          <i class="fa-solid fa-user-plus" style="font-size: 11px;"></i>
+        </div>
+        <div class="google-account-details">
+          <span class="name" style="font-weight: 700; font-size: 13px;">Gunakan akun lain</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Credentials Inputs (Hidden initially) -->
+    <form id="google-custom-auth-form" class="google-custom-auth-form hidden" style="margin-top: 15px;">
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="custom-google-email" class="form-label"
+          style="font-size: 11px; margin-bottom: 4px; display: block;">Alamat Email Google (Gmail)</label>
+        <input type="email" id="custom-google-email" class="form-control form-control-sm" placeholder="contoh@gmail.com"
+          required style="height: 38px;">
+      </div>
+      <div class="form-group" style="margin-bottom: 15px;">
+        <label for="custom-google-name" class="form-label"
+          style="font-size: 11px; margin-bottom: 4px; display: block;">Nama Lengkap Akun XBOX Minecraft</label>
+        <input type="text" id="custom-google-name" class="form-control form-control-sm" placeholder="Masukkan nama..."
+          required style="height: 38px;">
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button type="button" id="btn-back-to-chooser" class="btn btn-sm btn-outline"
+          style="flex: 1; height: 38px;">Kembali</button>
+        <button type="submit" class="btn btn-sm btn-gradient" style="flex: 1; height: 38px;">Lanjutkan</button>
+      </div>
+    </form>
+
+    <!-- Connection Overlay Loader (Hidden initially) -->
+    <div id="google-loader-overlay" class="google-loader-overlay hidden"
+      style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10;">
+      <div class="google-spinner"
+        style="width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.2); border-top-color: #4285F4; border-radius: 50%; animation: spin-google 1s linear infinite; margin-bottom: 15px;">
+      </div>
+      <p id="google-loader-text" style="font-size: 13px; color: #ffffff;">Menghubungkan ke Google...</p>
+    </div>
+
+    <div class="google-oauth-footer text-center"
+      style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 12px; font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+      <p>Dengan melanjutkan, Google akan membagikan nama, alamat email, dan foto profil Anda ke Panitia SNM 2026 untuk
+        keperluan verifikasi peserta.</p>
+    </div>
+  </div>
+  </div>
+
+  <!-- ChartJS script -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- html2pdf script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Initializer -->
+  <script src="firebase-init.js"></script>
+  <!-- App JS -->
+  <script src="app.js?v=17"></script>
+</body>
+
+</html>

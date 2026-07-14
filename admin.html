@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin SNM 2026 – Seleksi Nasional Minecrafter</title>
+  <!-- Google Fonts - Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Style CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Header & Navigation -->
+  <header class="main-header">
+    <div class="container navbar-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+        <span class="logo-text">SNM<span>2026</span></span>
+      </a>
+
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Halaman Utama</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Google Profile Widget -->
+        <div id="google-profile-widget" class="google-profile-widget hidden">
+          <div class="profile-badge" id="google-profile-badge">
+            <span class="profile-initials" id="google-profile-initials">U</span>
+            <img id="google-profile-avatar" src="" alt="Google Avatar" class="hidden">
+          </div>
+          <div class="profile-dropdown" id="google-profile-dropdown">
+            <div class="dropdown-user-info">
+              <strong id="dropdown-user-name">Nama User</strong>
+              <span id="dropdown-user-email">email@gmail.com</span>
+            </div>
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+            <button id="btn-google-logout" class="dropdown-item text-danger"><i
+                class="fa-solid fa-right-from-bracket"></i> Keluar Akun</button>
+          </div>
+        </div>
+
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Ganti Tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button id="menu-toggle" class="menu-toggle-btn" aria-label="Buka Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-content">
+
+    <!-- Backend Connection Warning Banner -->
+    <div id="db-connection-warning"
+      style="background: #ef4444; color: #fff; padding: 12px 24px; text-align: center; font-size: 13px; font-weight: 600; display: none; align-items: center; justify-content: center; gap: 8px; z-index: 9999; width: 100%; box-sizing: border-box;">
+      <i class="fa-solid fa-triangle-exclamation" style="font-size: 16px;"></i>
+      <span>Gagal terhubung ke database. Harap jalankan server backend dengan mengetikkan <code>npm run dev</code> di
+        terminal Anda, lalu buka <a href="http://localhost:3000"
+          style="color: #fff; text-decoration: underline; font-weight: 700;">http://localhost:3000</a>.</span>
+    </div>
+
+    <!-- SECTION 5: ADMIN DASHBOARD (SIMULATOR) -->
+    <section id="admin-section" class="app-section active" style="margin-top: 40px; margin-bottom: 40px;">
+      <div class="container admin-wrapper">
+
+        <!-- ADMIN LOGIN PANEL (SIMULATED) -->
+        <div id="admin-login-card" class="admin-login-card">
+          <div class="admin-login-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <h2>Akses Dashboard Simulator Admin</h2>
+          <p>Gunakan password simulasi di bawah ini untuk mengelola data pendaftar:</p>
+          <div class="passcode-hint">Password Simulasi: <code>admin123</code></div>
+
+          <form id="admin-login-form" class="admin-login-form">
+            <div class="form-group">
+              <label for="admin-password" class="form-label">Password</label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="admin-password" class="form-control" placeholder="Masukkan password admin..."
+                  required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient btn-block"><i class="fa-solid fa-right-to-bracket"></i> Masuk
+              Dashboard</button>
+          </form>
+        </div>
+
+        <!-- MAIN ADMIN DASHBOARD CONTENT (Hidden until logged in) -->
+        <div id="admin-dashboard-container" class="admin-dashboard-container hidden">
+          <div class="admin-dashboard-header">
+            <div>
+              <h2>Dashboard Panitia Penerimaan <span>(Admin Mode)</span></h2>
+              <p>Selamat datang di panel kontrol simulasi Panitia SNM 2026. Anda dapat memvalidasi data dan merubah
+                status kelulusan peserta di sini.</p>
+            </div>
+            <button id="btn-admin-logout" class="btn btn-outline btn-sm"><i class="fa-solid fa-right-from-bracket"></i>
+              Keluar Admin</button>
+          </div>
+
+          <!-- Admin sub-navigation tabs -->
+          <div class="admin-sub-nav"
+            style="display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; overflow-x: auto;">
+            <button class="btn admin-tab-btn btn-gradient btn-sm active" data-target="admin-tab-overview"
+              style="height: 38px; font-size: 13px;"><i class="fa-solid fa-chart-pie"></i> Ringkasan &
+              Statistik</button>
+            <button class="btn admin-tab-btn btn-outline btn-sm" data-target="admin-tab-applicants"
+              style="height: 38px; font-size: 13px;"><i class="fa-solid fa-users"></i> Kelola Pendaftar</button>
+            <button class="btn admin-tab-btn btn-outline btn-sm" data-target="admin-tab-exams"
+              style="height: 38px; font-size: 13px;"><i class="fa-solid fa-laptop-code"></i> Ujian CBT</button>
+            <button class="btn admin-tab-btn btn-outline btn-sm" data-target="admin-tab-settings"
+              style="height: 38px; font-size: 13px;"><i class="fa-solid fa-gears"></i> Pengaturan Sistem</button>
+          </div>
+
+
+          <!-- Admin Stats Cards Grid -->
+          <div class="admin-stats-grid admin-tab-content admin-tab-overview-el">
+            <div class="astat-card card-total">
+              <div class="astat-icon"><i class="fa-solid fa-users"></i></div>
+              <div class="astat-info">
+                <h4 id="astat-total">0</h4>
+                <p>Total Pendaftar</p>
+              </div>
+            </div>
+            <div class="astat-card card-accepted"
+              style="border-left: 4px solid #10b981; background: var(--bg-tertiary);">
+              <div class="astat-icon" style="color: #10b981;"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="astat-info">
+                <h4 id="astat-accepted" style="color: #10b981;">0</h4>
+                <p style="color: var(--text-muted);">Lulus Seleksi</p>
+              </div>
+            </div>
+            <div class="astat-card card-rejected"
+              style="border-left: 4px solid #ef4444; background: var(--bg-tertiary);">
+              <div class="astat-icon" style="color: #ef4444;"><i class="fa-solid fa-circle-xmark"></i></div>
+              <div class="astat-info">
+                <h4 id="astat-rejected" style="color: #ef4444;">0</h4>
+                <p style="color: var(--text-muted);">Tidak Diterima</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts visualizer container -->
+          <div class="charts-grid-row admin-tab-content admin-tab-overview-el" style="grid-template-columns: 1fr 1fr;">
+            <div class="chart-card">
+              <h3>Proporsi Status Seleksi</h3>
+              <div class="chart-container-mock">
+                <canvas id="chart-status"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>Tren Pendaftaran Harian</h3>
+              <div class="chart-container-mock">
+                <canvas id="chart-tren"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quota & Passing Grade Control Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-applicants-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid var(--border-focus);">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i class="fa-solid fa-sliders text-muted"
+                style="margin-right: 8px;"></i> Kelulusan Otomatis (Kuota atau Passing Grade IRT)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Pilih metode kelulusan: Urutkan
+              berdasarkan Skor IRT tertinggi sesuai dengan kuota penerimaan, ATAU tentukan batas kelulusan minimal
+              (Passing Grade) secara langsung.</p>
+
+            <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+              <!-- Quota Section -->
+              <div
+                style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; flex: 1; min-width: 280px; padding-right: 20px; border-right: 1px dashed var(--border-color);">
+                <div class="form-group" style="margin-bottom: 0; min-width: 120px;">
+                  <label for="admin-quota-input" class="form-label"
+                    style="font-size: 11px; margin-bottom: 4px; display: block;">Kuota Kelulusan</label>
+                  <input type="number" id="admin-quota-input" class="form-control" value="3" min="1"
+                    style="height: 38px;">
+                </div>
+                <div style="margin-top: 15px;">
+                  <button id="btn-apply-quota" class="btn btn-gradient" style="height: 38px;"><i
+                      class="fa-solid fa-circle-check"></i> Terapkan Sesuai Kuota</button>
+                </div>
+              </div>
+
+              <!-- Passing Grade Section -->
+              <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; flex: 1; min-width: 280px;">
+                <div class="form-group" style="margin-bottom: 0; min-width: 140px;">
+                  <label for="admin-passing-grade-input" class="form-label"
+                    style="font-size: 11px; margin-bottom: 4px; display: block;">Passing Grade (Batas Skor)</label>
+                  <input type="number" id="admin-passing-grade-input" class="form-control" value="70" min="0" max="100"
+                    style="height: 38px;">
+                </div>
+                <div style="margin-top: 15px;">
+                  <button id="btn-apply-passing-grade" class="btn btn-outline" style="height: 38px;"><i
+                      class="fa-solid fa-sliders"></i> Terapkan Passing Grade</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CBT Exam Timer Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-exams-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #EA4335;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i
+                class="fa-solid fa-stopwatch text-danger" style="margin-right: 8px;"></i> Waktu Pengerjaan Ujian CBT
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Tentukan batas waktu pengerjaan
+              untuk ujian CBT online (dalam menit).</p>
+            <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+              <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+                <label for="admin-cbt-duration-input" class="form-label"
+                  style="font-size: 11px; margin-bottom: 4px; display: block;">Durasi Ujian (Menit)</label>
+                <input type="number" id="admin-cbt-duration-input" class="form-control" value="10" min="1" max="180"
+                  style="height: 38px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0 12px; box-sizing: border-box; width: 100%;">
+              </div>
+              <div style="margin-bottom: 0;">
+                <button id="btn-save-cbt-duration" class="btn btn-gradient" style="height: 38px;"><i
+                    class="fa-solid fa-floppy-disk"></i> Simpan Waktu</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CBT Question Bank Manager Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-exams-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #EA4335;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i
+                class="fa-solid fa-laptop-code text-danger" style="margin-right: 8px;"></i> Pengelolaan Bank Soal &
+              Bobot IRT</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Kelola materi ujian CBT online.
+              Setiap soal memiliki bobot tingkat kesulitan (b) dan daya beda (a) untuk perhitungan skor IRT (Item
+              Response Theory) otomatis.</p>
+
+            <!-- Add Question Form -->
+            <form id="admin-add-question-form"
+              style="background: var(--bg-tertiary); padding: 15px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 20px;">
+              <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-primary);">Tambah
+                Soal Baru</h4>
+              <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-text" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Pertanyaan
+                    Soal</label>
+                  <textarea id="q-text" class="form-control" rows="2" placeholder="Tuliskan pertanyaan ujian di sini..."
+                    required style="padding: 8px; font-size: 13px;"></textarea>
+                </div>
+              </div>
+              <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-opt-a" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Pilihan A</label>
+                  <input type="text" id="q-opt-a" class="form-control" placeholder="Pilihan jawaban A" required
+                    style="height: 34px; font-size: 13px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-opt-b" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Pilihan B</label>
+                  <input type="text" id="q-opt-b" class="form-control" placeholder="Pilihan jawaban B" required
+                    style="height: 34px; font-size: 13px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-opt-c" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Pilihan C</label>
+                  <input type="text" id="q-opt-c" class="form-control" placeholder="Pilihan jawaban C" required
+                    style="height: 34px; font-size: 13px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-opt-d" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Pilihan D</label>
+                  <input type="text" id="q-opt-d" class="form-control" placeholder="Pilihan jawaban D" required
+                    style="height: 34px; font-size: 13px;">
+                </div>
+              </div>
+              <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; align-items: flex-end;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-subtest" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Kategori
+                    Subtes</label>
+                  <select id="q-subtest" class="form-control" required style="height: 34px; font-size: 13px;">
+                    <option value="Penalaran Matematika">Penalaran Matematika</option>
+                    <option value="Kemampuan Bernalar">Kemampuan Bernalar</option>
+                    <option value="Soal-soal Minecraft" selected>Soal-soal Minecraft</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-answer" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Kunci
+                    Jawaban</label>
+                  <select id="q-answer" class="form-control" required style="height: 34px; font-size: 13px;">
+                    <option value="" disabled selected>Pilih Kunci...</option>
+                    <option value="0">Pilihan A</option>
+                    <option value="1">Pilihan B</option>
+                    <option value="2">Pilihan C</option>
+                    <option value="3">Pilihan D</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-param-b" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Kesulitan b (-3
+                    s/d 3)</label>
+                  <input type="number" id="q-param-b" class="form-control" value="0.0" step="0.1" min="-3" max="3"
+                    required style="height: 34px; font-size: 13px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="q-param-a" class="form-label" style="font-size: 11px; margin-bottom: 4px;">Daya Beda a
+                    (0.5 s/d 2.5)</label>
+                  <input type="number" id="q-param-a" class="form-control" value="1.0" step="0.1" min="0.5" max="2.5"
+                    required style="height: 34px; font-size: 13px;">
+                </div>
+                <button type="submit" class="btn btn-gradient btn-sm"
+                  style="height: 34px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;"><i
+                    class="fa-solid fa-plus"></i> Simpan Soal</button>
+              </div>
+            </form>
+
+            <!-- Questions List Table -->
+            <div class="table-responsive"
+              style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+              <table class="applicants-table" style="margin: 0; font-size: 12px;">
+                <thead>
+                  <tr style="position: sticky; top: 0; background: var(--bg-secondary); z-index: 1;">
+                    <th style="padding: 8px;">Soal Pertanyaan</th>
+                    <th style="padding: 8px; width: 140px; text-align: center;">Subtes</th>
+                    <th style="padding: 8px; width: 90px; text-align: center;">Kunci</th>
+                    <th style="padding: 8px; width: 70px; text-align: center;">Kesulitan (b)</th>
+                    <th style="padding: 8px; width: 70px; text-align: center;">Daya Beda (a)</th>
+                    <th style="padding: 8px; width: 70px; text-align: center;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="exam-questions-table-body">
+                  <!-- JS renders lines here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- CBT Monitor & Block Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-exams-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #f59e0b;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">
+              <i class="fa-solid fa-shield-halved" style="color: #f59e0b; margin-right: 8px;"></i>
+              Pantau &amp; Blokir Peserta CBT
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+              Daftar peserta jalur CBT. Admin dapat memblokir atau membuka blokir akses ujian peserta yang terdeteksi curang.
+            </p>
+            <div style="display: flex; gap: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap;">
+              <button id="btn-refresh-cbt-monitor" class="btn btn-outline" style="height: 34px; font-size: 12px;">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+              <span id="cbt-monitor-summary" style="font-size: 12px; color: var(--text-muted);"></span>
+            </div>
+            <div class="table-responsive"
+              style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+              <table class="applicants-table" style="margin: 0; font-size: 12px;">
+                <thead>
+                  <tr style="position: sticky; top: 0; background: var(--bg-secondary); z-index: 1;">
+                    <th style="padding: 8px;">ID Pendaftaran</th>
+                    <th style="padding: 8px;">Nama</th>
+                    <th style="padding: 8px; text-align: center; width: 100px;">Pelanggaran</th>
+                    <th style="padding: 8px; text-align: center; width: 120px;">Status Blokir</th>
+                    <th style="padding: 8px; text-align: center; width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="cbt-monitor-table-body">
+                  <tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--text-muted);">Memuat data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Firebase Integration Card -->
+
+          <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #FFCA28;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i class="fa-solid fa-fire"
+                style="color: #FFCA28; margin-right: 8px;"></i> Integrasi Firebase</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Masukkan API Key Firebase Anda
+              untuk mengaktifkan integrasi database dan layanan terkait.</p>
+            <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+              <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 250px;">
+                <label for="firebase-api-key" class="form-label"
+                  style="font-size: 11px; margin-bottom: 4px; display: block;">Firebase API Key</label>
+                <input type="text" id="firebase-api-key" class="form-control"
+                  placeholder="Masukkan API Key Firebase (contoh: AIzaSyB...)" style="height: 38px;">
+              </div>
+              <div style="margin-bottom: 0;">
+                <button id="btn-save-firebase" class="btn btn-gradient" style="height: 38px;"><i
+                    class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Countdown Configuration Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #4285F4;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i
+                class="fa-solid fa-stopwatch text-primary" style="margin-right: 8px;"></i> Konfigurasi Hitung Mundur
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Aktifkan countdown pengumuman
+              kelulusan di halaman cek status peserta.</p>
+            <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="custom-checkbox"
+                  style="margin-bottom: 8px; display: inline-flex; align-items: center; cursor: pointer;">
+                  <input type="checkbox" id="admin-countdown-active" style="width: auto; height: auto;">
+                  <span class="checkmark" style="position: relative; top: 0; left: 0;"></span>
+                  <span class="label-text" style="font-size: 13px; font-weight: 600; margin-left: 8px;">Aktifkan
+                    Countdown</span>
+                </label>
+              </div>
+              <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+                <label for="admin-countdown-target" class="form-label"
+                  style="font-size: 11px; margin-bottom: 4px; display: block;">Waktu Pengumuman (Target)</label>
+                <input type="datetime-local" id="admin-countdown-target" class="form-control" style="height: 38px;">
+              </div>
+              <div style="margin-bottom: 0;">
+                <button id="btn-save-countdown" class="btn btn-gradient" style="height: 38px;"><i
+                    class="fa-solid fa-floppy-disk"></i> Simpan Countdown</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Registration Status Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #34A853;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i
+                class="fa-solid fa-door-open text-success" style="margin-right: 8px;"></i> Status Pendaftaran</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Buka atau tutup akses pendaftaran
+              SNM 2026 di website utama.</p>
+            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; width: 100%;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="custom-checkbox"
+                  style="margin-bottom: 0; display: inline-flex; align-items: center; cursor: pointer;">
+                  <input type="checkbox" id="admin-reg-active" checked style="width: auto; height: auto;">
+                  <span class="checkmark" style="position: relative; top: 0; left: 0;"></span>
+                  <span class="label-text" style="font-size: 13px; font-weight: 600; margin-left: 8px;">Pendaftaran
+                    Dibuka</span>
+                </label>
+              </div>
+              <div style="margin-bottom: 0; margin-left: auto;">
+                <button id="btn-save-reg-status" class="btn btn-gradient" style="height: 38px;"><i
+                    class="fa-solid fa-floppy-disk"></i> Terapkan Status</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Minecraft Schools Configuration -->
+          <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #6366f1;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i class="fa-solid fa-graduation-cap"
+                style="color: #6366f1; margin-right: 8px;"></i> Pilihan Sekolah Minecraft</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Kelola daftar sekolah Minecraft
+              yang tersedia untuk calon pendaftar.</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+              <input type="text" id="admin-school-add-input" class="form-control"
+                placeholder="Tulis nama sekolah baru..."
+                style="height: 38px; font-size: 13px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0 12px; flex: 1;">
+              <button id="btn-add-school-item" class="btn btn-primary"
+                style="height: 38px; white-space: nowrap; padding: 0 16px;"><i class="fa-solid fa-plus"></i>
+                Tambah</button>
+            </div>
+            <div id="admin-schools-list-container"
+              style="display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; background: var(--bg-secondary); margin-bottom: 15px;">
+              <!-- Items rendered here dynamically -->
+            </div>
+            <button id="btn-save-schools" class="btn btn-gradient" style="height: 38px;"><i
+                class="fa-solid fa-floppy-disk"></i> Simpan Daftar Sekolah</button>
+          </div>
+
+          <!-- Minecraft Roles Configuration -->
+          <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #a855f7;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i class="fa-solid fa-medal"
+                style="color: #a855f7; margin-right: 8px;"></i> Pilihan Sertifikasi Role Minecraft</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Kelola daftar role sertifikasi
+              Minecraft yang wajib dipilih pendaftar.</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+              <input type="text" id="admin-role-add-input" class="form-control" placeholder="Tulis nama role baru..."
+                style="height: 38px; font-size: 13px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0 12px; flex: 1;">
+              <button id="btn-add-role-item" class="btn btn-primary"
+                style="height: 38px; white-space: nowrap; padding: 0 16px;"><i class="fa-solid fa-plus"></i>
+                Tambah</button>
+            </div>
+            <div id="admin-roles-list-container"
+              style="display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; background: var(--bg-secondary); margin-bottom: 15px;">
+              <!-- Items rendered here dynamically -->
+            </div>
+            <button id="btn-save-roles" class="btn btn-gradient" style="height: 38px;"><i
+                class="fa-solid fa-floppy-disk"></i> Simpan Daftar Role</button>
+          </div>
+
+          <!-- Applicant Table Management -->
+          <div class="admin-table-card admin-tab-content admin-tab-applicants-el hidden">
+            <div class="table-actions-bar">
+              <div class="search-filter-wrapper">
+                <div class="search-input-box">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="admin-table-search" placeholder="Cari Nama / ID Pendaftar...">
+                </div>
+                <div class="filter-dropdowns">
+                  <select id="admin-filter-status" class="form-control form-control-sm">
+                    <option value="">Semua Status</option>
+                    <option value="Lolos">Lulus</option>
+                    <option value="Dalam Proses">Dalam Proses</option>
+                    <option value="Tidak Diterima">Tidak Diterima</option>
+                  </select>
+                </div>
+              </div>
+              <button id="btn-admin-reset-data" class="btn btn-danger-outline btn-sm"><i
+                  class="fa-solid fa-trash-arrow-up"></i> Reset ke Dummy Data</button>
+            </div>
+
+            <!-- Table content -->
+            <div class="table-responsive">
+              <table id="applicants-table" class="applicants-table">
+                <thead>
+                  <tr>
+                    <th>ID Pendaftaran</th>
+                    <th>Nama Pendaftar</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Skor IRT</th>
+                    <th>Status</th>
+                    <th>Aksi Pengelolaan</th>
+                  </tr>
+                </thead>
+                <tbody id="applicants-table-body">
+                  <!-- JS will dynamically render lines here -->
+                  <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">Belum ada data pendaftar. Silakan isi form
+                      pendaftaran.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+          <span class="logo-text">SNM<span>2026</span></span>
+        </div>
+        <p class="brand-desc">Portal resmi pendaftaran Seleksi Nasional Minecrafter (SNM) 2026. Wadah bagi para player
+          Minecraft berbakat di seluruh Indonesia.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h3>Navigasi Cepat</h3>
+        <ul>
+          <li><a href="index.html#home">Beranda</a></li>
+          <li><a href="index.html#daftar">Formulir Pendaftaran</a></li>
+          <li><a href="index.html#cek-status">Cek Status</a></li>
+          <li><a href="index.html#faq">Pertanyaan & Jawaban</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h3>Hubungi Kami</h3>
+        <p><i class="fa-brands fa-discord"></i> discord.gg/snm2026 (Komunitas Resmi)</p>
+        <p><i class="fa-solid fa-envelope"></i> snm2026@minecrafter.id</p>
+        <p><i class="fa-brands fa-whatsapp text-success"></i> +62 812-3456-7890 (WA Admin SNM)</p>
+      </div>
+    </div>
+    <div class="footer-bottom text-center">
+      <p>&copy; 2026 SNM Indonesia. Hak Cipta Dilindungi. Hubungi Admin Discord jika Anda mengalami kendala teknis.</p>
+    </div>
+  </footer>
+
+  <!-- ChartJS script -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Initializer -->
+  <script src="firebase-init.js"></script>
+  <!-- Admin JS -->
+  <script src="admin.js?v=3"></script>
+</body>
+
+</html>

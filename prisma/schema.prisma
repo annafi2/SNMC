@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+model Applicant {
+  id               String   @id
+  nama             String
+  email            String   @unique
+  jalur            String
+  tanggalLahir     String
+  sekolahMinecraft String?
+  roleMinecraft    String?
+  essay            String?
+  scoreIRT         Float?
+  essayScoreIRT    Float?
+  ujianCode        String?
+  status           String   @default("Dalam Proses")
+  tanggalSubmit    String
+  stats            Json?
+  cbtBlocked       Boolean  @default(false)
+  cbtViolations    Int      @default(0)
+}
+
+model Setting {
+  key   String @id
+  value Json
+}
