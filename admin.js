@@ -871,6 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
           renderPassingGradeTable();
           showToast(`Jalur "${pathName}" berhasil dihapus.`, 'success');
         }
+      });
     });
   }
 
