@@ -4,7 +4,8 @@
   "scripts": {
     "start": "node api/index.js",
     "dev": "node api/index.js",
-    "build": "prisma generate"
+    "build": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
