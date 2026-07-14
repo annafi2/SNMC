@@ -562,23 +562,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const passingGradeApplyBtn = document.getElementById('btn-apply-passing-grade');
+   const passingGradeApplyBtn = document.getElementById('btn-apply-passing-grade');
   if (passingGradeApplyBtn) {
     passingGradeApplyBtn.addEventListener('click', () => {
-      const passingGradeVal = parseInt(document.getElementById('admin-passing-grade-input').value, 10);
-      if (isNaN(passingGradeVal) || passingGradeVal < 0 || passingGradeVal > 100) {
-        showToast('Passing Grade tidak valid! Harus antara 0 s/d 100.', 'error');
-        return;
-      }
+      const inputs = document.querySelectorAll('.path-pg-input');
+      let isValid = true;
+      inputs.forEach(input => {
+        const pathName = input.getAttribute('data-path');
+        const val = parseInt(input.value, 10);
+        if (isNaN(val) || val < 0 || val > 100) {
+          showToast(`Passing Grade untuk "${pathName}" tidak valid (0-100)!`, 'error');
+          isValid = false;
+        } else {
+          activePassingGrades[pathName] = val;
+        }
+      });
+      if (!isValid) return;
+
+      savePassingGradesToServer(activePassingGrades);
 
       let list = getApplicants();
       list.forEach((applicant) => {
-        applicant.status = (applicant.scoreIRT || 0) >= passingGradeVal ? 'Lolos' : 'Tidak Diterima';
+        const pgLimit = activePassingGrades[applicant.jalur] !== undefined ? activePassingGrades[applicant.jalur] : 70;
+        applicant.status = (applicant.scoreIRT || 0) >= pgLimit ? 'Lolos' : 'Tidak Diterima';
       });
       saveApplicants(list);
-      localStorage.setItem('PPDB_PASSING_GRADE', passingGradeVal);
       loadAdminDashboardData();
-      showToast(`Berhasil menerapkan kelulusan sesuai Passing Grade minimal ${passingGradeVal} Poin!`, 'success');
+      showToast('Berhasil menerapkan kelulusan sesuai Passing Grade per Jalur!', 'success');
 
       const updates = list.map(applicant => ({ id: applicant.id, status: applicant.status }));
       fetch(`${API_BASE}/api/applicants/batch`, {
@@ -592,6 +602,27 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(() => fetchApplicantsFromServer())
       .catch(err => console.error("Gagal menerapkan passing grade di server Prisma: ", err));
+    });
+  }
+
+  const addPathBtn = document.getElementById('btn-add-new-path');
+  const newPathInput = document.getElementById('admin-new-path-name');
+  if (addPathBtn && newPathInput) {
+    addPathBtn.addEventListener('click', () => {
+      const newName = newPathInput.value.trim();
+      if (!newName) {
+        showToast('Nama jalur baru tidak boleh kosong!', 'error');
+        return;
+      }
+      if (activePassingGrades[newName] !== undefined) {
+        showToast('Jalur tersebut sudah terdaftar!', 'error');
+        return;
+      }
+      activePassingGrades[newName] = 70;
+      newPathInput.value = '';
+      savePassingGradesToServer(activePassingGrades);
+      renderPassingGradeTable();
+      showToast(`Jalur baru "${newName}" berhasil ditambahkan!`, 'success');
     });
   }
 
@@ -761,9 +792,87 @@ document.addEventListener('DOMContentLoaded', () => {
         return data;
       }
     } catch (error) {
-      console.error("Gagal menyimpan config ke server Prisma: ", error);
+      console.error("Gagal menyimpan config ke server: ", error);
     }
   };
+
+  let activePassingGrades = {
+    "Jalur Stats Minecraft (Bedrock)": 70,
+    "Jalur Beasiswa Miner/Builder": 70,
+    "Jalur Seleksi Ujian (CBT)": 70
+  };
+
+  const syncPassingGradesFromServer = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/settings/passing_grades`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data) {
+          activePassingGrades = data;
+        }
+      }
+      renderPassingGradeTable();
+    } catch (error) {
+      console.error("Gagal melakukan sync passing grades: ", error);
+      renderPassingGradeTable();
+    }
+  };
+
+  const savePassingGradesToServer = async (grades) => {
+    try {
+      await fetch(`${API_BASE}/api/settings/passing_grades`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value: grades })
+      });
+    } catch (error) {
+      console.error("Gagal menyimpan passing grades ke server: ", error);
+    }
+  };
+
+  function renderPassingGradeTable() {
+    const tbody = document.getElementById('admin-passing-grade-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    
+    const corePaths = [
+      "Jalur Stats Minecraft (Bedrock)",
+      "Jalur Beasiswa Miner/Builder",
+      "Jalur Seleksi Ujian (CBT)"
+    ];
+
+    Object.keys(activePassingGrades).forEach(pathName => {
+      const isCore = corePaths.includes(pathName);
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = '1px solid var(--border-color)';
+      
+      tr.innerHTML = `
+        <td style="padding: 6px; font-weight: 500;">${pathName}</td>
+        <td style="padding: 6px; text-align: center;">
+          <input type="number" class="path-pg-input form-control" data-path="${pathName}" value="${activePassingGrades[pathName]}" min="0" max="100" style="height: 28px; font-size: 11px; padding: 2px 6px; text-align: center; width: 70px; display: inline-block;">
+        </td>
+        <td style="padding: 6px; text-align: center;">
+          ${isCore 
+            ? `<span style="color: var(--text-muted); font-size: 10px; font-weight: 600;">Core</span>` 
+            : `<button type="button" class="btn-delete-path" data-path="${pathName}" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px; padding: 2px;"><i class="fa-solid fa-trash-can"></i></button>`
+          }
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Attach delete path events
+    document.querySelectorAll('.btn-delete-path').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pathName = btn.getAttribute('data-path');
+        if (confirm(`Apakah Anda yakin ingin menghapus Jalur "${pathName}"?`)) {
+          delete activePassingGrades[pathName];
+          savePassingGradesToServer(activePassingGrades);
+          renderPassingGradeTable();
+          showToast(`Jalur "${pathName}" berhasil dihapus.`, 'success');
+        }
+    });
+  }
 
   let currentSchoolsList = [];
   let currentRolesList = [];
@@ -877,6 +986,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   syncSystemConfigFromServer();
   syncMinecraftSettings();
+  syncPassingGradesFromServer();
   setInterval(syncSystemConfigFromServer, 8000);
 
   // Add school item button listener

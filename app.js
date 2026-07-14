@@ -704,13 +704,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const successCard = document.getElementById('form-success-card');
 
   // Track selection card interactive event listeners
-  const trackCards = document.querySelectorAll('.track-card');
   const jalurHiddenInput = document.getElementById('jalur-pendaftaran');
   const step2Container = document.getElementById('form-step-2-container');
   const trackError = document.getElementById('track-error-msg');
 
-  trackCards.forEach(card => {
-    card.addEventListener('click', () => {
+  const gridContainer = document.querySelector('.track-cards-grid');
+  if (gridContainer) {
+    gridContainer.addEventListener('click', (e) => {
+      const card = e.target.closest('.track-card');
+      if (!card) return;
+
       const selectedValue = card.getAttribute('data-value');
 
       const roleSelect = document.getElementById('role-minecraft');
@@ -723,7 +726,8 @@ document.addEventListener('DOMContentLoaded', () => {
       trackError.style.display = 'none';
 
       // Reset card highlights
-      trackCards.forEach(c => {
+      const cards = gridContainer.querySelectorAll('.track-card');
+      cards.forEach(c => {
         c.style.borderColor = 'var(--border-color)';
         c.style.background = 'var(--bg-secondary)';
         c.querySelector('.track-check-indicator').style.opacity = '0';
@@ -745,11 +749,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (selectedValue === 'Jalur Stats Minecraft (Bedrock)') {
         if (fieldStats) fieldStats.style.display = 'block';
-      } else if (selectedValue === 'Jalur Beasiswa Miner/Builder') {
-        if (fieldEssay) fieldEssay.style.display = 'block';
       } else if (selectedValue === 'Jalur Seleksi Ujian (CBT)') {
         if (fieldCbtNote) fieldCbtNote.style.display = 'block';
         if (fieldEssayCbt) fieldEssayCbt.style.display = 'block';
+      } else {
+        if (fieldEssay) fieldEssay.style.display = 'block';
       }
 
       // Open and slide Step 2 content card
@@ -758,13 +762,14 @@ document.addEventListener('DOMContentLoaded', () => {
         step2Container.style.opacity = '1';
       }
     });
-  });
+  }
 
   const roleSelect = document.getElementById('role-minecraft');
   if (roleSelect) {
     roleSelect.addEventListener('change', (e) => {
       if (e.target.value === 'PvP Honor') {
-        const cbtCard = Array.from(trackCards).find(c => c.getAttribute('data-value') === 'Jalur Seleksi Ujian (CBT)');
+        const cards = document.querySelectorAll('.track-card');
+        const cbtCard = Array.from(cards).find(c => c.getAttribute('data-value') === 'Jalur Seleksi Ujian (CBT)');
         if (cbtCard) {
           cbtCard.click();
           showToast('Calon sertifikasi PvP Honor otomatis diarahkan ke Jalur Seleksi Ujian (CBT)!', 'info');
@@ -1003,17 +1008,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let statsObj = null;
     let essayScoreVal = 0;
 
-    if (jalurInput.value === 'Jalur Beasiswa Miner/Builder') {
-      score = calculateIRTScore(essayInput ? essayInput.value : '');
-    } else if (jalurInput.value === 'Jalur Stats Minecraft (Bedrock)') {
+    if (jalurInput.value === 'Jalur Stats Minecraft (Bedrock)') {
       const timeVal = parseInt(document.getElementById('raw-stat-time').value, 10) || 0;
       const minedVal = parseInt(document.getElementById('raw-stat-mined').value, 10) || 0;
       const placedVal = parseInt(document.getElementById('raw-stat-placed').value, 10) || 0;
       const diamondsVal = parseInt(document.getElementById('raw-stat-diamonds').value, 10) || 0;
       score = calculateStatsIRTScore(timeVal, minedVal, placedVal, diamondsVal);
       statsObj = { time: timeVal, mined: minedVal, placed: placedVal, diamonds: diamondsVal };
+    } else if (jalurInput.value === 'Jalur Seleksi Ujian (CBT)') {
+      score = null;
+    } else {
+      score = calculateIRTScore(essayInput ? essayInput.value : '');
     }
-    // CBT: score will be assigned after exam
 
     const isCbtTrack = (jalurInput.value === 'Jalur Seleksi Ujian (CBT)');
     if (isCbtTrack) {
@@ -1755,6 +1761,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const syncPassingGradesAndTracks = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/settings/passing_grades`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data && typeof data === 'object') {
+          renderDynamicTrackCards(data);
+        }
+      }
+    } catch (error) {
+      console.error("Gagal sinkronisasi passing grades dan jalur:", error);
+    }
+  };
+
+  const renderDynamicTrackCards = (passingGrades) => {
+    const grid = document.querySelector('.track-cards-grid');
+    if (!grid) return;
+    
+    const corePaths = [
+      "Jalur Stats Minecraft (Bedrock)",
+      "Jalur Beasiswa Miner/Builder",
+      "Jalur Seleksi Ujian (CBT)"
+    ];
+
+    Object.keys(passingGrades).forEach(pathName => {
+      if (corePaths.includes(pathName)) return;
+      
+      let card = grid.querySelector(`.track-card[data-value="${pathName}"]`);
+      if (!card) {
+        card = document.createElement('div');
+        card.className = 'track-card';
+        card.setAttribute('data-value', pathName);
+        card.style.cssText = "padding: 20px; border: 2px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); cursor: pointer; text-align: center; transition: all 0.2s ease; position: relative;";
+        card.innerHTML = `
+          <div class="track-card-icon" style="font-size: 24px; margin-bottom: 10px; color: #4285F4;"><i
+              class="fa-solid fa-graduation-cap"></i></div>
+          <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">${pathName.replace('Jalur ', '')}</h4>
+          <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 0;">Jalur khusus ${pathName} — diseleksi berdasarkan Passing Grade minimal ${passingGrades[pathName]} Poin</p>
+          <div class="track-check-indicator"
+            style="position: absolute; top: 10px; right: 10px; color: #10b981; font-size: 14px; opacity: 0; transition: opacity 0.2s ease;">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    });
+
+    const cards = grid.querySelectorAll('.track-card');
+    cards.forEach(card => {
+      const val = card.getAttribute('data-value');
+      if (!corePaths.includes(val) && passingGrades[val] === undefined) {
+        card.remove();
+      }
+    });
+  };
+
   // Sync Minecraft Schools and Roles select options from Prisma database
   const syncMinecraftSelectOptions = async () => {
     try {
@@ -1805,8 +1867,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Perform initial fetch & set polling interval
   syncSystemConfigFromServer();
   syncMinecraftSelectOptions();
+  syncPassingGradesAndTracks();
   setInterval(syncSystemConfigFromServer, 4000);
   setInterval(syncMinecraftSelectOptions, 4000);
+  setInterval(syncPassingGradesAndTracks, 4000);
 
   // Settings save listeners (Migrated to admin.js)
 
