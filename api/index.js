@@ -28,7 +28,11 @@ app.get('/api/applicants', async (req, res) => {
     res.json(applicants);
   } catch (error) {
     console.error('Error fetching applicants:', error);
-    res.status(500).json({ error: 'Failed to fetch applicants' });
+    res.status(500).json({ 
+      error: 'Failed to fetch applicants',
+      message: error.message,
+      env_exists: !!process.env.DATABASE_URL
+    });
   }
 });
 
