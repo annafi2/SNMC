@@ -1763,10 +1763,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const syncPassingGradesAndTracks = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/settings/passing_grades`);
+      const response = await fetch(`${API_BASE}/api/settings/active_jalur_list`);
       if (response.ok) {
         const data = await response.json();
-        if (data && typeof data === 'object') {
+        if (data && Array.isArray(data)) {
           renderDynamicTrackCards(data);
         }
       }
@@ -1775,7 +1775,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const renderDynamicTrackCards = (passingGrades) => {
+  const renderDynamicTrackCards = (jalurList) => {
     const grid = document.querySelector('.track-cards-grid');
     if (!grid) return;
     
@@ -1785,7 +1785,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "Jalur Seleksi Ujian (CBT)"
     ];
 
-    Object.keys(passingGrades).forEach(pathName => {
+    jalurList.forEach(pathName => {
       if (corePaths.includes(pathName)) return;
       
       let card = grid.querySelector(`.track-card[data-value="${pathName}"]`);
@@ -1798,7 +1798,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="track-card-icon" style="font-size: 24px; margin-bottom: 10px; color: #4285F4;"><i
               class="fa-solid fa-graduation-cap"></i></div>
           <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">${pathName.replace('Jalur ', '')}</h4>
-          <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 0;">Jalur khusus ${pathName} — diseleksi berdasarkan Passing Grade minimal ${passingGrades[pathName]} Poin</p>
+          <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 0;">Jalur khusus ${pathName} — diseleksi berdasarkan Passing Grade minimal per Role</p>
           <div class="track-check-indicator"
             style="position: absolute; top: 10px; right: 10px; color: #10b981; font-size: 14px; opacity: 0; transition: opacity 0.2s ease;">
             <i class="fa-solid fa-circle-check"></i>
@@ -1811,10 +1811,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = grid.querySelectorAll('.track-card');
     cards.forEach(card => {
       const val = card.getAttribute('data-value');
-      if (!corePaths.includes(val) && passingGrades[val] === undefined) {
+      if (!corePaths.includes(val) && !jalurList.includes(val)) {
         card.remove();
       }
     });
+  };
+
+  const checkMaintenanceMode = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/settings/maintenance_mode`);
+      if (res.ok) {
+        const isActive = await res.json();
+        const overlay = document.getElementById('maintenance-overlay');
+        if (overlay) {
+          overlay.style.display = isActive === true ? 'flex' : 'none';
+        }
+      }
+    } catch (e) {
+      console.error("Gagal memeriksa status pemeliharaan:", e);
+    }
   };
 
   // Sync Minecraft Schools and Roles select options from Prisma database
@@ -1868,9 +1883,11 @@ document.addEventListener('DOMContentLoaded', () => {
   syncSystemConfigFromServer();
   syncMinecraftSelectOptions();
   syncPassingGradesAndTracks();
+  checkMaintenanceMode();
   setInterval(syncSystemConfigFromServer, 4000);
   setInterval(syncMinecraftSelectOptions, 4000);
   setInterval(syncPassingGradesAndTracks, 4000);
+  setInterval(checkMaintenanceMode, 4000);
 
   // Settings save listeners (Migrated to admin.js)
 

@@ -389,6 +389,28 @@
             </div>
           </div>
 
+          <!-- Maintenance Mode Card -->
+          <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"
+            style="margin-bottom: 24px; padding: 20px; border-left: 4px solid #ef4444;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;"><i class="fa-solid fa-screwdriver-wrench"
+                style="color: #ef4444; margin-right: 8px;"></i> Mode Pemeliharaan Website (Maintenance)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Aktifkan mode pemeliharaan untuk mengunci portal registrasi dan ujian dengan tampilan popup pengumuman pemeliharaan.</p>
+            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="custom-checkbox"
+                  style="margin-bottom: 0; display: inline-flex; align-items: center; cursor: pointer;">
+                  <input type="checkbox" id="admin-maintenance-active" style="width: auto; height: auto;">
+                  <span class="checkmark" style="position: relative; top: 0; left: 0;"></span>
+                  <span class="label-text" style="font-size: 13px; font-weight: 600; margin-left: 8px; color: #ef4444;">Aktifkan Mode Pemeliharaan</span>
+                </label>
+              </div>
+              <div>
+                <button id="btn-save-maintenance" class="btn btn-outline" style="height: 38px; border-color: #ef4444; color: #ef4444;"><i
+                    class="fa-solid fa-floppy-disk"></i> Simpan Status Pemeliharaan</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Firebase Integration Card -->
 
           <div class="admin-table-card admin-tab-content admin-tab-settings-el hidden"

@@ -562,19 +562,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-   const passingGradeApplyBtn = document.getElementById('btn-apply-passing-grade');
+  const passingGradeApplyBtn = document.getElementById('btn-apply-passing-grade');
   if (passingGradeApplyBtn) {
     passingGradeApplyBtn.addEventListener('click', () => {
       const inputs = document.querySelectorAll('.path-pg-input');
       let isValid = true;
       inputs.forEach(input => {
-        const pathName = input.getAttribute('data-path');
+        const comboKey = input.getAttribute('data-combo');
         const val = parseInt(input.value, 10);
         if (isNaN(val) || val < 0 || val > 100) {
-          showToast(`Passing Grade untuk "${pathName}" tidak valid (0-100)!`, 'error');
+          showToast(`Passing Grade untuk "${comboKey}" tidak valid (0-100)!`, 'error');
           isValid = false;
         } else {
-          activePassingGrades[pathName] = val;
+          activePassingGrades[comboKey] = val;
         }
       });
       if (!isValid) return;
@@ -583,12 +583,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let list = getApplicants();
       list.forEach((applicant) => {
-        const pgLimit = activePassingGrades[applicant.jalur] !== undefined ? activePassingGrades[applicant.jalur] : 70;
+        const comboKey = `${applicant.jalur} - ${applicant.roleMinecraft}`;
+        const pgLimit = activePassingGrades[comboKey] !== undefined ? activePassingGrades[comboKey] : 70;
         applicant.status = (applicant.scoreIRT || 0) >= pgLimit ? 'Lolos' : 'Tidak Diterima';
       });
       saveApplicants(list);
       loadAdminDashboardData();
-      showToast('Berhasil menerapkan kelulusan sesuai Passing Grade per Jalur!', 'success');
+      showToast('Berhasil menerapkan kelulusan sesuai Passing Grade per Kombinasi Jalur & Role!', 'success');
 
       const updates = list.map(applicant => ({ id: applicant.id, status: applicant.status }));
       fetch(`${API_BASE}/api/applicants/batch`, {
@@ -614,12 +615,21 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Nama jalur baru tidak boleh kosong!', 'error');
         return;
       }
-      if (activePassingGrades[newName] !== undefined) {
+      if (activeJalurList.includes(newName)) {
         showToast('Jalur tersebut sudah terdaftar!', 'error');
         return;
       }
-      activePassingGrades[newName] = 70;
+      activeJalurList.push(newName);
       newPathInput.value = '';
+      
+      const roles = currentRolesList && currentRolesList.length > 0 
+        ? currentRolesList 
+        : ['Builder', 'Farmer', 'Miner', 'PvP Honor'];
+      roles.forEach(role => {
+        activePassingGrades[`${newName} - ${role}`] = 70;
+      });
+
+      saveActiveJalurListToServer(activeJalurList);
       savePassingGradesToServer(activePassingGrades);
       renderPassingGradeTable();
       showToast(`Jalur baru "${newName}" berhasil ditambahkan!`, 'success');
@@ -796,25 +806,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  let activePassingGrades = {
-    "Jalur Stats Minecraft (Bedrock)": 70,
-    "Jalur Beasiswa Miner/Builder": 70,
-    "Jalur Seleksi Ujian (CBT)": 70
-  };
+  let activeJalurList = [
+    "Jalur Stats Minecraft (Bedrock)",
+    "Jalur Beasiswa Miner/Builder",
+    "Jalur Seleksi Ujian (CBT)"
+  ];
+
+  let activePassingGrades = {};
 
   const syncPassingGradesFromServer = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/settings/passing_grades`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data) {
-          activePassingGrades = data;
+      const resJalur = await fetch(`${API_BASE}/api/settings/active_jalur_list`);
+      if (resJalur.ok) {
+        const jalurData = await resJalur.json();
+        if (jalurData && Array.isArray(jalurData)) {
+          activeJalurList = jalurData;
         }
       }
+
+      const resPG = await fetch(`${API_BASE}/api/settings/passing_grades`);
+      if (resPG.ok) {
+        const pgData = await resPG.json();
+        if (pgData && typeof pgData === 'object') {
+          activePassingGrades = pgData;
+        }
+      }
+
+      ensurePassingGradeCombinations();
       renderPassingGradeTable();
     } catch (error) {
       console.error("Gagal melakukan sync passing grades: ", error);
       renderPassingGradeTable();
+    }
+  };
+
+  const ensurePassingGradeCombinations = () => {
+    const roles = currentRolesList && currentRolesList.length > 0 
+      ? currentRolesList 
+      : ['Builder', 'Farmer', 'Miner', 'PvP Honor'];
+
+    let modified = false;
+    activeJalurList.forEach(jalur => {
+      roles.forEach(role => {
+        const key = `${jalur} - ${role}`;
+        if (activePassingGrades[key] === undefined) {
+          activePassingGrades[key] = 70;
+          modified = true;
+        }
+      });
+    });
+
+    if (modified) {
+      savePassingGradesToServer(activePassingGrades);
     }
   };
 
@@ -830,6 +873,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const saveActiveJalurListToServer = async (list) => {
+    try {
+      await fetch(`${API_BASE}/api/settings/active_jalur_list`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value: list })
+      });
+    } catch (error) {
+      console.error("Gagal menyimpan daftar jalur ke server: ", error);
+    }
+  };
+
   function renderPassingGradeTable() {
     const tbody = document.getElementById('admin-passing-grade-table-body');
     if (!tbody) return;
@@ -841,37 +896,97 @@ document.addEventListener('DOMContentLoaded', () => {
       "Jalur Seleksi Ujian (CBT)"
     ];
 
-    Object.keys(activePassingGrades).forEach(pathName => {
-      const isCore = corePaths.includes(pathName);
-      const tr = document.createElement('tr');
-      tr.style.borderBottom = '1px solid var(--border-color)';
+    const roles = currentRolesList && currentRolesList.length > 0 
+      ? currentRolesList 
+      : ['Builder', 'Farmer', 'Miner', 'PvP Honor'];
+
+    activeJalurList.forEach(jalurName => {
+      const isCore = corePaths.includes(jalurName);
       
-      tr.innerHTML = `
-        <td style="padding: 6px; font-weight: 500;">${pathName}</td>
-        <td style="padding: 6px; text-align: center;">
-          <input type="number" class="path-pg-input form-control" data-path="${pathName}" value="${activePassingGrades[pathName]}" min="0" max="100" style="height: 28px; font-size: 11px; padding: 2px 6px; text-align: center; width: 70px; display: inline-block;">
-        </td>
-        <td style="padding: 6px; text-align: center;">
-          ${isCore 
-            ? `<span style="color: var(--text-muted); font-size: 10px; font-weight: 600;">Core</span>` 
-            : `<button type="button" class="btn-delete-path" data-path="${pathName}" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px; padding: 2px;"><i class="fa-solid fa-trash-can"></i></button>`
-          }
-        </td>
-      `;
-      tbody.appendChild(tr);
+      roles.forEach(roleName => {
+        const comboKey = `${jalurName} - ${roleName}`;
+        const pgVal = activePassingGrades[comboKey] !== undefined ? activePassingGrades[comboKey] : 70;
+        
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--border-color)';
+        
+        tr.innerHTML = `
+          <td style="padding: 6px; font-weight: 500;">
+            <div style="font-weight: 700; color: var(--text-primary);">${jalurName}</div>
+            <div style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-id-card-clip"></i> ${roleName}</div>
+          </td>
+          <td style="padding: 6px; text-align: center; vertical-align: middle;">
+            <input type="number" class="path-pg-input form-control" data-combo="${comboKey}" value="${pgVal}" min="0" max="100" style="height: 28px; font-size: 11px; padding: 2px 6px; text-align: center; width: 70px; display: inline-block;">
+          </td>
+          <td style="padding: 6px; text-align: center; vertical-align: middle;">
+            ${isCore 
+              ? `<span style="color: var(--text-muted); font-size: 10px; font-weight: 600;">Core</span>` 
+              : `<button type="button" class="btn-delete-path" data-path="${jalurName}" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px; padding: 2px;"><i class="fa-solid fa-trash-can"></i> Hapus</button>`
+            }
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
     });
 
     // Attach delete path events
     document.querySelectorAll('.btn-delete-path').forEach(btn => {
       btn.addEventListener('click', () => {
         const pathName = btn.getAttribute('data-path');
-        if (confirm(`Apakah Anda yakin ingin menghapus Jalur "${pathName}"?`)) {
-          delete activePassingGrades[pathName];
+        if (confirm(`Apakah Anda yakin ingin menghapus Jalur "${pathName}"? Ini akan menghapus semua konfigurasi passing grade untuk semua role di jalur ini.`)) {
+          activeJalurList = activeJalurList.filter(j => j !== pathName);
+          Object.keys(activePassingGrades).forEach(key => {
+            if (key.startsWith(pathName + " - ")) {
+              delete activePassingGrades[key];
+            }
+          });
+          saveActiveJalurListToServer(activeJalurList);
           savePassingGradesToServer(activePassingGrades);
           renderPassingGradeTable();
           showToast(`Jalur "${pathName}" berhasil dihapus.`, 'success');
         }
       });
+    });
+  }
+
+  // ==========================================
+  // Maintenance Mode Logic
+  // ==========================================
+  const syncMaintenanceModeFromServer = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/settings/maintenance_mode`);
+      if (res.ok) {
+        const isActive = await res.json();
+        const checkbox = document.getElementById('admin-maintenance-active');
+        if (checkbox) {
+          checkbox.checked = isActive === true;
+        }
+      }
+    } catch (err) {
+      console.error("Gagal sinkronisasi maintenance mode:", err);
+    }
+  };
+
+  const saveMaintenanceModeBtn = document.getElementById('btn-save-maintenance');
+  if (saveMaintenanceModeBtn) {
+    saveMaintenanceModeBtn.addEventListener('click', async () => {
+      const checkbox = document.getElementById('admin-maintenance-active');
+      const val = checkbox ? checkbox.checked : false;
+      try {
+        const res = await fetch(`${API_BASE}/api/settings/maintenance_mode`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value: val })
+        });
+        if (res.ok) {
+          showToast(`Mode Pemeliharaan berhasil ${val ? 'Diaktifkan' : 'Dinonaktifkan'}!`, 'success');
+        } else {
+          throw new Error('Save failed');
+        }
+      } catch (err) {
+        console.error("Gagal menyimpan mode pemeliharaan:", err);
+        showToast('Gagal menyimpan status mode pemeliharaan!', 'error');
+      }
     });
   }
 
@@ -988,7 +1103,9 @@ document.addEventListener('DOMContentLoaded', () => {
   syncSystemConfigFromServer();
   syncMinecraftSettings();
   syncPassingGradesFromServer();
+  syncMaintenanceModeFromServer();
   setInterval(syncSystemConfigFromServer, 8000);
+  setInterval(syncMaintenanceModeFromServer, 8000);
 
   // Add school item button listener
   const addSchoolBtn = document.getElementById('btn-add-school-item');

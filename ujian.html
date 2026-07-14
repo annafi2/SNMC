@@ -1043,6 +1043,23 @@
     document.addEventListener('DOMContentLoaded', () => {
       const API_BASE = (window.location.port === '3000' || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.hostname !== '')) ? '' : 'http://localhost:3000';
 
+      const checkMaintenanceMode = async () => {
+        try {
+          const res = await fetch(`${API_BASE}/api/settings/maintenance_mode`);
+          if (res.ok) {
+            const isActive = await res.json();
+            const overlay = document.getElementById('maintenance-overlay');
+            if (overlay) {
+              overlay.style.display = isActive === true ? 'flex' : 'none';
+            }
+          }
+        } catch (e) {
+          console.error("Gagal memeriksa status pemeliharaan:", e);
+        }
+      };
+      checkMaintenanceMode();
+      setInterval(checkMaintenanceMode, 4000);
+
       function customAlert(message) {
         return new Promise((resolve) => {
           const overlay = document.getElementById('custom-popup-overlay');
@@ -2041,5 +2058,20 @@
 
   </script>
 
+  <!-- Maintenance Overlay -->
+  <div id="maintenance-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px); z-index: 999999; justify-content: center; align-items: center; text-align: center; color: #ffffff; padding: 20px; flex-direction: column;">
+    <style>
+      @keyframes pulse-gear {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+        50% { transform: scale(1.1) rotate(180deg); opacity: 1; }
+        100% { transform: scale(1) rotate(360deg); opacity: 0.9; }
+      }
+    </style>
+    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 40px; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+      <div style="font-size: 60px; color: #ef4444; margin-bottom: 20px; display: inline-block; animation: pulse-gear 4s infinite linear;"><i class="fa-solid fa-gear"></i></div>
+      <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px; color: #ffffff;">Pemeliharaan Server</h2>
+      <p style="font-size: 14px; color: #a0aec0; line-height: 1.6; margin-bottom: 0;">Kami sedang melakukan pemeliharaan rutin pada sistem SNM 2026. Portal ujian CBT ditutup sementara waktu. Mohon maaf atas ketidaknyamanan ini.</p>
+    </div>
+  </div>
 </body>
 </html>
