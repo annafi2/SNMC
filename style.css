@@ -13,6 +13,7 @@
   --bg-primary: #fbfbfb;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f1f1f1;
+  --body-bg: linear-gradient(rgba(251, 251, 251, 0.88), rgba(251, 251, 251, 0.88)), url('minecraft-bg.jpg') no-repeat center center fixed;
   
   --text-main: #000000;
   --text-muted: #555555;
@@ -58,6 +59,7 @@
   --bg-primary: #050505;
   --bg-secondary: #121212;
   --bg-tertiary: #1c1c1c;
+  --body-bg: linear-gradient(rgba(5, 5, 5, 0.90), rgba(5, 5, 5, 0.90)), url('minecraft-bg.jpg') no-repeat center center fixed;
   
   --text-main: #ffffff;
   --text-muted: #a0a0a0;
@@ -98,7 +100,9 @@ html {
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-primary);
+  background: var(--body-bg);
+  background-size: cover;
+  background-attachment: fixed;
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
