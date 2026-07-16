@@ -1027,19 +1027,18 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Save Applicant Object
-    const applicants = getApplicants();
-
     // Gen unique application ID (seq - year - randomCode)
+    const applicants = getApplicants();
+    const config = getSystemConfig();
+    const activeYear = config.selectionYear || String(new Date().getFullYear());
     const count = applicants.length + 1;
     const seq = String(count).padStart(3, '0');
-    const year = new Date().getFullYear();
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let randomCode = '';
     for (let i = 0; i < 4; i++) {
       randomCode += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    const newId = `${seq}-${year}-${randomCode}`;
+    const newId = `${seq}-${activeYear}-${randomCode}`;
 
     const formattedToday = new Date().toISOString().split('T')[0];
 
@@ -1072,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let examCode = '';
     if (isCbtTrack) {
-      examCode = `EXAM-${year}-${randomCode}`;
+      examCode = `EXAM-${activeYear}-${randomCode}`;
     }
 
     const essayVal = jalurInput.value === 'Jalur Beasiswa Miner/Builder'
@@ -1510,9 +1509,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set date
     const dateEl = document.getElementById('cbt-cert-date');
     if (dateEl) {
+      const config = getSystemConfig();
+      const activeYear = config.selectionYear || '2026';
       const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       const now = new Date();
-      dateEl.innerText = `Jakarta, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+      dateEl.innerText = `Jakarta, ${now.getDate()} ${months[now.getMonth()]} ${activeYear}`;
     }
 
     // Trigger open
@@ -1741,7 +1742,8 @@ document.addEventListener('DOMContentLoaded', () => {
       countdownActive: false,
       countdownTarget: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
       registrationActive: true,
-      announcementText: 'Pendaftaran SNM 2026 Resmi Dibuka!'
+      announcementText: 'Pendaftaran SNM 2026 Resmi Dibuka!',
+      selectionYear: '2026'
     };
   };
 
@@ -1756,6 +1758,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function updateSystemYearUI(year) {
+    if (!year) return;
+    document.title = `SNM ${year} – Seleksi Nasional Minecrafter Indonesia`;
+    document.querySelectorAll('.active-year').forEach(el => {
+      el.innerText = year;
+    });
+  }
+
   // Sync system config from Prisma backend server
   const syncSystemConfigFromServer = async () => {
     try {
@@ -1767,6 +1777,7 @@ document.addEventListener('DOMContentLoaded', () => {
           updateSystemCountdownUI(data.countdownActive, data.countdownTarget);
           updateSystemRegistrationUI(data.registrationActive);
           updateSystemAnnouncementUI(data.announcementText);
+          updateSystemYearUI(data.selectionYear || '2026');
         } else {
           // Seed default configurations
           const defaultConfig = getSystemConfig();
@@ -1779,6 +1790,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateSystemCountdownUI(data.countdownActive, data.countdownTarget);
       updateSystemRegistrationUI(data.registrationActive);
       updateSystemAnnouncementUI(data.announcementText);
+      updateSystemYearUI(data.selectionYear || '2026');
     }
   };
 

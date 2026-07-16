@@ -24,7 +24,7 @@
     <div class="text-center" style="margin-bottom: 24px;">
       <a href="index.html" class="logo" style="display: inline-flex; font-size: 24px; text-decoration: none;">
         <div class="logo-icon" style="width: 38px; height: 38px;"><i class="fa-solid fa-cube"></i></div>
-        <span class="logo-text">SNM<span>2026</span></span>
+        <span class="logo-text">SNM<span class="active-year">2026</span></span>
       </a>
       <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Portal Verifikasi Kelulusan Resmi</p>
     </div>
@@ -78,7 +78,7 @@
         </div>
 
         <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">
-          Peserta di atas secara sah dinyatakan lulus proses seleksi SNM 2026. Keputusan ini bersifat mutlak dan dikeluarkan langsung oleh Panitia Seleksi Nasional Minecrafter Indonesia.
+          Peserta di atas secara sah dinyatakan lulus proses seleksi SNM <span class="active-year">2026</span>. Keputusan ini bersifat mutlak dan dikeluarkan langsung oleh Panitia Seleksi Nasional Minecrafter Indonesia.
         </p>
 
         <a href="index.html" class="btn btn-gradient btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; height: 42px;"><i class="fa-solid fa-house"></i> Kembali ke Beranda</a>
@@ -110,6 +110,26 @@
       
       const urlParams = new URLSearchParams(window.location.search);
       const id = urlParams.get('id');
+
+      // Fetch dynamic active selection year from system config
+      let currentYear = '2026';
+      try {
+        const yearResponse = await fetch(`${API_BASE}/api/settings/system_config`);
+        if (yearResponse.ok) {
+          const config = await yearResponse.json();
+          if (config && config.selectionYear) {
+            currentYear = config.selectionYear;
+          }
+        }
+      } catch (err) {
+        console.error("Gagal sinkronisasi tahun seleksi:", err);
+      }
+      
+      // Apply active year dynamically to UI
+      document.title = `Verifikasi Kelulusan Resmi – SNM ${currentYear}`;
+      document.querySelectorAll('.active-year').forEach(el => {
+        el.innerText = currentYear;
+      });
 
       const loadingEl = document.getElementById('verify-loading');
       const successEl = document.getElementById('verify-success');

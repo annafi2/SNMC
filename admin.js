@@ -828,6 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const countdownTargetInput = document.getElementById('admin-countdown-target');
     const regActiveCheckbox = document.getElementById('admin-reg-active');
     const announcementTextInput = document.getElementById('admin-announcement-text');
+    const selectionYearInput = document.getElementById('admin-selection-year');
     
     if (countdownActiveCheckbox) countdownActiveCheckbox.checked = data.countdownActive || false;
     if (countdownTargetInput && data.countdownTarget) {
@@ -837,6 +838,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (announcementTextInput) {
       announcementTextInput.value = data.announcementText || 'Pendaftaran SNM 2026 Resmi Dibuka!';
     }
+    if (selectionYearInput) {
+      selectionYearInput.value = data.selectionYear || '2026';
+    }
   }
 
   const getSystemConfig = () => {
@@ -845,13 +849,21 @@ document.addEventListener('DOMContentLoaded', () => {
       countdownActive: false,
       countdownTarget: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
       registrationActive: true,
-      announcementText: 'Pendaftaran SNM 2026 Resmi Dibuka!'
+      announcementText: 'Pendaftaran SNM 2026 Resmi Dibuka!',
+      selectionYear: '2026'
     };
   };
 
   const saveSystemConfig = (config) => {
     localStorage.setItem('PPDB_SYSTEM_CONFIG', JSON.stringify(config));
   };
+
+  function updateAdminYearUI(year) {
+    if (!year) return;
+    document.querySelectorAll('.active-year').forEach(el => {
+      el.innerText = year;
+    });
+  }
 
   const syncSystemConfigFromServer = async () => {
     try {
@@ -861,6 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
           saveSystemConfig(data);
           syncAdminConfigInputs(data);
+          updateAdminYearUI(data.selectionYear || '2026');
         } else {
           const defaultConfig = getSystemConfig();
           await saveSystemConfigToServer(defaultConfig);
@@ -870,6 +883,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Gagal melakukan sync sistem config, falling back to local storage: ", error);
       const data = getSystemConfig();
       syncAdminConfigInputs(data);
+      updateAdminYearUI(data.selectionYear || '2026');
     }
   };
 
@@ -1277,6 +1291,26 @@ document.addEventListener('DOMContentLoaded', () => {
       config.announcementText = text;
       saveSystemConfig(config);
       showToast("Teks pengumuman berhasil disimpan!", "success");
+
+      await saveSystemConfigToServer(config);
+    });
+  }
+
+  const saveSelectionYearBtn = document.getElementById('btn-save-selection-year');
+  if (saveSelectionYearBtn) {
+    saveSelectionYearBtn.addEventListener('click', async () => {
+      const year = document.getElementById('admin-selection-year').value.trim();
+      
+      if (!year) {
+        showToast("Tahun seleksi tidak boleh kosong!", "error");
+        return;
+      }
+      
+      const config = getSystemConfig();
+      config.selectionYear = year;
+      saveSystemConfig(config);
+      updateAdminYearUI(year);
+      showToast("Tahun seleksi berhasil disimpan!", "success");
 
       await saveSystemConfigToServer(config);
     });
