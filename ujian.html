@@ -765,7 +765,7 @@
   <!-- HEADER -->
   <header class="cbt-header">
     <a href="#" class="cbt-logo">
-      <i class="fa-solid fa-cube"></i> SNM<span>2026</span>
+      <i class="fa-solid fa-cube"></i> SNM<span class="active-year">2026</span>
     </a>
     
     <div id="cbt-timer-container" class="cbt-timer" style="display: none;">
@@ -929,7 +929,7 @@
         </p>
         <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 24px; font-size: 13px; color: var(--text-secondary);">
           <i class="fa-solid fa-circle-info" style="color: var(--accent-red); margin-right: 6px;"></i>
-          Hubungi panitia SNM 2026 untuk mengajukan keberatan atau klarifikasi dengan menyertakan Nomor ID Pendaftaran Anda.
+          Hubungi panitia SNM <span class="active-year">2026</span> untuk mengajukan keberatan atau klarifikasi dengan menyertakan Nomor ID Pendaftaran Anda.
         </div>
         <button id="btn-blocked-back" class="btn btn-outline btn-block"><i class="fa-solid fa-house"></i> Kembali ke Portal</button>
       </div>
@@ -961,8 +961,8 @@
           <div style="text-align: center; margin-bottom: 25px;">
             <i class="fa-solid fa-cube" style="font-size: 48px; color: #000000; margin-bottom: 10px;"></i>
             <h2 style="font-size: 14px; font-weight: 700; margin: 0; letter-spacing: 1px;">PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</h2>
-            <h1 style="font-size: 24px; font-weight: 800; margin: 4px 0; letter-spacing: 0.5px;">SNM 2026</h1>
-            <p style="font-size: 11px; margin: 0; color: #4b5563;">Komunitas Minecrafter Indonesia | snm2026@minecrafter.id</p>
+            <h1 style="font-size: 24px; font-weight: 800; margin: 4px 0; letter-spacing: 0.5px;">SNM <span class="active-year">2026</span></h1>
+            <p style="font-size: 11px; margin: 0; color: #4b5563;">Komunitas Minecrafter Indonesia | snm<span class="active-year">2026</span>@minecrafter.id</p>
             <div style="height: 3px; background: #000000; margin-top: 15px;"></div>
           </div>
 
@@ -978,7 +978,7 @@
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 13px;">
             <tr>
               <td style="padding: 6px; width: 30%; font-weight: bold; border: 1px solid #000000; background: #f3f4f6;">Nomor ID Pendaftaran</td>
-              <td style="padding: 6px; border: 1px solid #000000; font-family: monospace; font-size: 14px; font-weight: bold;" id="cert-p-id">001-2026-XXXX</td>
+              <td style="padding: 6px; border: 1px solid #000000; font-family: monospace; font-size: 14px; font-weight: bold;" id="cert-p-id">001-<span class="active-year">2026</span>-XXXX</td>
             </tr>
             <tr>
               <td style="padding: 6px; font-weight: bold; border: 1px solid #000000; background: #f3f4f6;">Nama Lengkap</td>
@@ -1045,12 +1045,12 @@
             
             <div style="text-align: center; font-size: 13px; position: relative;">
               <p>Jakarta, <span id="cert-sig-date">13 Juli 2026</span></p>
-              <p style="margin-top: 5px;">Ketua Panitia SNM 2026,</p>
+              <p style="margin-top: 5px;">Ketua Panitia SNM <span class="active-year">2026</span>,</p>
               <div style="position: relative; height: 50px; margin: 5px 0;">
                 <img src="signature.png" alt="Tanda Tangan" style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
               </div>
               <p><strong>Admin SNM Indonesia</strong></p>
-              <span style="font-size: 10px; color: #4b5563; display: block;">ID Panitia: SNM-ADM-2026-001</span>
+              <span style="font-size: 10px; color: #4b5563; display: block;">ID Panitia: SNM-ADM-<span class="active-year">2026</span>-001</span>
             </div>
           </div>
         </div>
@@ -1111,6 +1111,32 @@
       };
       checkMaintenanceMode();
       setInterval(checkMaintenanceMode, 4000);
+
+      // Fetch dynamic active selection year from system config
+      const syncSystemYear = async () => {
+        try {
+          const response = await fetch(`${API_BASE}/api/settings/system_config`);
+          if (response.ok) {
+            const config = await response.json();
+            if (config && config.selectionYear) {
+              const year = config.selectionYear;
+              document.title = `Portal Ujian CBT Sertifikasi – SNM ${year} Seleksi Nasional Minecrafter`;
+              document.querySelectorAll('.active-year').forEach(el => {
+                el.innerText = year;
+              });
+              
+              // Also update login placeholders dynamically
+              const idInput = document.getElementById('login-id');
+              const codeInput = document.getElementById('login-code');
+              if (idInput) idInput.placeholder = `Contoh: 001-${year}-X8BF`;
+              if (codeInput) codeInput.placeholder = `Contoh: EXAM-${year}-3NWX`;
+            }
+          }
+        } catch (err) {
+          console.error("Gagal sinkronisasi tahun seleksi di portal ujian:", err);
+        }
+      };
+      syncSystemYear();
 
       function customAlert(message) {
         return new Promise((resolve) => {
@@ -2131,7 +2157,7 @@
     <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 40px; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
       <div style="font-size: 60px; color: #ef4444; margin-bottom: 20px; display: inline-block; animation: pulse-gear 4s infinite linear;"><i class="fa-solid fa-gear"></i></div>
       <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px; color: #ffffff;">Pemeliharaan Server</h2>
-      <p style="font-size: 14px; color: #a0aec0; line-height: 1.6; margin-bottom: 0;">Kami sedang melakukan pemeliharaan rutin pada sistem SNM 2026. Portal ujian CBT ditutup sementara waktu. Mohon maaf atas ketidaknyamanan ini.</p>
+      <p style="font-size: 14px; color: #a0aec0; line-height: 1.6; margin-bottom: 0;">Kami sedang melakukan pemeliharaan rutin pada sistem SNM <span class="active-year">2026</span>. Portal ujian CBT ditutup sementara waktu. Mohon maaf atas ketidaknyamanan ini.</p>
     </div>
   </div>
 </body>
