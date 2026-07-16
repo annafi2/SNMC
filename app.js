@@ -1263,13 +1263,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (student.status === 'Lolos') {
-      // Show QR verification only when lolos
+    if (student.status === 'Lolos' || student.status === 'Lulus') {
+      // Show QR verification only when lulus
       qrSection.style.display = 'block';
-      const qrContent = `Status Pendaftaran: ${student.status} | ID: ${student.id} | Nama: ${student.nama} | Jalur: ${student.jalur || 'Prestasi'}`;
+      const qrContent = `${window.location.origin}/verify.html?id=${student.id}`;
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrContent)}`;
       document.getElementById('res-qr-code').src = qrUrl;
-      document.getElementById('res-qr-text').innerText = `VERIFIED: ${student.id} (${student.status.toUpperCase()})`;
+      document.getElementById('res-qr-text').innerText = `VERIFIED: ${student.id} (LULUS)`;
 
       lineFill.style.width = '100%';
       step1.classList.add('completed');
@@ -1278,21 +1278,21 @@ document.addEventListener('DOMContentLoaded', () => {
       step4.classList.add('completed');
 
       document.getElementById('tracker-date-2').innerText = 'Terverifikasi';
-      document.getElementById('tracker-date-3').innerText = 'Lolos';
-      document.getElementById('tracker-date-4').innerText = 'Diterima';
+      document.getElementById('tracker-date-3').innerText = 'Lulus';
+      document.getElementById('tracker-date-4').innerText = 'Lulus';
 
       badge.classList.add('status-accepted');
-      badge.innerText = 'Lolos';
+      badge.innerText = 'Lulus';
 
       infoBox.classList.add('status-info-accepted');
-      infoTitle.innerText = 'Selamat! Anda Dinyatakan Lolos!';
+      infoTitle.innerText = 'Selamat! Anda Dinyatakan Lulus!';
       const sekolahVal = student.sekolahMinecraft || '';
       const showSekolah = sekolahVal.trim() && sekolahVal.toUpperCase() !== 'TIDAK MEMILIH';
       const sekolahLine = showSekolah ? `<strong>Sekolah :</strong> ${sekolahVal.toUpperCase()}<br>` : '';
 
       infoDesc.innerHTML = `
         Selamat! Anda Dinyatakan Lulus Seleksi pada <strong>${student.jalur || 'Prestasi'}</strong>.<br><br>
-        Selamat! Anda Dinyatakan Lolos seleksi di :<br>
+        Selamat! Anda Dinyatakan Lulus seleksi di :<br>
         <div style="margin: 8px 0; padding-left: 15px; border-left: 3px solid #10b981; line-height: 1.8;">
           ${sekolahLine}
           <strong>Role :</strong> ${(student.roleMinecraft || '-').toUpperCase()}
@@ -1344,15 +1344,15 @@ document.addEventListener('DOMContentLoaded', () => {
       step4.querySelector('.step-circle').innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
 
       document.getElementById('tracker-date-2').innerText = 'Terverifikasi';
-      document.getElementById('tracker-date-3').innerText = 'Tidak Lolos';
-      document.getElementById('tracker-date-4').innerText = 'Ditolak';
+      document.getElementById('tracker-date-3').innerText = 'Tidak Lulus';
+      document.getElementById('tracker-date-4').innerText = 'Tidak Lulus';
 
       badge.classList.add('status-rejected');
-      badge.innerText = 'Tidak Diterima';
+      badge.innerText = 'Tidak Lulus';
 
       infoBox.classList.add('status-info-rejected');
-      infoTitle.innerText = 'Mohon Maaf, Anda Belum Lolos';
-      infoDesc.innerText = `Halo ${student.nama}, kami menghargai minat dan antusiasme Anda. Berdasarkan hasil seleksi persaingan nilai akademik dan kuota bangku yang terbatas, Anda dinyatakan Belum Lolos seleksi saat ini.`;
+      infoTitle.innerText = 'Mohon Maaf, Anda Belum Lulus';
+      infoDesc.innerText = `Halo ${student.nama}, kami menghargai minat dan antusiasme Anda. Berdasarkan hasil seleksi persaingan nilai akademik dan kuota bangku yang terbatas, Anda dinyatakan Belum Lulus seleksi saat ini.`;
 
       infoAction.innerHTML = '';
     }
@@ -1476,6 +1476,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const statementRole = document.getElementById('letter-statement-role');
     if (statementSekolah) statementSekolah.innerText = student.sekolahMinecraft || '-';
     if (statementRole) statementRole.innerText = student.roleMinecraft || '-';
+
+    // Generate dynamic QR Code for printed letter pointing to verification page
+    const letterQr = document.getElementById('letter-qr-code');
+    if (letterQr) {
+      const qrContent = `${window.location.origin}/verify.html?id=${student.id}`;
+      letterQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrContent)}`;
+    }
 
     // Trigger open
     document.getElementById('print-sk-modal').classList.add('active');
@@ -1674,7 +1681,8 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('countdown-minutes').innerText = "00";
           document.getElementById('countdown-seconds').innerText = "00";
 
-          // Countdown reached 0: show the search form
+          // Countdown reached 0: hide banner and show the search form
+          if (banner) banner.classList.add('hidden');
           if (searchCard) searchCard.classList.remove('hidden');
           return;
         }

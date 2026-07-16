@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <title>Verifikasi Kelulusan Resmi – SNM 2026</title>
+  <!-- Google Fonts - Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Style CSS -->
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at top, var(--bg-secondary) 0%, var(--bg-primary) 100%); padding: 20px; box-sizing: border-box;">
+
+  <div class="verify-container" style="width: 100%; max-width: 500px;">
+    <!-- Logo Header -->
+    <div class="text-center" style="margin-bottom: 24px;">
+      <a href="index.html" class="logo" style="display: inline-flex; font-size: 24px; text-decoration: none;">
+        <div class="logo-icon" style="width: 38px; height: 38px;"><i class="fa-solid fa-cube"></i></div>
+        <span class="logo-text">SNM<span>2026</span></span>
+      </a>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Portal Verifikasi Kelulusan Resmi</p>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div id="verify-card" class="modal-content-card" style="width: 100%; padding: 32px; border-radius: var(--radius-md); box-shadow: var(--card-shadow); text-align: center; background: var(--bg-secondary); border: 1px solid var(--border-color); transform: none; display: block; position: relative;">
+      
+      <!-- Loading State -->
+      <div id="verify-loading">
+        <div style="font-size: 40px; color: var(--border-focus); animation: spin 2s infinite linear; margin-bottom: 16px;">
+          <i class="fa-solid fa-spinner"></i>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary);">Memverifikasi Data...</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">Menghubungkan ke database Seleksi Nasional Minecrafter</p>
+      </div>
+
+      <!-- Success Verified State (Hidden initially) -->
+      <div id="verify-success" style="display: none;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(52, 168, 83, 0.1); color: #34A853; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; border: 2px solid #34A853; box-shadow: 0 0 15px rgba(52, 168, 83, 0.2);">
+          <i class="fa-solid fa-shield-check"></i>
+        </div>
+        <h2 style="font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--text-primary); margin-bottom: 4px;">VERIFIKASI BERHASIL</h2>
+        <span class="badge badge-success-soft" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-sm); letter-spacing: 0.5px; background: rgba(52, 168, 83, 0.1); color: #34A853; border: 1px solid rgba(52, 168, 83, 0.2);">DOKUMEN RESMI & SAH</span>
+
+        <!-- Info Table -->
+        <div style="margin: 24px 0; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px 20px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 12px;">Nama Siswa:</span>
+            <strong id="v-name" style="color: var(--text-primary); font-size: 13.5px;">Nama Siswa</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 12px;">ID Pendaftaran:</span>
+            <strong id="v-id" style="color: var(--text-primary); font-size: 13px; font-family: monospace;">000-0000-XXXX</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 12px;">Jalur Pendaftaran:</span>
+            <span id="v-track" style="color: var(--text-primary); font-size: 13px; font-weight: 600;">Jalur Ujian</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 12px;">Sekolah Terpilih:</span>
+            <span id="v-school" style="color: var(--text-primary); font-size: 13px; font-weight: 600;">Minecraft School</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 12px;">Role Kompetensi:</span>
+            <span id="v-role" style="color: var(--text-primary); font-size: 13px; font-weight: 600;">Role</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-bottom: 4px;">
+            <span style="color: var(--text-muted); font-size: 12px;">Status Kelulusan:</span>
+            <strong style="color: #34A853; font-size: 13.5px;"><i class="fa-solid fa-circle-check"></i> LULUS SELEKSI</strong>
+          </div>
+        </div>
+
+        <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">
+          Peserta di atas secara sah dinyatakan lulus proses seleksi SNM 2026. Keputusan ini bersifat mutlak dan dikeluarkan langsung oleh Panitia Seleksi Nasional Minecrafter Indonesia.
+        </p>
+
+        <a href="index.html" class="btn btn-gradient btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; height: 42px;"><i class="fa-solid fa-house"></i> Kembali ke Beranda</a>
+      </div>
+
+      <!-- Failure State (Hidden initially) -->
+      <div id="verify-fail" style="display: none;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(234, 67, 53, 0.1); color: #EA4335; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; border: 2px solid #EA4335; box-shadow: 0 0 15px rgba(234, 67, 53, 0.2);">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+        <h2 style="font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--text-primary); margin-bottom: 4px;">VERIFIKASI GAGAL</h2>
+        <span class="badge" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-sm); letter-spacing: 0.5px; background: rgba(234, 67, 53, 0.1); color: #EA4335; border: 1px solid rgba(234, 67, 53, 0.2);">DOKUMEN TIDAK VALID</span>
+
+        <div style="margin: 24px 0; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px 20px; text-align: center;">
+          <p id="verify-fail-msg" style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.6;">ID pendaftaran tidak ditemukan atau status peserta tidak dinyatakan lulus seleksi.</p>
+        </div>
+
+        <a href="index.html" class="btn btn-outline btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; height: 42px;"><i class="fa-solid fa-house"></i> Kembali ke Beranda</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Simple verification check script
+    document.addEventListener('DOMContentLoaded', async () => {
+      // API Base URL config matching app.js
+      const API_BASE = window.location.origin;
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+
+      const loadingEl = document.getElementById('verify-loading');
+      const successEl = document.getElementById('verify-success');
+      const failEl = document.getElementById('verify-fail');
+      const failMsgEl = document.getElementById('verify-fail-msg');
+
+      if (!id) {
+        loadingEl.style.display = 'none';
+        failEl.style.display = 'block';
+        failMsgEl.innerText = "Parameter ID pendaftaran tidak ditentukan.";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/api/applicants/${id}`);
+        if (response.ok) {
+          const student = await response.json();
+          
+          // Check if student status is Lolos (Lulus)
+          if (student && (student.status === 'Lolos' || student.status === 'Lulus')) {
+            document.getElementById('v-name').innerText = student.nama;
+            document.getElementById('v-id').innerText = student.id;
+            document.getElementById('v-track').innerText = student.jalur || '-';
+            document.getElementById('v-school').innerText = (student.sekolahMinecraft || '-').toUpperCase();
+            document.getElementById('v-role').innerText = (student.roleMinecraft || '-').toUpperCase();
+
+            loadingEl.style.display = 'none';
+            successEl.style.display = 'block';
+          } else {
+            loadingEl.style.display = 'none';
+            failEl.style.display = 'block';
+            failMsgEl.innerText = `Data pendaftaran ditemukan, namun status peserta saat ini adalah: "${student.status || 'Dalam Proses'}". Peserta belum/tidak lulus seleksi.`;
+          }
+        } else {
+          loadingEl.style.display = 'none';
+          failEl.style.display = 'block';
+          failMsgEl.innerText = `ID pendaftaran "${id}" tidak terdaftar di sistem kami.`;
+        }
+      } catch (error) {
+        console.error("Verification error:", error);
+        loadingEl.style.display = 'none';
+        failEl.style.display = 'block';
+        failMsgEl.innerText = "Terjadi kegagalan jaringan saat menghubungkan ke database.";
+      }
+    });
+  </script>
+
+</body>
+
+</html>

@@ -452,11 +452,16 @@ document.addEventListener('DOMContentLoaded', () => {
     filtered.forEach(applicant => {
       const tr = document.createElement('tr');
       let badgeClass = 'status-rejected';
+      let displayStatus = 'Tidak Lulus';
+      
       if (applicant.status === 'Lolos') {
         badgeClass = 'status-accepted';
+        displayStatus = 'Lulus';
       } else if (applicant.status === 'Dalam Proses') {
         badgeClass = 'status-pending';
+        displayStatus = 'Dalam Proses';
       }
+      
       const scoreText = applicant.scoreIRT !== null ? `${applicant.scoreIRT} Poin` : '<span style="color:#ef4444; font-weight: 600;">Belum Ujian</span>';
 
       tr.innerHTML = `
@@ -464,10 +469,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${applicant.nama}</td>
         <td>${formatDateIndo(applicant.tanggalLahir)}</td>
         <td><span class="badge badge-secondary-soft" style="font-weight: 700;">${scoreText}</span></td>
-        <td><span class="status-badge ${badgeClass}">${applicant.status}</span></td>
+        <td><span class="status-badge ${badgeClass}">${displayStatus}</span></td>
         <td>
           <div class="admin-actions-cell">
-            <button class="btn-view-essay btn btn-outline btn-sm" data-id="${applicant.id}" title="Lihat Essay" style="padding: 4px 8px; font-size: 11px; margin-right: 8px; border-radius: var(--radius-sm);"><i class="fa-solid fa-file-lines"></i> Detail</button>
+            <button class="btn-view-essay btn btn-outline btn-sm" data-id="${applicant.id}" title="Lihat Detail" style="padding: 4px 8px; font-size: 11px; margin-right: 8px; border-radius: var(--radius-sm);"><i class="fa-solid fa-file-lines"></i> Detail</button>
             <button class="btn-delete-row" data-id="${applicant.id}" title="Hapus Data"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         </td>
@@ -522,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
             <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Status Kelulusan</div>
-            <div style="font-weight: 700; color: ${student.status === 'Lolos' ? '#10b981' : student.status === 'Tidak Diterima' ? '#ef4444' : '#f59e0b'}; margin-top: 4px; font-size: 13px;">${student.status}</div>
+            <div style="font-weight: 700; color: ${(student.status === 'Lolos' || student.status === 'Lulus') ? '#10b981' : (student.status === 'Tidak Diterima' || student.status === 'Tidak Lulus') ? '#ef4444' : '#f59e0b'}; margin-top: 4px; font-size: 13px;">${(student.status === 'Lolos' || student.status === 'Lulus') ? 'Lulus' : (student.status === 'Tidak Diterima' || student.status === 'Tidak Lulus') ? 'Tidak Lulus' : student.status}</div>
           </div>
           <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
             <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Evaluasi CBT (IRT)</div>
