@@ -2445,8 +2445,11 @@ textarea.form-control {
 .certificate-landscape-container {
   width: 1000px;
   height: 700px;
+  background-color: #faf9f5 !important;
+  background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.02) 0%, rgba(212, 175, 55, 0.07) 100%) !important;
+  border: 16px double #c5a059 !important;
   box-sizing: border-box !important;
-  padding: 50px 60px !important;
+  padding: 40px !important;
   position: relative !important;
   font-family: 'Plus Jakarta Sans', Arial, sans-serif !important;
   color: #1e293b !important;
@@ -2454,17 +2457,40 @@ textarea.form-control {
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
-  background-size: 100% 100% !important;
-  background-repeat: no-repeat !important;
-  background-position: center center !important;
 }
 
-.certificate-cbt-bg {
-  background-image: url('certificate_background.png') !important;
+.certificate-landscape-container::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 2px solid #c5a059;
+  pointer-events: none;
 }
 
-.certificate-graduation-bg {
-  background-image: url('graduation_background.png') !important;
+.cert-corner-decor {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #c5a059;
+  pointer-events: none;
+}
+.cert-corner-tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+.cert-corner-tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+.cert-corner-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+.cert-corner-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+.cert-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 320px;
+  color: rgba(197, 160, 89, 0.04) !important;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .cert-header {
