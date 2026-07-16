@@ -3258,4 +3258,37 @@ textarea.form-control {
   }
 }
 
+/* --- ANNOUNCEMENT MARQUEE SYSTEM --- */
+.announcement-marquee-wrapper {
+  margin-bottom: 12px;
+}
+.announcement-marquee-wrapper .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+  overflow: hidden;
+  padding: 6px 14px;
+}
+.announcement-marquee-wrapper .badge i {
+  flex-shrink: 0;
+}
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 220px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.marquee-content {
+  display: inline-block;
+  animation: marquee-scroll 10s linear infinite;
+  padding-left: 100%;
+}
+@keyframes marquee-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
 

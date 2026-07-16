@@ -822,12 +822,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const countdownActiveCheckbox = document.getElementById('admin-countdown-active');
     const countdownTargetInput = document.getElementById('admin-countdown-target');
     const regActiveCheckbox = document.getElementById('admin-reg-active');
+    const announcementTextInput = document.getElementById('admin-announcement-text');
     
     if (countdownActiveCheckbox) countdownActiveCheckbox.checked = data.countdownActive || false;
     if (countdownTargetInput && data.countdownTarget) {
       countdownTargetInput.value = data.countdownTarget.slice(0, 16);
     }
     if (regActiveCheckbox) regActiveCheckbox.checked = data.registrationActive !== false;
+    if (announcementTextInput) {
+      announcementTextInput.value = data.announcementText || 'Pendaftaran SNM 2026 Resmi Dibuka!';
+    }
   }
 
   const getSystemConfig = () => {
@@ -835,7 +839,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return data ? JSON.parse(data) : {
       countdownActive: false,
       countdownTarget: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
-      registrationActive: true
+      registrationActive: true,
+      announcementText: 'Pendaftaran SNM 2026 Resmi Dibuka!'
     };
   };
 
@@ -1248,6 +1253,25 @@ document.addEventListener('DOMContentLoaded', () => {
       config.registrationActive = active;
       saveSystemConfig(config);
       showToast(`Status pendaftaran berhasil diubah menjadi: ${active ? 'DIBUKA' : 'DITUTUP'}`, "success");
+
+      await saveSystemConfigToServer(config);
+    });
+  }
+
+  const saveAnnouncementBtn = document.getElementById('btn-save-announcement');
+  if (saveAnnouncementBtn) {
+    saveAnnouncementBtn.addEventListener('click', async () => {
+      const text = document.getElementById('admin-announcement-text').value.trim();
+      
+      if (!text) {
+        showToast("Teks pengumuman tidak boleh kosong!", "error");
+        return;
+      }
+      
+      const config = getSystemConfig();
+      config.announcementText = text;
+      saveSystemConfig(config);
+      showToast("Teks pengumuman berhasil disimpan!", "success");
 
       await saveSystemConfigToServer(config);
     });

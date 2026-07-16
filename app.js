@@ -1701,13 +1701,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return data ? JSON.parse(data) : {
       countdownActive: false,
       countdownTarget: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
-      registrationActive: true
+      registrationActive: true,
+      announcementText: 'Pendaftaran SNM 2026 Resmi Dibuka!'
     };
   };
 
   const saveSystemConfig = (config) => {
     localStorage.setItem('PPDB_SYSTEM_CONFIG', JSON.stringify(config));
   };
+
+  function updateSystemAnnouncementUI(text) {
+    const el = document.getElementById('announcement-text');
+    if (el && text) {
+      el.innerText = text;
+    }
+  }
 
   // Sync system config from Prisma backend server
   const syncSystemConfigFromServer = async () => {
@@ -1719,6 +1727,7 @@ document.addEventListener('DOMContentLoaded', () => {
           saveSystemConfig(data);
           updateSystemCountdownUI(data.countdownActive, data.countdownTarget);
           updateSystemRegistrationUI(data.registrationActive);
+          updateSystemAnnouncementUI(data.announcementText);
         } else {
           // Seed default configurations
           const defaultConfig = getSystemConfig();
@@ -1730,6 +1739,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = getSystemConfig();
       updateSystemCountdownUI(data.countdownActive, data.countdownTarget);
       updateSystemRegistrationUI(data.registrationActive);
+      updateSystemAnnouncementUI(data.announcementText);
     }
   };
 
