@@ -1374,7 +1374,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       infoBox.classList.add('status-info-rejected');
       infoTitle.innerText = 'Mohon Maaf, Anda Belum Lulus';
-      infoDesc.innerText = `Halo ${student.nama}, kami menghargai minat dan antusiasme Anda. Berdasarkan hasil seleksi persaingan nilai akademik dan kuota bangku yang terbatas, Anda dinyatakan Belum Lulus seleksi saat ini.`;
+      infoDesc.innerHTML = `Halo <strong>${student.nama}</strong>, kami sangat menghargai minat, dedikasi, serta kerja keras luar biasa yang telah Anda tunjukkan sepanjang proses Seleksi Nasional ini.<br><br>
+      Berdasarkan hasil evaluasi nilai ujian CBT, persaingan parameter IRT yang sangat ketat, serta keterbatasan kuota bangku akademi yang tersedia, Anda dinyatakan <strong>Belum Lulus</strong> dalam seleksi periode ini.<br><br>
+      Jangan berkecil hati! Di dunia Minecraft yang tak terbatas, kegagalan hanyalah sebuah momen saat kita kehilangan beberapa item di inventaris—kita selalu bisa bangkit kembali, mengumpulkan material baru, dan mendirikan kastil yang jauh lebih megah. Jadikan hasil ini sebagai batu loncatan untuk terus mengasah kreativitas, keahlian arsitektur redstone, serta teknik bertahan hidup Anda. Teruslah berkarya, menjelajah, dan jadilah Minecrafter terbaik di komunitas Anda. Petualangan Anda baru saja dimulai!`;
 
       infoAction.innerHTML = '';
     }
