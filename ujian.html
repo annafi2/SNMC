@@ -1153,7 +1153,16 @@
         .catch(err => {
           console.error("Gagal mengambil data pendaftar dari server Prisma: ", err);
           const warningEl = document.getElementById('db-connection-warning');
-          if (warningEl) warningEl.style.display = 'flex';
+          if (warningEl) {
+            const isLocal = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname === '';
+            if (!isLocal) {
+              const span = warningEl.querySelector('span');
+              if (span) {
+                span.innerHTML = 'Gagal terhubung ke database server. Harap muat ulang halaman atau coba beberapa saat lagi.';
+              }
+            }
+            warningEl.style.display = 'flex';
+          }
         });
 
       // ==========================================

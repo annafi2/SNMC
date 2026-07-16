@@ -48,14 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Gagal mengambil data dari server Prisma:", error);
       // Show warning banner if connection failed
       const warningEl = document.getElementById('db-connection-warning');
-      if (warningEl) warningEl.style.display = 'flex';
+      if (warningEl) {
+        const isLocal = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname === '';
+        if (!isLocal) {
+          const span = warningEl.querySelector('span');
+          if (span) {
+            span.innerHTML = 'Gagal terhubung ke database server. Harap muat ulang halaman atau coba beberapa saat lagi.';
+          }
+        }
+        warningEl.style.display = 'flex';
+      }
     }
   };
 
   // Perform initial fetch
   fetchApplicantsFromServer();
-  // Poll every 8 seconds to mimic real-time snapshot sync
-  setInterval(fetchApplicantsFromServer, 8000);
+  // Poll every 30 seconds to mimic real-time snapshot sync
+  setInterval(fetchApplicantsFromServer, 30000);
   if (localStorage.getItem('PPDB_QUOTA') === null) {
     localStorage.setItem('PPDB_QUOTA', '350');
   }
@@ -1866,10 +1875,10 @@ document.addEventListener('DOMContentLoaded', () => {
   syncMinecraftSelectOptions();
   syncPassingGradesAndTracks();
   checkMaintenanceMode();
-  setInterval(syncSystemConfigFromServer, 4000);
-  setInterval(syncMinecraftSelectOptions, 4000);
-  setInterval(syncPassingGradesAndTracks, 4000);
-  setInterval(checkMaintenanceMode, 4000);
+  setInterval(syncSystemConfigFromServer, 30000);
+  // syncMinecraftSelectOptions is static, no need to poll!
+  setInterval(syncPassingGradesAndTracks, 45000);
+  setInterval(checkMaintenanceMode, 30000);
 
   // Settings save listeners (Migrated to admin.js)
 

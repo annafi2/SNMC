@@ -41,13 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Gagal mengambil data dari server Prisma:", error);
       // Show warning banner if connection failed
       const warningEl = document.getElementById('db-connection-warning');
-      if (warningEl) warningEl.style.display = 'flex';
+      if (warningEl) {
+        const isLocal = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname === '';
+        if (!isLocal) {
+          const span = warningEl.querySelector('span');
+          if (span) {
+            span.innerHTML = 'Gagal terhubung ke database server. Harap muat ulang halaman atau coba beberapa saat lagi.';
+          }
+        }
+        warningEl.style.display = 'flex';
+      }
     }
   };
 
-  // Perform initial fetch and poll every 8 seconds
+  // Perform initial fetch and poll every 30 seconds
   fetchApplicantsFromServer();
-  setInterval(fetchApplicantsFromServer, 8000);
+  setInterval(fetchApplicantsFromServer, 30000);
 
   function formatDateIndo(dateStr) {
     if (!dateStr) return '';
@@ -1104,8 +1113,8 @@ document.addEventListener('DOMContentLoaded', () => {
   syncMinecraftSettings();
   syncPassingGradesFromServer();
   syncMaintenanceModeFromServer();
-  setInterval(syncSystemConfigFromServer, 8000);
-  setInterval(syncMaintenanceModeFromServer, 8000);
+  setInterval(syncSystemConfigFromServer, 30000);
+  setInterval(syncMaintenanceModeFromServer, 30000);
 
   // Add school item button listener
   const addSchoolBtn = document.getElementById('btn-add-school-item');
