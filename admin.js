@@ -1614,6 +1614,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectChatSession = (sessionId) => {
     activeChatSessionId = sessionId;
     
+    // Add active state class to container for mobile responsive views
+    const container = document.querySelector('.admin-tab-chat-el');
+    if (container) container.classList.add('session-active');
+    
     // UI toggles
     document.getElementById('admin-chat-window-placeholder').style.display = 'none';
     document.getElementById('admin-chat-window-header').style.display = 'block';
@@ -1744,6 +1748,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (refreshBtn) {
     refreshBtn.addEventListener('click', loadChatSessions);
+  }
+
+  // Bind back button for mobile views
+  const backBtn = document.getElementById('admin-chat-back-btn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      activeChatSessionId = null;
+      const container = document.querySelector('.admin-tab-chat-el');
+      if (container) container.classList.remove('session-active');
+      
+      // Stop active chat messages polling
+      if (adminChatMessagesInterval) clearInterval(adminChatMessagesInterval);
+      
+      // Hide active chat view, show placeholder
+      document.getElementById('admin-chat-window-placeholder').style.display = 'flex';
+      document.getElementById('admin-chat-window-header').style.display = 'none';
+      document.getElementById('admin-chat-messages-container').style.display = 'none';
+      document.getElementById('admin-chat-window-footer').style.display = 'none';
+      
+      // Refresh session list
+      loadChatSessions();
+    });
   }
 
   // Periodic slow checks for incoming messages globally to update the main CS tab badge

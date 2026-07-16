@@ -3227,4 +3227,35 @@ textarea.form-control {
   }
 }
 
+/* --- RESPONSIVE ADMIN CS CHAT --- */
+@media (max-width: 768px) {
+  .admin-tab-chat-el {
+    flex-direction: column !important;
+    min-height: 550px !important;
+  }
+  /* On mobile, left list takes full width by default */
+  .admin-tab-chat-el > div:first-child {
+    width: 100% !important;
+    display: flex !important;
+  }
+  /* Right panel: Active Chat Window full width */
+  .admin-tab-chat-el > div:last-child {
+    width: 100% !important;
+    display: flex !important;
+  }
+  
+  /* Show/hide active states based on whether session is selected */
+  .admin-tab-chat-el.session-active > div:first-child {
+    display: none !important; /* Hide list on mobile when chat is active */
+  }
+  .admin-tab-chat-el:not(.session-active) > div:last-child {
+    display: none !important; /* Hide active chat area if no session selected on mobile */
+  }
+  
+  /* Show back button when session is active */
+  #admin-chat-back-btn {
+    display: inline-flex !important;
+  }
+}
+
 

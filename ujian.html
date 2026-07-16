@@ -664,21 +664,54 @@
       }
       .cbt-workspace {
         order: 1;
+        padding: 20px 15px; /* Reduced padding from 35px for more workspace */
       }
       .main-container {
-        padding: 0 12px;
+        padding: 0 10px;
         margin: 15px auto;
       }
       .cbt-header {
-        padding: 10px 15px;
+        padding: 10px 12px;
+      }
+      .cbt-logo span {
+        display: none; /* Hide SNM text on mobile logo */
+      }
+      .cbt-user-badge span {
+        display: none; /* Hide email text, show only icon on mobile badge */
+      }
+      .cbt-user-badge {
+        padding: 6px 10px;
+      }
+      .cbt-timer {
+        font-size: 14px;
+        padding: 5px 10px;
+      }
+      .option-card {
+        padding: 12px 14px; /* Reduced option padding */
+      }
+      .option-label {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+      }
+      .option-text {
+        font-size: 13px;
+      }
+      .cbt-footer {
+        padding-top: 15px;
+        gap: 8px;
+      }
+      .cbt-footer .btn {
+        padding: 0 10px;
+        font-size: 12px;
+        height: 38px;
+        flex: 1; /* Split evenly on mobile */
+        min-width: 0;
       }
       .auth-card {
         padding: 24px 16px;
       }
       .instruct-card {
-        padding: 20px;
-      }
-      .question-card {
         padding: 20px;
       }
       .finished-card {

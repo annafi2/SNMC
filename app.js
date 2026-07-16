@@ -2010,6 +2010,11 @@ document.addEventListener('DOMContentLoaded', () => {
       chatPanel.classList.toggle('active', isChatOpen);
 
       if (isChatOpen) {
+        // Prevent body scroll on mobile
+        if (window.innerWidth <= 480) {
+          document.body.style.overflow = 'hidden';
+        }
+
         // Clear unread badge
         chatUnreadBadge.classList.add('hidden');
         chatUnreadBadge.innerText = '0';
@@ -2021,6 +2026,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (chatPollInterval) clearInterval(chatPollInterval);
         chatPollInterval = setInterval(loadChatMessages, 3000);
       } else {
+        // Restore scroll
+        document.body.style.overflow = '';
+
         // Poll every 15 seconds when closed
         if (chatPollInterval) clearInterval(chatPollInterval);
         chatPollInterval = setInterval(loadChatMessages, 15000);
@@ -2032,6 +2040,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chatCloseBtn.addEventListener('click', () => {
       isChatOpen = false;
       chatPanel.classList.remove('active');
+      document.body.style.overflow = '';
       if (chatPollInterval) clearInterval(chatPollInterval);
       chatPollInterval = setInterval(loadChatMessages, 15000);
     });
