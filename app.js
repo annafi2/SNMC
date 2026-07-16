@@ -1764,6 +1764,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.active-year').forEach(el => {
       el.innerText = year;
     });
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute('content', `Daftar Seleksi Nasional Minecrafter (SNM) ${year}. Buktikan kemampuan Minecraft Bedrock-mu dan raih pengakuan resmi nasional.`);
+    }
   }
 
   // Sync system config from Prisma backend server
