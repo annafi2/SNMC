@@ -403,10 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Real-time Firebase Authentication state observer
   auth.onAuthStateChanged((user) => {
     if (user) {
+      const existingUser = getGoogleUser();
       const googleUserObj = {
         name: user.displayName || user.email.split('@')[0],
         email: user.email,
-        photoURL: user.photoURL
+        photoURL: (existingUser && existingUser.email.toLowerCase() === user.email.toLowerCase() && existingUser.photoURL) ? existingUser.photoURL : user.photoURL,
+        dateOfBirth: (existingUser && existingUser.email.toLowerCase() === user.email.toLowerCase() && existingUser.dateOfBirth) ? existingUser.dateOfBirth : undefined
       };
       saveGoogleUser(googleUserObj);
     } else {
