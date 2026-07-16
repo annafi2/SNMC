@@ -953,10 +953,17 @@
         <h3 style="font-weight: 700; color: #1f2937;">Cetak Sertifikat Skor Resmi CBT</h3>
         <button id="btn-close-cert-modal" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af;">&times;</button>
       </div>
-      
+      <!-- Zoom Control Bar -->
+      <div style="background: #ffffff; padding: 8px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: center; gap: 12px; align-items: center; z-index: 10;">
+        <button id="btn-cbt-zoom-out" class="btn btn-outline" style="height: 32px; padding: 0 12px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #d1d5db; background: transparent; cursor: pointer; font-weight: 600; color: #1f2937;"><i class="fa-solid fa-magnifying-glass-minus"></i> Perkecil</button>
+        <span id="cbt-zoom-percent" style="font-size: 13px; font-weight: 700; min-width: 60px; text-align: center; color: #1f2937;">100%</span>
+        <button id="btn-cbt-zoom-in" class="btn btn-outline" style="height: 32px; padding: 0 12px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #d1d5db; background: transparent; cursor: pointer; font-weight: 600; color: #1f2937;"><i class="fa-solid fa-magnifying-glass-plus"></i> Perbesar</button>
+        <button id="btn-cbt-zoom-reset" class="btn btn-outline" style="height: 32px; padding: 0 12px; font-size: 12px; border: 1px solid #d1d5db; background: transparent; cursor: pointer; font-weight: 600; color: #1f2937;">Reset</button>
+      </div>
       <!-- Print Area Sheet -->
       <div class="modal-body" id="cert-print-area-scroll-wrapper" style="overflow-x: auto; padding: 20px; display: flex; justify-content: center; background: #e2e8f0; flex-grow: 1; overflow-y: auto;">
-        <div class="print-area" id="cert-print-area" style="background: none; padding: 0; display: block;">
+        <div id="print-cbt-zoom-container" style="transform-origin: top center; transition: transform 0.15s ease, margin 0.15s ease; flex-shrink: 0; width: 1000px; height: 700px;">
+          <div class="print-area" id="cert-print-area" style="background: none; padding: 0; display: block; width: 100%; height: 100%;">
           <div class="certificate-landscape-container">
             <!-- Corner decorations -->
             <div class="cert-corner-decor cert-corner-tl"></div>
@@ -1042,6 +1049,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
       <div class="modal-footer" style="padding: 15px 20px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 10px;">
         <button id="btn-cert-modal-close" class="btn btn-outline" style="height: 38px; padding: 0 16px; border: 1px solid #d1d5db; background: transparent; cursor: pointer; font-weight: 600;">Tutup</button>
@@ -2064,6 +2072,10 @@
             certBarcodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrContent)}`;
           }
 
+          if (typeof resetCbtZoom === 'function') {
+            resetCbtZoom();
+          }
+
           certModal.style.display = 'flex';
         });
       }
@@ -2132,6 +2144,53 @@
               }
             });
           });
+        });
+      // CBT Score Certificate Zoom Feature
+      let cbtZoomScale = 1.0;
+      const cbtZoomContainer = document.getElementById('print-cbt-zoom-container');
+      const cbtZoomPercent = document.getElementById('cbt-zoom-percent');
+
+      function applyCbtZoom() {
+        if (cbtZoomContainer && cbtZoomPercent) {
+          cbtZoomContainer.style.transform = `scale(${cbtZoomScale})`;
+          cbtZoomPercent.innerText = `${Math.round(cbtZoomScale * 100)}%`;
+          
+          // Dynamic margin adjustments to adapt scroll container size to current zoom scale
+          cbtZoomContainer.style.marginBottom = `${-(700 * (1 - cbtZoomScale))}px`;
+          cbtZoomContainer.style.marginRight = `${-(1000 * (1 - cbtZoomScale))}px`;
+        }
+      }
+
+      window.resetCbtZoom = function() {
+        cbtZoomScale = 1.0;
+        applyCbtZoom();
+      };
+
+      const btnZoomOut = document.getElementById('btn-cbt-zoom-out');
+      const btnZoomIn = document.getElementById('btn-cbt-zoom-in');
+      const btnZoomReset = document.getElementById('btn-cbt-zoom-reset');
+
+      if (btnZoomOut) {
+        btnZoomOut.addEventListener('click', () => {
+          if (cbtZoomScale > 0.4) {
+            cbtZoomScale = Math.max(0.4, cbtZoomScale - 0.1);
+            applyCbtZoom();
+          }
+        });
+      }
+
+      if (btnZoomIn) {
+        btnZoomIn.addEventListener('click', () => {
+          if (cbtZoomScale < 1.5) {
+            cbtZoomScale = Math.min(1.5, cbtZoomScale + 0.1);
+            applyCbtZoom();
+          }
+        });
+      }
+
+      if (btnZoomReset) {
+        btnZoomReset.addEventListener('click', () => {
+          window.resetCbtZoom();
         });
       }
 

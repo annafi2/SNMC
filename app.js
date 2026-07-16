@@ -1548,6 +1548,11 @@ document.addEventListener('DOMContentLoaded', () => {
       cbtCertQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrContent)}`;
     }
 
+    // Reset zoom state on open
+    if (typeof resetCbtZoom === 'function') {
+      resetCbtZoom();
+    }
+
     // Trigger open
     document.getElementById('print-cbt-modal').classList.add('active');
   }
@@ -2278,6 +2283,55 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         console.error("Gagal menyimpan profil ke database server: ", err);
       }
+    });
+  }
+
+  // CBT Score Certificate Zoom Feature
+  let cbtZoomScale = 1.0;
+  const cbtZoomContainer = document.getElementById('print-cbt-zoom-container');
+  const cbtZoomPercent = document.getElementById('cbt-zoom-percent');
+
+  function applyCbtZoom() {
+    if (cbtZoomContainer && cbtZoomPercent) {
+      cbtZoomContainer.style.transform = `scale(${cbtZoomScale})`;
+      cbtZoomPercent.innerText = `${Math.round(cbtZoomScale * 100)}%`;
+      
+      // Dynamic margin adjustments to adapt scroll container size to current zoom scale
+      cbtZoomContainer.style.marginBottom = `${-(700 * (1 - cbtZoomScale))}px`;
+      cbtZoomContainer.style.marginRight = `${-(1000 * (1 - cbtZoomScale))}px`;
+    }
+  }
+
+  window.resetCbtZoom = function() {
+    cbtZoomScale = 1.0;
+    applyCbtZoom();
+  };
+
+  const btnZoomOut = document.getElementById('btn-cbt-zoom-out');
+  const btnZoomIn = document.getElementById('btn-cbt-zoom-in');
+  const btnZoomReset = document.getElementById('btn-cbt-zoom-reset');
+
+  if (btnZoomOut) {
+    btnZoomOut.addEventListener('click', () => {
+      if (cbtZoomScale > 0.4) {
+        cbtZoomScale = Math.max(0.4, cbtZoomScale - 0.1);
+        applyCbtZoom();
+      }
+    });
+  }
+
+  if (btnZoomIn) {
+    btnZoomIn.addEventListener('click', () => {
+      if (cbtZoomScale < 1.5) {
+        cbtZoomScale = Math.min(1.5, cbtZoomScale + 0.1);
+        applyCbtZoom();
+      }
+    });
+  }
+
+  if (btnZoomReset) {
+    btnZoomReset.addEventListener('click', () => {
+      window.resetCbtZoom();
     });
   }
 
