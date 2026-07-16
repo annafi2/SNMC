@@ -2335,6 +2335,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Drag-to-scroll panning functionality for zoomed certificates preview
+  function makeElementDraggable(wrapperId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+
+    let isDown = false;
+    let startX;
+    let startY;
+    let scrollLeft;
+    let scrollTop;
+
+    wrapper.style.cursor = 'grab';
+    wrapper.style.userSelect = 'none';
+
+    wrapper.addEventListener('mousedown', (e) => {
+      isDown = true;
+      wrapper.style.cursor = 'grabbing';
+      startX = e.pageX - wrapper.offsetLeft;
+      startY = e.pageY - wrapper.offsetTop;
+      scrollLeft = wrapper.scrollLeft;
+      scrollTop = wrapper.scrollTop;
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      isDown = false;
+      wrapper.style.cursor = 'grab';
+    });
+
+    wrapper.addEventListener('mouseup', () => {
+      isDown = false;
+      wrapper.style.cursor = 'grab';
+    });
+
+    wrapper.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - wrapper.offsetLeft;
+      const y = e.pageY - wrapper.offsetTop;
+      const walkX = (x - startX) * 1.5;
+      const walkY = (y - startY) * 1.5;
+      wrapper.scrollLeft = scrollLeft - walkX;
+      wrapper.scrollTop = scrollTop - walkY;
+    });
+
+    // Prevent default browser image draggingghost inside wrapper
+    wrapper.addEventListener('dragstart', (e) => {
+      e.preventDefault();
+    });
+  }
+
+  // Initialize drag controls on main page certificate previews
+  makeElementDraggable('print-cbt-area-scroll-wrapper');
+  makeElementDraggable('print-sk-area-scroll-wrapper');
+
   // Render home stats initially
   updateHomeStats();
 
