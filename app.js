@@ -1541,6 +1541,13 @@ document.addEventListener('DOMContentLoaded', () => {
       dateEl.innerText = `Jakarta, ${now.getDate()} ${months[now.getMonth()]} ${activeYear}`;
     }
 
+    // Generate dynamic QR Code for printed CBT certificate pointing to verification page
+    const cbtCertQr = document.getElementById('cbt-cert-qr');
+    if (cbtCertQr) {
+      const qrContent = `${window.location.origin}/verify.html?id=${student.id}`;
+      cbtCertQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrContent)}`;
+    }
+
     // Trigger open
     document.getElementById('print-cbt-modal').classList.add('active');
   }
@@ -1636,7 +1643,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('btn-download-sk-pdf').addEventListener('click', () => {
     const id = document.getElementById('letter-p-id').innerText || 'sk';
-    downloadPdfFromElement('print-sk-area', `Sertifikat_Kelulusan_${id}.pdf`, 'portrait');
+    downloadPdfFromElement('print-sk-area', `Sertifikat_Kelulusan_${id}.pdf`, 'landscape');
   });
 
   function formatDateLong(dateStr) {

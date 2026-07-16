@@ -1019,128 +1019,100 @@
 
   <!-- MODAL: PRINT CBT SCORE CERTIFICATE -->
   <div id="print-cbt-modal" class="modal-wrapper">
-    <div class="modal-content-card">
+    <div class="modal-content-card" style="max-width: 1060px;">
       <div class="modal-header">
         <h3><i class="fa-solid fa-award"></i> Sertifikat Skor CBT</h3>
         <button class="modal-close-btn" data-close="print-cbt-modal">&times;</button>
       </div>
-      <div class="modal-body print-area" id="print-cbt-area">
-        <!-- Inside print layout -->
-        <div class="print-card-layout">
-          <div class="print-header-brand">
-            <i class="fa-solid fa-cube logo-large"></i>
-            <div>
-              <h2>PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</h2>
-              <h1>SNM 2026</h1>
-              <p>Komunitas Minecrafter Indonesia | snm2026@minecrafter.id | discord.gg/snm2026</p>
-            </div>
-          </div>
+      <div class="modal-body" id="print-cbt-area-scroll-wrapper" style="overflow-x: auto; padding: 20px; display: flex; justify-content: center; background: var(--bg-tertiary);">
+        <div class="print-area" id="print-cbt-area" style="background: none; padding: 0; display: block;">
+          <div class="certificate-landscape-container">
+            <!-- Corner decorations -->
+            <div class="cert-corner-decor cert-corner-tl"></div>
+            <div class="cert-corner-decor cert-corner-tr"></div>
+            <div class="cert-corner-decor cert-corner-bl"></div>
+            <div class="cert-corner-decor cert-corner-br"></div>
 
-          <hr class="print-divider">
+            <!-- Watermark -->
+            <i class="fa-solid fa-cube cert-watermark"></i>
 
-          <div style="text-align: center; margin: 20px 0 15px;">
-            <h2
-              style="font-size: 18px; font-weight: 800; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: #000;">
-              SERTIFIKAT HASIL UJIAN CBT</h2>
-            <p style="font-size: 11px; color: #666; margin-top: 4px;">Computer Based Test – Seleksi Nasional Minecrafter
-              2026</p>
-          </div>
-
-          <div class="letter-body">
-            <p>Yang bertanda tangan di bawah ini, Panitia Seleksi Nasional Minecrafter (SNM) Indonesia <span class="active-year">2026</span> menerangkan
-              bahwa:</p>
-
-            <table class="table-letter-result">
-              <tr>
-                <td width="30%">Nomor Pendaftaran</td>
-                <td width="3%">:</td>
-                <td><strong id="cbt-cert-id">-</strong></td>
-              </tr>
-              <tr>
-                <td>Nama Lengkap</td>
-                <td>:</td>
-                <td><strong id="cbt-cert-nama">-</strong></td>
-              </tr>
-              <tr>
-                <td>Email Terdaftar</td>
-                <td>:</td>
-                <td><span id="cbt-cert-email">-</span></td>
-              </tr>
-              <tr>
-                <td>Jalur Seleksi</td>
-                <td>:</td>
-                <td><strong id="cbt-cert-jalur">JALUR SELEKSI UJIAN (CBT)</strong></td>
-              </tr>
-              <tr>
-                <td>Sekolah Minecraft</td>
-                <td>:</td>
-                <td><strong id="cbt-cert-sekolah">-</strong></td>
-              </tr>
-              <tr>
-                <td>Role Minecraft</td>
-                <td>:</td>
-                <td><strong id="cbt-cert-role">-</strong></td>
-              </tr>
-              <tr>
-                <td>Kode Peserta Ujian</td>
-                <td>:</td>
-                <td><strong id="cbt-cert-code" style="color: #EA4335; font-family: monospace;">-</strong></td>
-              </tr>
-            </table>
-
-            <div style="text-align: center; margin: 25px 0; padding: 20px; border: 2px solid #000; border-radius: 8px;">
-              <p
-                style="font-size: 12px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
-                Skor Ujian CBT (Item Response Theory)</p>
-              <p id="cbt-cert-score" style="font-size: 48px; font-weight: 900; margin: 0; line-height: 1;">0</p>
-              <p style="font-size: 12px; color: #666; margin: 5px 0 0;">Poin IRT</p>
+            <div class="cert-header">
+              <div class="cert-logo"><i class="fa-solid fa-cube"></i></div>
+              <p class="cert-org">Panitia Seleksi Nasional Minecrafter (SNM)</p>
+              <h1 class="cert-title-main">Sertifikat Hasil Ujian CBT</h1>
+              <p class="cert-subtitle">Computer Based Test – Seleksi Nasional Minecrafter <span class="active-year">2026</span></p>
+              <div class="cert-divider-line"></div>
             </div>
 
-            <p>Telah menyelesaikan <strong>Ujian Seleksi Berbasis Komputer (CBT)</strong> yang diselenggarakan secara
-              resmi oleh Panitia SNM Indonesia 2026 dengan perolehan skor di atas.</p>
-
-            <p>Skor dihitung menggunakan metode <strong>Item Response Theory (IRT)</strong>, di mana setiap soal
-              memiliki bobot kesulitan (<em>difficulty parameter, b</em>) dan daya beda (<em>discrimination parameter,
-                a</em>) yang berbeda-beda. Skor akhir peserta mencerminkan kemampuan estimasi (<em>ability, θ</em>) yang
-              disesuaikan dengan karakteristik butir soal.</p>
-
-            <p>Sertifikat ini diterbitkan sebagai bukti resmi penyelesaian ujian CBT dan hanya berlaku untuk proses
-              seleksi SNM 2026.</p>
-          </div>
-
-          <div class="print-footer-info">
-            <div class="print-qrcode-mock">
-              <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0" y="0" width="80" height="80" fill="white" />
-                <rect x="5" y="5" width="20" height="20" fill="black" />
-                <rect x="7" y="7" width="16" height="16" fill="white" />
-                <rect x="10" y="10" width="10" height="10" fill="black" />
-                <rect x="55" y="5" width="20" height="20" fill="black" />
-                <rect x="57" y="7" width="16" height="16" fill="white" />
-                <rect x="60" y="60" width="10" height="10" fill="black" />
-                <rect x="5" y="55" width="20" height="20" fill="black" />
-                <rect x="7" y="57" width="16" height="16" fill="white" />
-                <rect x="10" y="60" width="10" height="10" fill="black" />
-                <rect x="35" y="15" width="5" height="5" fill="black" />
-                <rect x="45" y="5" width="5" height="5" fill="black" />
-                <rect x="30" y="30" width="10" height="10" fill="black" />
-                <rect x="45" y="45" width="10" height="10" fill="black" />
-                <rect x="60" y="35" width="5" height="10" fill="black" />
-                <rect x="35" y="55" width="10" height="5" fill="black" />
-                <rect x="65" y="55" width="5" height="5" fill="black" />
-                <rect x="15" y="35" width="5" height="5" fill="black" />
-                <rect x="50" y="25" width="5" height="5" fill="black" />
-              </svg>
+            <div style="text-align: center; z-index: 2; position: relative;">
+              <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin: 0;">Sertifikat ini diberikan kepada:</p>
+              <h2 class="cert-recipient-name" id="cbt-cert-nama">BUDI SANTOSO</h2>
+              <p class="cert-body-desc">
+                Telah menyelesaikan <strong>Ujian Seleksi Berbasis Komputer (CBT)</strong> yang diselenggarakan oleh Panitia Seleksi Nasional Minecrafter Indonesia dengan metode penilaian <strong>Item Response Theory (IRT)</strong>.
+              </p>
             </div>
-            <div class="print-signatures" style="position: relative;">
-              <p id="cbt-cert-date">Jakarta, Juli 2026</p>
-              <p>Ketua Panitia SNM <span class="active-year">2026</span>,</p>
-              <div style="position: relative; height: 50px; margin: 5px 0;">
-                <img src="signature.png" alt="Tanda Tangan"
-                  style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
+
+            <div class="cert-details-grid">
+              <div class="cert-details-col">
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Nomor Pendaftaran</span>
+                  <span class="cert-detail-val" id="cbt-cert-id">001-2026-XXXX</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Jalur Seleksi</span>
+                  <span class="cert-detail-val" id="cbt-cert-jalur">JALUR SELEKSI UJIAN (CBT)</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Email Terdaftar</span>
+                  <span class="cert-detail-val" id="cbt-cert-email">email@example.com</span>
+                </div>
               </div>
-              <p><strong>Admin SNM Indonesia</strong></p>
-              <span class="nip-text">ID Panitia: SNM-ADM-<span class="active-year">2026</span>-001</span>
+              <div class="cert-details-col">
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Sekolah Minecraft</span>
+                  <span class="cert-detail-val" id="cbt-cert-sekolah">-</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Role Minecraft</span>
+                  <span class="cert-detail-val" id="cbt-cert-role">-</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Kode Peserta Ujian</span>
+                  <span class="cert-detail-val" id="cbt-cert-code" style="font-family: monospace; color: #b45309;">-</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="position: absolute; left: 40px; bottom: 170px; background: #b45309; color: white; padding: 10px 20px; border-radius: 8px; border: 2px solid #ca8a04; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 10;">
+              <span style="font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block; opacity: 0.9;">SKOR IRT AKHIR</span>
+              <strong style="font-size: 26px; font-weight: 800; display: block; line-height: 1;" id="cbt-cert-score">0.0</strong>
+            </div>
+
+            <div class="cert-footer-row">
+              <div class="cert-qr-container">
+                <div class="cert-qr-box">
+                  <img id="cbt-cert-qr" src="" alt="QR Verification">
+                </div>
+                <span class="cert-qr-label" id="cbt-cert-qr-text">VERIFIKASI RESMI</span>
+              </div>
+
+              <div class="cert-seal-box">
+                <div class="cert-seal-ribbon-left"></div>
+                <div class="cert-seal-ribbon-right"></div>
+                <div class="cert-seal-medal">
+                  <i class="fa-solid fa-award"></i>
+                </div>
+              </div>
+
+              <div class="cert-signature-container">
+                <p id="cbt-cert-date" style="margin: 0 0 2px 0;">Jakarta, 13 Juli 2026</p>
+                <p style="margin: 0; font-weight: 600;">Ketua Panitia SNM <span class="active-year">2026</span>,</p>
+                <div class="cert-signature-image-box">
+                  <img src="signature.png" alt="Tanda Tangan">
+                </div>
+                <p style="margin: 0; font-weight: 700; text-decoration: underline;">Admin SNM Indonesia</p>
+                <span style="font-size: 8px; color: #64748b; display: block; margin-top: 1px;">ID Panitia: SNM-ADM-<span class="active-year">2026</span>-001</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1157,127 +1129,99 @@
 
   <!-- MODAL: PRINT GRADUATION / SURAT KEPUTUSAN KELULUSAN -->
   <div id="print-sk-modal" class="modal-wrapper">
-    <div class="modal-content-card">
+    <div class="modal-content-card" style="max-width: 1060px;">
       <div class="modal-header">
         <h3><i class="fa-solid fa-trophy"></i> Sertifikat Minecrafter Nasional</h3>
         <button class="modal-close-btn" data-close="print-sk-modal">&times;</button>
       </div>
-      <div class="modal-body print-area" id="print-sk-area">
-        <!-- Inside print layout -->
-        <div class="print-card-layout">
-          <div class="print-header-brand">
-            <i class="fa-solid fa-cube logo-large"></i>
-            <div>
-              <h2>PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</h2>
-              <h1>SNM 2026</h1>
-              <p>Komunitas Minecrafter Indonesia | snm2026@minecrafter.id | discord.gg/snm2026</p>
+      <div class="modal-body" id="print-sk-area-scroll-wrapper" style="overflow-x: auto; padding: 20px; display: flex; justify-content: center; background: var(--bg-tertiary);">
+        <div class="print-area" id="print-sk-area" style="background: none; padding: 0; display: block;">
+          <div class="certificate-landscape-container">
+            <!-- Corner decorations -->
+            <div class="cert-corner-decor cert-corner-tl"></div>
+            <div class="cert-corner-decor cert-corner-tr"></div>
+            <div class="cert-corner-decor cert-corner-bl"></div>
+            <div class="cert-corner-decor cert-corner-br"></div>
+
+            <!-- Watermark -->
+            <i class="fa-solid fa-cube cert-watermark"></i>
+
+            <div class="cert-header">
+              <div class="cert-logo"><i class="fa-solid fa-cube"></i></div>
+              <p class="cert-org">Panitia Seleksi Nasional Minecrafter (SNM)</p>
+              <h1 class="cert-title-main" style="color: #15803d;">Sertifikat Kelulusan Resmi</h1>
+              <p class="cert-subtitle">Seleksi Nasional Minecrafter Indonesia – Tahun <span class="active-year">2026</span></p>
+              <div class="cert-divider-line"></div>
             </div>
-          </div>
 
-          <hr class="print-divider">
-
-          <div class="letter-meta-details">
-            <table class="table-meta-left">
-              <tr>
-                <td>Nomor</td>
-                <td>:</td>
-                <td>421.3/082/SNM-ID/<span class="active-year">2026</span></td>
-              </tr>
-              <tr>
-                <td>Lampiran</td>
-                <td>:</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <td>Perihal</td>
-                <td>:</td>
-                <td><strong>Keputusan Kelulusan Seleksi Nasional Minecrafter 2026</strong></td>
-              </tr>
-            </table>
-            <div class="date-right">Jakarta, 25 Agustus 2026</div>
-          </div>
-
-          <div class="letter-body">
-            <p>Kepada Yth.<br>Peserta Seleksi Nasional Minecrafter<br>Di Tempat</p>
-
-            <p class="letter-salutation">Dengan hormat,</p>
-            <p>Berdasarkan hasil verifikasi dan proses evaluasi seleksi secara online oleh Panitia Seleksi Nasional
-              Minecrafter (SNM) Indonesia 2026, dengan ini Panitia memutuskan bahwa:</p>
-
-            <table class="table-letter-result">
-              <tr>
-                <td width="30%">Nomor Pendaftaran</td>
-                <td width="3%">:</td>
-                <td><strong id="letter-p-id">001-2026-X8BF</strong></td>
-              </tr>
-              <tr>
-                <td>Nama Lengkap</td>
-                <td>:</td>
-                <td><strong id="letter-p-nama">BUDI SANTOSO</strong></td>
-              </tr>
-              <tr>
-                <td>Jalur Seleksi</td>
-                <td>:</td>
-                <td><strong id="letter-p-jalur">-</strong></td>
-              </tr>
-              <tr>
-                <td>Email Terdaftar</td>
-                <td>:</td>
-                <td><span id="letter-p-email">budisantoso@gmail.com</span></td>
-              </tr>
-              <tr>
-                <td>Sekolah Minecraft</td>
-                <td>:</td>
-                <td><strong id="letter-p-sekolah">-</strong></td>
-              </tr>
-              <tr>
-                <td>Role Minecraft</td>
-                <td>:</td>
-                <td><strong id="letter-p-role">-</strong></td>
-              </tr>
-              <tr>
-                <td>Status Kelulusan</td>
-                <td>:</td>
-                <td><span class="badge-print-accepted"><strong>LULUS</strong></span></td>
-              </tr>
-            </table>
-
-            <p>Dinyatakan <strong>LULUS SELEKSI NASIONAL MINECRAFTER <span class="active-year">2026</span></strong> dan berhak mendapatkan pengakuan
-              resmi sebagai <strong>Minecrafter Nasional Terpilih Indonesia Tahun <span class="active-year">2026</span></strong>.
-            </p>
-            <p style="font-size: 14px; line-height: 1.6; margin-top: 10px; margin-bottom: 20px; font-weight: bold; color: #15803d; text-align: center;"
-              id="letter-p-statement">
-              Anda lulus seleksi pada pilihan sekolah <span id="letter-statement-sekolah">-</span> dan role <span
-                id="letter-statement-role">-</span>
-            </p>
-
-            <p>Selanjutnya, bagi calon siswa yang dinyatakan lulus diwajibkan untuk melaksanakan proses
-              <strong>Konfirmasi Kelulusan</strong> yang akan dilaksanakan pada tanggal <strong>26 Agustus s/d 31
-                Agustus 2026</strong> dengan melengkapi persyaratan sebagai berikut:</p>
-            <ol>
-              <li>Menyimpan sertifikat kelulusan SNM <span class="active-year">2026</span> yang telah dicetak dari portal resmi.</li>
-              <li>Bergabung ke server Discord resmi Komunitas Minecrafter Indonesia (discord.gg/snm<span class="active-year">2026</span>).</li>
-              <li>Mengisi formulir konfirmasi kelulusan secara online di portal SNM.</li>
-            </ol>
-
-            <p>Apabila sampai dengan batas tanggal yang ditentukan peserta tidak melakukan konfirmasi, maka yang
-              bersangkutan dianggap <strong>mengundurkan diri</strong>.</p>
-
-            <p>Demikian sertifikat kelulusan ini diterbitkan. Selamat atas prestasi yang telah diraih!</p>
-          </div>
-
-          <div class="print-footer-info">
-            <div class="print-qrcode-mock" style="border: 1px solid #ccc; padding: 4px; background: #fff;">
-              <img id="letter-qr-code" src="" alt="QR Verification" style="width: 80px; height: 80px; display: block;">
+            <div style="text-align: center; z-index: 2; position: relative;">
+              <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin: 0;">Sertifikat kelulusan ini dianugerahkan kepada:</p>
+              <h2 class="cert-recipient-name" id="letter-p-nama" style="border-bottom-color: #15803d;">BUDI SANTOSO</h2>
+              <p class="cert-body-desc" style="max-width: 90%; font-size: 13px;">
+                Dinyatakan <strong>LULUS SELEKSI NASIONAL MINECRAFTER <span class="active-year">2026</span></strong> dan diakui secara resmi sebagai <strong>Minecrafter Nasional Terpilih Indonesia</strong>. Selamat atas prestasi gemilang yang telah dicapai dalam mempertahankan dan membuktikan keahlian terbaik Anda.
+              </p>
             </div>
-            <div class="print-signatures" style="position: relative;">
-              <p>Ketua Panitia SNM <span class="active-year">2026</span>,</p>
-              <div style="position: relative; height: 50px; margin: 5px 0;">
-                <img src="signature.png" alt="Tanda Tangan"
-                  style="height: 50px; position: absolute; left: 50%; transform: translateX(-50%); z-index: 10;">
+
+            <div class="cert-details-grid" style="background: rgba(21, 128, 61, 0.02); border-color: rgba(21, 128, 61, 0.2);">
+              <div class="cert-details-col">
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Nomor ID Pendaftaran</span>
+                  <span class="cert-detail-val" id="letter-p-id">001-2026-XXXX</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Jalur Pendaftaran</span>
+                  <span class="cert-detail-val" id="letter-p-jalur">-</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Email Terdaftar</span>
+                  <span class="cert-detail-val" id="letter-p-email">email@example.com</span>
+                </div>
               </div>
-              <p><strong>Admin SNM Indonesia</strong></p>
-              <span class="nip-text">ID Panitia: SNM-ADM-<span class="active-year">2026</span>-001</span>
+              <div class="cert-details-col">
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Sekolah Minecraft</span>
+                  <span class="cert-detail-val" id="letter-p-sekolah">-</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Role Minecraft</span>
+                  <span class="cert-detail-val" id="letter-p-role">-</span>
+                </div>
+                <div class="cert-detail-item">
+                  <span class="cert-detail-label">Status Kelulusan</span>
+                  <span class="cert-detail-val" style="color: #15803d; text-transform: uppercase;">LULUS SELEKSI</span>
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size: 11px; line-height: 1.4; color: #15803d; text-align: center; margin: -5px 0 5px 0; font-weight: 700; z-index: 2; position: relative;" id="letter-p-statement">
+              Anda lulus seleksi pada pilihan sekolah <span id="letter-statement-sekolah">-</span> dan role <span id="letter-statement-role">-</span>
+            </p>
+
+            <div class="cert-footer-row">
+              <div class="cert-qr-container">
+                <div class="cert-qr-box">
+                  <img id="letter-qr-code" src="" alt="QR Verification">
+                </div>
+                <span class="cert-qr-label">VERIFIKASI RESMI</span>
+              </div>
+
+              <div class="cert-seal-box">
+                <div class="cert-seal-ribbon-left"></div>
+                <div class="cert-seal-ribbon-right"></div>
+                <div class="cert-seal-medal" style="background: radial-gradient(circle, #86efac 0%, #15803d 100%); color: white;">
+                  <i class="fa-solid fa-trophy"></i>
+                </div>
+              </div>
+
+              <div class="cert-signature-container">
+                <p style="margin: 0 0 2px 0;">Jakarta, 25 Agustus 2026</p>
+                <p style="margin: 0; font-weight: 600;">Ketua Panitia SNM <span class="active-year">2026</span>,</p>
+                <div class="cert-signature-image-box">
+                  <img src="signature.png" alt="Tanda Tangan">
+                </div>
+                <p style="margin: 0; font-weight: 700; text-decoration: underline;">Admin SNM Indonesia</p>
+                <span style="font-size: 8px; color: #64748b; display: block; margin-top: 1px;">ID Panitia: SNM-ADM-<span class="active-year">2026</span>-001</span>
+              </div>
             </div>
           </div>
         </div>
