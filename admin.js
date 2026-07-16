@@ -481,25 +481,90 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = btn.getAttribute('data-id');
         const student = getApplicants().find(a => a.id === id);
         if (student) {
-          let detailMsg = `Detail Calon Peserta - ${student.nama}\n\nJalur: ${student.jalur}\n`;
-          if (student.ujianCode) detailMsg += `Kode Ujian: ${student.ujianCode}\n`;
-          detailMsg += `Sekolah Minecraft: ${student.sekolahMinecraft || '-'}\n`;
-          detailMsg += `Role Minecraft: ${student.roleMinecraft || '-'}\n`;
-          detailMsg += `Evaluasi IRT: ${student.scoreIRT !== null ? student.scoreIRT + ' Poin' : 'Belum Ujian'}\n\n`;
-          
-          if (student.jalur === 'Jalur Stats Minecraft (Bedrock)' && student.stats) {
-            detailMsg += `Hasil Scan Stats Bedrock:\n`;
-            detailMsg += `- Time Played: ${student.stats.time} Jam\n`;
-            detailMsg += `- Blocks Mined: ${student.stats.mined.toLocaleString()} Blok\n`;
-            detailMsg += `- Blocks Placed: ${student.stats.placed.toLocaleString()} Blok\n`;
-            detailMsg += `- Diamonds Found: ${student.stats.diamonds.toLocaleString()} Diamond\n`;
-          } else {
-            detailMsg += `Essay:\n"${student.essay}"`;
-          }
-          alert(detailMsg);
+          openApplicantDetailModal(student);
         }
       });
     });
+
+    function openApplicantDetailModal(student) {
+      const titleEl = document.getElementById('modal-detail-title-text');
+      const contentEl = document.getElementById('modal-detail-content');
+      
+      if (!titleEl || !contentEl) return;
+      
+      titleEl.innerHTML = `<i class="fa-solid fa-user-gear text-primary" style="margin-right: 8px;"></i> Detail Calon Peserta – ${student.nama}`;
+      
+      let html = `
+        <div class="applicant-detail-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px;">
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">ID Pendaftaran</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-family: monospace; font-size: 13px;">${student.id}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Jalur Seleksi</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-size: 13px;">${student.jalur}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Email Calon Peserta</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-size: 13px;">${student.email}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Tanggal Lahir</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-size: 13px;">${formatDateIndo(student.tanggalLahir)}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Sekolah Minecraft</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-size: 13px;">${student.sekolahMinecraft || '-'}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Role Minecraft</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-size: 13px;">${student.roleMinecraft || '-'}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Status Kelulusan</div>
+            <div style="font-weight: 700; color: ${student.status === 'Lolos' ? '#10b981' : student.status === 'Tidak Diterima' ? '#ef4444' : '#f59e0b'}; margin-top: 4px; font-size: 13px;">${student.status}</div>
+          </div>
+          <div class="detail-item" style="background: var(--bg-tertiary); padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Evaluasi CBT (IRT)</div>
+            <div style="font-weight: 700; color: var(--text-primary); margin-top: 4px; font-size: 13px;">${student.scoreIRT !== null ? student.scoreIRT + ' Poin' : 'Belum Ujian'}</div>
+          </div>
+        </div>
+      `;
+
+      if (student.jalur === 'Jalur Stats Minecraft (Bedrock)' && student.stats) {
+        html += `
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;"><i class="fa-solid fa-chart-simple text-primary"></i> Data Hasil Scan Stats Bedrock</h4>
+          <div class="bedrock-stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 8px;">
+            <div style="background: rgba(66, 133, 244, 0.06); padding: 12px; border: 1px solid rgba(66, 133, 244, 0.15); border-radius: var(--radius-sm); text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Waktu Bermain (Time Played)</div>
+              <div style="font-size: 18px; font-weight: 800; color: #4285F4; margin-top: 4px;">${student.stats.time} <span style="font-size: 11px; font-weight: 500;">Jam</span></div>
+            </div>
+            <div style="background: rgba(52, 168, 83, 0.06); padding: 12px; border: 1px solid rgba(52, 168, 83, 0.15); border-radius: var(--radius-sm); text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Blok Ditambang (Mined)</div>
+              <div style="font-size: 18px; font-weight: 800; color: #34A853; margin-top: 4px;">${student.stats.mined.toLocaleString()}</div>
+            </div>
+            <div style="background: rgba(251, 188, 5, 0.06); padding: 12px; border: 1px solid rgba(251, 188, 5, 0.15); border-radius: var(--radius-sm); text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Blok Diletakkan (Placed)</div>
+              <div style="font-size: 18px; font-weight: 800; color: #FBBC05; margin-top: 4px;">${student.stats.placed.toLocaleString()}</div>
+            </div>
+            <div style="background: rgba(234, 67, 53, 0.06); padding: 12px; border: 1px solid rgba(234, 67, 53, 0.15); border-radius: var(--radius-sm); text-align: center;">
+              <div style="font-size: 11px; color: var(--text-muted);">Diamond Ditemukan</div>
+              <div style="font-size: 18px; font-weight: 800; color: #EA4335; margin-top: 4px;">${student.stats.diamonds.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        html += `
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;"><i class="fa-solid fa-pen-nib text-primary"></i> Dokumen Essay Motivasi</h4>
+          <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px; max-height: 200px; overflow-y: auto; font-style: italic; white-space: pre-wrap; font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+            ${student.essay ? `"${student.essay}"` : '<em>Calon peserta tidak diwajibkan menulis essay untuk jalur ini.</em>'}
+          </div>
+        `;
+      }
+
+      contentEl.innerHTML = html;
+      document.getElementById('applicant-detail-modal').classList.add('active');
+    }
 
     // Delete actions
     document.querySelectorAll('.btn-delete-row').forEach(btn => {
@@ -1397,5 +1462,23 @@ document.addEventListener('DOMContentLoaded', () => {
       menuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
     });
   }
+
+  // Close modals listeners
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const modalId = btn.getAttribute('data-close');
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('active');
+    });
+  });
+
+  // Close modals when clicking overlay bg outside content card
+  document.querySelectorAll('.modal-wrapper').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  });
 
 });

@@ -624,6 +624,24 @@
     </div>
   </footer>
 
+  <!-- MODAL: DETAIL CALON PESERTA -->
+  <div id="applicant-detail-modal" class="modal-wrapper">
+    <div class="modal-content-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 id="modal-detail-title-text"><i class="fa-solid fa-user-gear text-primary" style="margin-right: 8px;"></i> Detail Calon Peserta</h3>
+        <button class="modal-close-btn" data-close="applicant-detail-modal">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 24px; overflow-y: auto;">
+        <div id="modal-detail-content">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close="applicant-detail-modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ChartJS script -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Firebase Compat SDKs -->
