@@ -2443,15 +2443,16 @@ textarea.form-control {
 
 /* --- PREMIUM LANDSCAPE CERTIFICATE --- */
 .certificate-landscape-container {
-  width: 100%;
-  max-width: 950px;
-  aspect-ratio: 1000 / 700;
-  container-type: inline-size;
+  width: 1000px;
+  min-width: 1000px;
+  height: 700px;
+  min-height: 700px;
+  flex-shrink: 0;
   background-color: #faf9f5 !important;
   background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.02) 0%, rgba(212, 175, 55, 0.07) 100%) !important;
-  border: 1.6cqw double #c5a059 !important;
+  border: 16px double #c5a059 !important;
   box-sizing: border-box !important;
-  padding: 4cqw !important;
+  padding: 40px !important;
   position: relative !important;
   font-family: 'Plus Jakarta Sans', Arial, sans-serif !important;
   color: #1e293b !important;
@@ -2464,32 +2465,32 @@ textarea.form-control {
 .certificate-landscape-container::before {
   content: '';
   position: absolute;
-  top: 0.8cqw;
-  left: 0.8cqw;
-  right: 0.8cqw;
-  bottom: 0.8cqw;
-  border: 0.2cqw solid #c5a059;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 2px solid #c5a059;
   pointer-events: none;
 }
 
 .cert-corner-decor {
   position: absolute;
-  width: 3cqw;
-  height: 3cqw;
-  border: 0.4cqw solid #c5a059;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #c5a059;
   pointer-events: none;
 }
-.cert-corner-tl { top: 1.2cqw; left: 1.2cqw; border-right: none; border-bottom: none; }
-.cert-corner-tr { top: 1.2cqw; right: 1.2cqw; border-left: none; border-bottom: none; }
-.cert-corner-bl { bottom: 1.2cqw; left: 1.2cqw; border-right: none; border-top: none; }
-.cert-corner-br { bottom: 1.2cqw; right: 1.2cqw; border-left: none; border-top: none; }
+.cert-corner-tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+.cert-corner-tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+.cert-corner-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+.cert-corner-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
 
 .cert-watermark {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 32cqw;
+  font-size: 320px;
   color: rgba(197, 160, 89, 0.04) !important;
   pointer-events: none;
   z-index: 0;
@@ -2502,32 +2503,32 @@ textarea.form-control {
 }
 
 .cert-logo {
-  font-size: 3.8cqw;
+  font-size: 38px;
   color: #c5a059;
-  margin-bottom: 0.8cqw;
+  margin-bottom: 8px;
 }
 
 .cert-org {
-  font-size: 1.1cqw;
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.2cqw;
+  letter-spacing: 2px;
   color: #64748b;
   text-transform: uppercase;
-  margin: 0 0 0.4cqw 0;
+  margin: 0 0 4px 0;
 }
 
 .cert-title-main {
-  font-size: 2.6cqw;
+  font-size: 26px;
   font-weight: 800;
-  letter-spacing: 0.3cqw;
+  letter-spacing: 3px;
   color: #b45309;
-  margin: 0.6cqw 0 0.2cqw 0;
+  margin: 6px 0 2px 0;
   text-transform: uppercase;
-  text-shadow: 0.1cqw 0.1cqw 0px rgba(255,255,255,0.8);
+  text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
 }
 
 .cert-subtitle {
-  font-size: 1.2cqw;
+  font-size: 12px;
   font-style: italic;
   color: #475569;
   margin: 0;
@@ -2535,27 +2536,27 @@ textarea.form-control {
 
 .cert-divider-line {
   width: 60%;
-  height: 0.2cqw;
+  height: 2px;
   background: linear-gradient(to right, transparent, #c5a059, transparent);
-  margin: 1.5cqw auto;
+  margin: 15px auto;
 }
 
 .cert-recipient-name {
-  font-size: 2.8cqw;
+  font-size: 28px;
   font-weight: 800;
   color: #0f172a;
-  border-bottom: 0.2cqw solid #c5a059;
+  border-bottom: 2px solid #c5a059;
   display: inline-block;
-  padding: 0 3cqw 0.4cqw 3cqw;
-  margin: 1cqw 0;
+  padding: 0 30px 4px 30px;
+  margin: 10px 0;
   text-transform: uppercase;
 }
 
 .cert-body-desc {
-  font-size: 1.35cqw;
+  font-size: 13.5px;
   line-height: 1.6;
   max-width: 85%;
-  margin: 0 auto 1.5cqw auto;
+  margin: 0 auto 15px auto;
   color: #334155;
   text-align: center;
 }
@@ -2563,14 +2564,14 @@ textarea.form-control {
 .cert-details-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5cqw;
-  max-width: 65cqw;
-  margin: 0 auto 1.5cqw auto;
-  font-size: 1.2cqw;
+  gap: 15px;
+  max-width: 650px;
+  margin: 0 auto 15px auto;
+  font-size: 12px;
   background: rgba(197, 160, 89, 0.03);
-  border: 0.1cqw dashed rgba(197, 160, 89, 0.3);
-  padding: 1.2cqw 2cqw;
-  border-radius: 0.8cqw;
+  border: 1px dashed rgba(197, 160, 89, 0.3);
+  padding: 12px 20px;
+  border-radius: 8px;
   z-index: 2;
   position: relative;
 }
@@ -2578,14 +2579,14 @@ textarea.form-control {
 .cert-details-col {
   display: flex;
   flex-direction: column;
-  gap: 0.6cqw;
+  gap: 6px;
 }
 
 .cert-detail-item {
   display: flex;
   justify-content: space-between;
-  border-bottom: 0.1cqw solid rgba(0, 0, 0, 0.05);
-  padding-bottom: 0.4cqw;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 4px;
 }
 
 .cert-detail-label {
@@ -2602,7 +2603,7 @@ textarea.form-control {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 1cqw;
+  margin-top: 10px;
   z-index: 2;
   position: relative;
 }
@@ -2611,24 +2612,24 @@ textarea.form-control {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4cqw;
+  gap: 4px;
 }
 
 .cert-qr-box {
   background: white;
-  border: 0.1cqw solid #c5a059;
-  padding: 0.6cqw;
-  border-radius: 0.6cqw;
+  border: 1px solid #c5a059;
+  padding: 6px;
+  border-radius: 6px;
 }
 
 .cert-qr-box img {
-  width: 7cqw;
-  height: 7cqw;
+  width: 70px;
+  height: 70px;
   display: block;
 }
 
 .cert-qr-label {
-  font-size: 0.8cqw;
+  font-size: 8px;
   font-family: monospace;
   color: #64748b;
   text-transform: uppercase;
@@ -2636,16 +2637,16 @@ textarea.form-control {
 
 .cert-seal-box {
   position: relative;
-  width: 9cqw;
-  height: 9cqw;
+  width: 90px;
+  height: 90px;
 }
 
 .cert-seal-ribbon-left {
   position: absolute;
-  bottom: -1.5cqw;
-  left: 2cqw;
-  width: 2.2cqw;
-  height: 5.5cqw;
+  bottom: -15px;
+  left: 20px;
+  width: 22px;
+  height: 55px;
   background: #b91c1c;
   transform: rotate(15deg);
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
@@ -2653,10 +2654,10 @@ textarea.form-control {
 
 .cert-seal-ribbon-right {
   position: absolute;
-  bottom: -1.5cqw;
-  right: 2cqw;
-  width: 2.2cqw;
-  height: 5.5cqw;
+  bottom: -15px;
+  right: 20px;
+  width: 22px;
+  height: 55px;
   background: #b91c1c;
   transform: rotate(-15deg);
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
@@ -2666,34 +2667,34 @@ textarea.form-control {
   position: absolute;
   top: 0;
   left: 0;
-  width: 9cqw;
-  height: 9cqw;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   background: radial-gradient(circle, #fef08a 0%, #ca8a04 100%);
-  border: 0.3cqw double #ffffff;
-  box-shadow: 0 0.4cqw 1cqw rgba(0,0,0,0.1);
+  border: 3px double #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3.8cqw;
+  font-size: 38px;
   color: #854d0e;
 }
 
 .cert-signature-container {
   text-align: center;
-  font-size: 1.1cqw;
+  font-size: 11px;
   color: #475569;
-  width: 20cqw;
+  width: 200px;
 }
 
 .cert-signature-image-box {
   position: relative;
-  height: 4.5cqw;
-  margin: 0.2cqw 0;
+  height: 45px;
+  margin: 2px 0;
 }
 
 .cert-signature-image-box img {
-  height: 4.5cqw;
+  height: 45px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
