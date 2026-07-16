@@ -1260,22 +1260,13 @@ document.addEventListener('DOMContentLoaded', () => {
         Silakan cetak Surat Keputusan Kelulusan resmi di samping untuk digunakan sebagai berkas daftar ulang.
       `;
 
-      // Render SK print button and CBT certificate button if they have a CBT score
-      const hasCbtScore = student.jalur === 'Jalur Seleksi Ujian (CBT)' && student.scoreIRT !== null && student.scoreIRT > 0;
+      // Render SK print button
       let buttonsHtml = `<button id="btn-print-sk" class="btn btn-primary" style="margin-right: 8px;"><i class="fa-solid fa-file-pdf"></i> Cetak SK Kelulusan</button>`;
-      if (hasCbtScore) {
-        buttonsHtml += `<button id="btn-print-cbt-status" class="btn btn-success"><i class="fa-solid fa-award"></i> Unduh Sertifikat Skor CBT</button>`;
-      }
       infoAction.innerHTML = buttonsHtml;
 
       document.getElementById('btn-print-sk').addEventListener('click', () => {
         openPrintSKModal(student.id);
       });
-      if (hasCbtScore) {
-        document.getElementById('btn-print-cbt-status').addEventListener('click', () => {
-          openPrintCBTModal(student.id);
-        });
-      }
     }
     else if (student.status === 'Dalam Proses') {
       // Hide QR verification barcode when still pending review
@@ -1323,16 +1314,7 @@ document.addEventListener('DOMContentLoaded', () => {
       infoTitle.innerText = 'Mohon Maaf, Anda Belum Lolos';
       infoDesc.innerText = `Halo ${student.nama}, kami menghargai minat dan antusiasme Anda. Berdasarkan hasil seleksi persaingan nilai akademik dan kuota bangku yang terbatas, Anda dinyatakan Belum Lolos seleksi saat ini.`;
 
-      // Render CBT certificate button on reject view if they completed the exam
-      const hasCbtScore = student.jalur === 'Jalur Seleksi Ujian (CBT)' && student.scoreIRT !== null && student.scoreIRT > 0;
-      if (hasCbtScore) {
-        infoAction.innerHTML = `
-          <button id="btn-print-cbt-status" class="btn btn-success"><i class="fa-solid fa-award"></i> Unduh Sertifikat Skor CBT</button>
-        `;
-        document.getElementById('btn-print-cbt-status').addEventListener('click', () => {
-          openPrintCBTModal(student.id);
-        });
-      }
+      infoAction.innerHTML = '';
     }
   }
 

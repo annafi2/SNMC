@@ -868,7 +868,7 @@
       <div class="finished-card" style="max-width: 550px;">
         <div class="success-badge-icon"><i class="fa-solid fa-circle-check"></i></div>
         <h2 style="font-family: var(--font-display); margin-bottom: 8px;">Ujian Selesai!</h2>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">Nilai Anda telah berhasil dihitung menggunakan sistem matematika pembobotan IRT (Item Response Theory) dan tersinkronisasi ke profil pendaftaran sekolah Anda. Silakan unduh sertifikat resmi untuk melihat hasil rincian nilai ujian Anda.</p>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">Nilai Anda telah berhasil dihitung menggunakan sistem matematika pembobotan IRT (Item Response Theory) dan tersinkronisasi ke profil pendaftaran Anda. Silakan kembali ke Portal Utama SNM untuk mengunduh sertifikat resmi Anda pada bagian menu pendaftaran.</p>
         
         <div class="score-banner" style="display: none !important; grid-template-columns: 1fr 1fr; gap: 15px; background: var(--bg-tertiary); padding: 15px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <div style="border-right: 1px dashed var(--border-color); padding-right: 10px;">
@@ -880,16 +880,6 @@
             <div class="score-val" id="essay-bonus-val" style="color: #4285F4;">0</div>
           </div>
         </div>
-
-        <!-- Countdown download widget -->
-        <div id="cert-countdown-wrapper" style="margin: 20px 0; padding: 12px; background: rgba(66, 133, 244, 0.06); border: 1px solid rgba(66, 133, 244, 0.2); border-radius: var(--radius-sm); font-size: 13px;">
-          <i class="fa-solid fa-hourglass-half fa-spin" style="color: #4285F4; margin-right: 6px;"></i>
-          <span>Menyiapkan sertifikat skor ujian resmi... <strong id="cert-countdown-timer">5</strong> detik</span>
-        </div>
-
-        <button id="btn-download-cert" class="btn btn-gradient btn-block" disabled style="margin-bottom: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; display: none; align-items: center; justify-content: center; gap: 8px;">
-          <i class="fa-solid fa-file-pdf"></i> Unduh & Cetak Sertifikat Skor
-        </button>
 
         <button id="btn-finish-redirect" class="btn btn-outline btn-block"><i class="fa-solid fa-home"></i> Kembali ke Portal SNM</button>
       </div>
