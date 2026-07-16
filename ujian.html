@@ -2083,43 +2083,54 @@
           if (!original) return;
           const id = document.getElementById('cert-p-id').innerText || 'cert';
 
-          const scrollPos = window.scrollY;
-          window.scrollTo(0, 0);
-          const parent = original.parentNode;
-          const nextSibling = original.nextSibling;
-          const originalStyle = original.getAttribute('style') || '';
+          // Clone the element
+          const clone = original.cloneNode(true);
+          clone.style.position = 'fixed';
+          clone.style.left = '-9999px';
+          clone.style.top = '0';
+          clone.style.width = '1000px';
+          clone.style.height = 'auto';
+          clone.style.background = '#faf9f5';
+          clone.style.color = '#1e293b';
+          clone.style.display = 'block';
+          clone.style.visibility = 'visible';
+          clone.style.opacity = '1';
 
-          original.style.position = 'absolute';
-          original.style.left = '0';
-          original.style.top = '0';
-          original.style.width = '1040px';
-          original.style.height = 'auto';
-          original.style.maxHeight = 'none';
-          original.style.overflow = 'visible';
-          original.style.background = '#ffffff';
-          original.style.color = '#000000';
-          original.style.zIndex = '99999';
-          document.body.appendChild(original);
+          document.body.appendChild(clone);
 
-          const opt = {
-            margin: [10, 10, 10, 10],
-            filename: `Sertifikat_Skor_CBT_${id}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 1040 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-          };
+          // Wait for all images in clone to load
+          const images = clone.querySelectorAll('img');
+          const promises = Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => {
+              img.onload = resolve;
+              img.onerror = resolve;
+            });
+          });
 
-          html2pdf().set(opt).from(original).save().then(() => {
-            original.setAttribute('style', originalStyle);
-            if (nextSibling) { parent.insertBefore(original, nextSibling); }
-            else { parent.appendChild(original); }
-            window.scrollTo(0, scrollPos);
-          }).catch(err => {
-            console.error('Error generating PDF:', err);
-            original.setAttribute('style', originalStyle);
-            if (nextSibling) { parent.insertBefore(original, nextSibling); }
-            else { parent.appendChild(original); }
-            window.scrollTo(0, scrollPos);
+          Promise.all(promises).then(() => {
+            const opt = {
+              margin:       [0, 0, 0, 0],
+              filename:     `Sertifikat_Skor_CBT_${id}.pdf`,
+              image:        { type: 'jpeg', quality: 1.0 },
+              html2canvas:  { 
+                scale: 2, 
+                useCORS: true,
+                scrollY: 0,
+                scrollX: 0,
+                windowWidth: 1000
+              },
+              jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(clone).save().then(() => {
+              document.body.removeChild(clone);
+            }).catch(err => {
+              console.error('Error generating PDF:', err);
+              if (clone.parentNode) {
+                document.body.removeChild(clone);
+              }
+            });
           });
         });
       }

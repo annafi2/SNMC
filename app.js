@@ -1568,66 +1568,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const original = document.getElementById(elementId);
     if (!original) return;
 
-    // Save scroll position and reset to 0 to prevent html2canvas offset rendering bugs
-    const scrollPos = window.scrollY;
-    window.scrollTo(0, 0);
-
-    // Save original parent, sibling, and styles
-    const parent = original.parentNode;
-    const nextSibling = original.nextSibling;
-    const originalStyle = original.getAttribute('style') || '';
-
+    // Clone the element to avoid mutating or detaching the original live DOM element
+    const clone = original.cloneNode(true);
+    
     // Width based on landscape or portrait
-    const widthPx = orientation === 'landscape' ? 1040 : 790;
+    const widthPx = orientation === 'landscape' ? 1000 : 750;
 
-    // Temporarily format element layout for print rendering
-    original.style.position = 'absolute';
-    original.style.left = '0';
-    original.style.top = '0';
-    original.style.width = widthPx + 'px';
-    original.style.height = 'auto';
-    original.style.maxHeight = 'none';
-    original.style.overflow = 'visible';
-    original.style.background = '#ffffff';
-    original.style.color = '#000000';
-    original.style.zIndex = '99999';
+    // Set styling on the clone to ensure it's visible, styled correctly, and not cut off
+    clone.style.position = 'fixed';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    clone.style.width = widthPx + 'px';
+    clone.style.height = 'auto';
+    clone.style.maxHeight = 'none';
+    clone.style.overflow = 'visible';
+    clone.style.background = '#faf9f5'; // Force premium light color
+    clone.style.color = '#1e293b';
+    clone.style.display = 'block';
+    clone.style.visibility = 'visible';
+    clone.style.opacity = '1';
+    
+    // Append clone to body so html2canvas can render it
+    document.body.appendChild(clone);
 
-    // Append to document.body to escape any limited/clipped parent modals
-    document.body.appendChild(original);
+    // Wait for all images (QR code, signatures) in clone to load completely
+    const images = clone.querySelectorAll('img');
+    const promises = Array.from(images).map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve; // Continue even if load fails to prevent hangs
+      });
+    });
 
-    const opt = {
-      margin:       [10, 10, 10, 10],
-      filename:     filename,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { 
-        scale: 2, 
-        useCORS: true,
-        scrollY: 0,
-        scrollX: 0,
-        windowWidth: widthPx
-      },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: orientation }
-    };
+    Promise.all(promises).then(() => {
+      const opt = {
+        margin:       [0, 0, 0, 0], // Remove margins for perfect boundary rendering
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { 
+          scale: 2, 
+          useCORS: true,
+          scrollY: 0,
+          scrollX: 0,
+          windowWidth: widthPx
+        },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: orientation }
+      };
 
-    // Render directly from the body-level element
-    html2pdf().set(opt).from(original).save().then(() => {
-      // Restore styles and position in DOM
-      original.setAttribute('style', originalStyle);
-      if (nextSibling) {
-        parent.insertBefore(original, nextSibling);
-      } else {
-        parent.appendChild(original);
-      }
-      window.scrollTo(0, scrollPos);
-    }).catch(err => {
-      console.error('Error generating PDF:', err);
-      original.setAttribute('style', originalStyle);
-      if (nextSibling) {
-        parent.insertBefore(original, nextSibling);
-      } else {
-        parent.appendChild(original);
-      }
-      window.scrollTo(0, scrollPos);
+      // Render directly from the clone
+      html2pdf().set(opt).from(clone).save().then(() => {
+        document.body.removeChild(clone);
+      }).catch(err => {
+        console.error('Error generating PDF:', err);
+        if (clone.parentNode) {
+          document.body.removeChild(clone);
+        }
+      });
     });
   }
 
