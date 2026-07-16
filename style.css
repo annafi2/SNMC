@@ -3291,4 +3291,17 @@ textarea.form-control {
   100% { transform: translate3d(-100%, 0, 0); }
 }
 
+/* Avatar presets styling */
+.avatar-preset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.avatar-preset-btn:hover {
+  border-color: var(--border-focus) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
 

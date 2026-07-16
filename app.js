@@ -356,8 +356,34 @@ document.addEventListener('DOMContentLoaded', () => {
       if (namaInput) namaInput.value = user.name;
       if (emailInput) emailInput.value = user.email;
 
+      // Auto-fill date of birth from user profile
+      const dobInput = document.getElementById('tanggal-lahir');
+      if (dobInput && user.dateOfBirth) {
+        dobInput.value = user.dateOfBirth;
+      }
+
       if (bannerEmail) bannerEmail.innerText = `${user.name} (${user.email})`;
-      if (initialsSpan) initialsSpan.innerText = user.name.charAt(0).toUpperCase();
+      
+      // Render user avatar if available
+      const avatarUrl = user.photoURL || '';
+      const avatarImg = document.getElementById('google-profile-avatar');
+      if (avatarUrl) {
+        if (avatarImg) {
+          avatarImg.src = avatarUrl;
+          avatarImg.classList.remove('hidden');
+        }
+        if (initialsSpan) initialsSpan.classList.add('hidden');
+      } else {
+        if (avatarImg) {
+          avatarImg.classList.add('hidden');
+          avatarImg.src = '';
+        }
+        if (initialsSpan) {
+          initialsSpan.classList.remove('hidden');
+          initialsSpan.innerText = user.name.charAt(0).toUpperCase();
+        }
+      }
+
       if (dropName) dropName.innerText = user.name;
       if (dropEmail) dropEmail.innerText = user.email;
     } else {
@@ -368,6 +394,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (namaInput) namaInput.value = '';
       if (emailInput) emailInput.value = '';
+      
+      const dobInput = document.getElementById('tanggal-lahir');
+      if (dobInput) dobInput.value = '';
     }
   }
 
@@ -2076,6 +2105,115 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial slow poll to catch any missed messages when page loads
   loadChatMessages();
   chatPollInterval = setInterval(loadChatMessages, 15000);
+
+  // ==========================================
+  // 17. DISCLAIMER POPUP MODAL
+  // ==========================================
+  const disclaimerModal = document.getElementById('disclaimer-modal');
+  const acceptDisclaimerBtn = document.getElementById('btn-accept-disclaimer');
+  if (disclaimerModal && acceptDisclaimerBtn) {
+    if (!sessionStorage.getItem('PPDB_DISCLAIMER_ACCEPTED')) {
+      disclaimerModal.classList.add('active');
+    }
+    acceptDisclaimerBtn.addEventListener('click', () => {
+      disclaimerModal.classList.remove('active');
+      sessionStorage.setItem('PPDB_DISCLAIMER_ACCEPTED', 'true');
+    });
+  }
+
+  // ==========================================
+  // 18. USER PROFILE EDITING SYSTEM
+  // ==========================================
+  const openProfileBtn = document.getElementById('btn-open-profile');
+  const profileModal = document.getElementById('user-profile-modal');
+  const profileAvatarUrlInput = document.getElementById('profile-avatar-url');
+  const profileDobInput = document.getElementById('profile-dob');
+  const saveProfileBtn = document.getElementById('btn-save-profile');
+  
+  const profilePreviewImg = document.getElementById('profile-modal-avatar-preview');
+  const profilePreviewInitials = document.getElementById('profile-modal-initials-preview');
+
+  const updateProfileModalPreview = (url) => {
+    if (url) {
+      profilePreviewImg.src = url;
+      profilePreviewImg.style.display = 'block';
+      profilePreviewInitials.style.display = 'none';
+    } else {
+      profilePreviewImg.style.display = 'none';
+      profilePreviewInitials.style.display = 'block';
+      const user = getGoogleUser();
+      if (user) {
+        profilePreviewInitials.innerText = user.name.charAt(0).toUpperCase();
+      }
+    }
+  };
+
+  if (openProfileBtn && profileModal) {
+    openProfileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const user = getGoogleUser();
+      if (!user) {
+        showToast("Anda harus masuk terlebih dahulu!", "error");
+        return;
+      }
+      
+      // Populate fields
+      profileAvatarUrlInput.value = user.photoURL || '';
+      profileDobInput.value = user.dateOfBirth || '';
+      
+      updateProfileModalPreview(user.photoURL);
+      
+      // Reset preset highlights
+      document.querySelectorAll('.avatar-preset-btn').forEach(b => {
+        b.style.borderColor = 'var(--border-color)';
+        if (b.getAttribute('data-preset') === user.photoURL) {
+          b.style.borderColor = '#10b981';
+        }
+      });
+
+      profileModal.classList.add('active');
+    });
+  }
+
+  if (profileAvatarUrlInput) {
+    profileAvatarUrlInput.addEventListener('input', () => {
+      updateProfileModalPreview(profileAvatarUrlInput.value.trim());
+    });
+  }
+
+  // Preset Buttons click handlers
+  document.querySelectorAll('.avatar-preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const presetUrl = btn.getAttribute('data-preset');
+      if (profileAvatarUrlInput) profileAvatarUrlInput.value = presetUrl;
+      updateProfileModalPreview(presetUrl);
+
+      // Highlight selected preset
+      document.querySelectorAll('.avatar-preset-btn').forEach(b => b.style.borderColor = 'var(--border-color)');
+      btn.style.borderColor = '#10b981';
+    });
+  });
+
+  if (saveProfileBtn) {
+    saveProfileBtn.addEventListener('click', () => {
+      const user = getGoogleUser();
+      if (!user) return;
+
+      const avatarUrl = profileAvatarUrlInput.value.trim();
+      const dobValue = profileDobInput.value;
+
+      // Update user details
+      user.photoURL = avatarUrl;
+      user.dateOfBirth = dobValue;
+      saveGoogleUser(user);
+
+      // Update UI across page
+      updateGoogleAuthUI();
+      
+      profileModal.classList.remove('active');
+      showToast("Profil berhasil diperbarui!", "success");
+    });
+  }
 
   // Render home stats initially
   updateHomeStats();
