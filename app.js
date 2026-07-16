@@ -403,18 +403,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // Real-time Firebase Authentication state observer
   auth.onAuthStateChanged((user) => {
     if (user) {
-      const existingUser = getGoogleUser();
-      const googleUserObj = {
-        name: user.displayName || user.email.split('@')[0],
-        email: user.email,
-        photoURL: (existingUser && existingUser.email.toLowerCase() === user.email.toLowerCase() && existingUser.photoURL) ? existingUser.photoURL : user.photoURL,
-        dateOfBirth: (existingUser && existingUser.email.toLowerCase() === user.email.toLowerCase() && existingUser.dateOfBirth) ? existingUser.dateOfBirth : undefined
-      };
-      saveGoogleUser(googleUserObj);
+      const emailKey = user.email.toLowerCase();
+      
+      // Fetch custom profile details from database
+      fetch(`${API_BASE}/api/settings/profile:${emailKey}`)
+        .then(res => {
+          if (res.ok) return res.json();
+          return null;
+        })
+        .then(dbProfile => {
+          const existingUser = getGoogleUser();
+          const googleUserObj = {
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            photoURL: (dbProfile && dbProfile.photoURL) ? dbProfile.photoURL : ((existingUser && existingUser.email.toLowerCase() === emailKey && existingUser.photoURL) ? existingUser.photoURL : user.photoURL),
+            dateOfBirth: (dbProfile && dbProfile.dateOfBirth) ? dbProfile.dateOfBirth : ((existingUser && existingUser.email.toLowerCase() === emailKey && existingUser.dateOfBirth) ? existingUser.dateOfBirth : undefined)
+          };
+          saveGoogleUser(googleUserObj);
+          updateGoogleAuthUI();
+        })
+        .catch(err => {
+          console.error("Gagal sinkronisasi profil user dari database:", err);
+          const existingUser = getGoogleUser();
+          const googleUserObj = {
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            photoURL: (existingUser && existingUser.email.toLowerCase() === emailKey && existingUser.photoURL) ? existingUser.photoURL : user.photoURL,
+            dateOfBirth: (existingUser && existingUser.email.toLowerCase() === emailKey && existingUser.dateOfBirth) ? existingUser.dateOfBirth : undefined
+          };
+          saveGoogleUser(googleUserObj);
+          updateGoogleAuthUI();
+        });
     } else {
       clearGoogleUser();
+      updateGoogleAuthUI();
     }
-    updateGoogleAuthUI();
   });
 
   // Real Google Sign-in trigger
@@ -2221,7 +2244,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (saveProfileBtn) {
-    saveProfileBtn.addEventListener('click', () => {
+    saveProfileBtn.addEventListener('click', async () => {
       const user = getGoogleUser();
       if (!user) return;
 
@@ -2238,6 +2261,17 @@ document.addEventListener('DOMContentLoaded', () => {
       
       profileModal.classList.remove('active');
       showToast("Profil berhasil diperbarui!", "success");
+
+      // Save user details to database server settings
+      try {
+        await fetch(`${API_BASE}/api/settings/profile:${user.email.toLowerCase()}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value: { photoURL: avatarUrl, dateOfBirth: dobValue } })
+        });
+      } catch (err) {
+        console.error("Gagal menyimpan profil ke database server: ", err);
+      }
     });
   }
 
