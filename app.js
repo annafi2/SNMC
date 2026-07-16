@@ -1882,6 +1882,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Settings save listeners (Migrated to admin.js)
 
+  // ==========================================
+  // 16. CUSTOMER SERVICE FLOATING CHAT LOGIC
+  // ==========================================
+  const chatBubble = document.getElementById('cs-chat-bubble');
+  const chatPanel = document.getElementById('cs-chat-panel');
+  const chatCloseBtn = document.getElementById('cs-chat-close-btn');
+  const chatInput = document.getElementById('cs-chat-input');
+  const chatSendBtn = document.getElementById('cs-chat-send-btn');
+  const chatBody = document.getElementById('cs-chat-body');
+  const chatUnreadBadge = document.getElementById('cs-chat-unread-badge');
+
+  let chatPollInterval = null;
+  let isChatOpen = false;
+  let lastReadTimestamp = localStorage.getItem('PPDB_CS_LAST_READ') ? parseInt(localStorage.getItem('PPDB_CS_LAST_READ'), 10) : 0;
+  let localMessagesCount = 0;
+
+  const getChatSessionId = () => {
+    const googleUser = getGoogleUser();
+    if (googleUser && googleUser.email) {
+      return `google-${googleUser.email.replace(/[@.]/g, '_')}`;
+    }
+    let guestId = localStorage.getItem('PPDB_CS_GUEST_ID');
+    if (!guestId) {
+      guestId = `guest-${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('PPDB_CS_GUEST_ID', guestId);
+    }
+    return guestId;
+  };
+
+  const getChatSenderName = () => {
+    const googleUser = getGoogleUser();
+    return googleUser && googleUser.displayName ? googleUser.displayName : 'Guest User';
+  };
+
+  const loadChatMessages = async () => {
+    const sessionId = getChatSessionId();
+    try {
+      const response = await fetch(`${API_BASE}/api/chat/${sessionId}`);
+      if (response.ok) {
+        const messages = await response.json();
+        renderChatMessages(messages);
+      }
+    } catch (error) {
+      console.error("Gagal memuat pesan chat:", error);
+    }
+  };
+
+  const renderChatMessages = (messages) => {
+    // Check if new messages arrived
+    if (messages.length > localMessagesCount) {
+      localMessagesCount = messages.length;
+      
+      // Update unread badge if panel is closed
+      if (!isChatOpen) {
+        let unreadCount = 0;
+        messages.forEach(msg => {
+          if (msg.sender === 'admin' && msg.timestamp > lastReadTimestamp) {
+            unreadCount++;
+          }
+        });
+        if (unreadCount > 0) {
+          chatUnreadBadge.innerText = unreadCount;
+          chatUnreadBadge.classList.remove('hidden');
+        }
+      }
+    }
+
+    // Keep the welcome html
+    const welcomeHTML = `<div class="cs-chat-welcome">Halo! Ada yang bisa kami bantu seputar pendaftaran SNM 2026? silakan kirim pesan di bawah ini.</div>`;
+    let html = welcomeHTML;
+
+    messages.forEach(msg => {
+      const isUser = msg.sender === 'user';
+      html += `
+        <div class="cs-chat-bubble-msg ${isUser ? 'user' : 'admin'}">
+          ${msg.message}
+        </div>
+      `;
+    });
+
+    const scrollHeightBefore = chatBody.scrollHeight;
+    chatBody.innerHTML = html;
+
+    // Scroll to bottom if new messages were added
+    if (chatBody.scrollHeight > scrollHeightBefore) {
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+  };
+
+  const sendChatMessage = async () => {
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    chatInput.value = '';
+    chatSendBtn.disabled = true;
+
+    const sessionId = getChatSessionId();
+    const senderName = getChatSenderName();
+
+    try {
+      const response = await fetch(`${API_BASE}/api/chat/${sessionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: 'user',
+          senderName: senderName,
+          message: message
+        })
+      });
+      if (response.ok) {
+        const messages = await response.json();
+        renderChatMessages(messages);
+      }
+    } catch (error) {
+      console.error("Gagal mengirim pesan chat:", error);
+    } finally {
+      chatSendBtn.disabled = false;
+      chatInput.focus();
+    }
+  };
+
+  // Toggle chat panel
+  if (chatBubble && chatPanel) {
+    chatBubble.addEventListener('click', () => {
+      isChatOpen = !isChatOpen;
+      chatPanel.classList.toggle('active', isChatOpen);
+
+      if (isChatOpen) {
+        // Clear unread badge
+        chatUnreadBadge.classList.add('hidden');
+        chatUnreadBadge.innerText = '0';
+        lastReadTimestamp = Date.now();
+        localStorage.setItem('PPDB_CS_LAST_READ', lastReadTimestamp);
+
+        // Fetch immediately and poll every 3 seconds
+        loadChatMessages();
+        if (chatPollInterval) clearInterval(chatPollInterval);
+        chatPollInterval = setInterval(loadChatMessages, 3000);
+      } else {
+        // Poll every 15 seconds when closed
+        if (chatPollInterval) clearInterval(chatPollInterval);
+        chatPollInterval = setInterval(loadChatMessages, 15000);
+      }
+    });
+  }
+
+  if (chatCloseBtn) {
+    chatCloseBtn.addEventListener('click', () => {
+      isChatOpen = false;
+      chatPanel.classList.remove('active');
+      if (chatPollInterval) clearInterval(chatPollInterval);
+      chatPollInterval = setInterval(loadChatMessages, 15000);
+    });
+  }
+
+  // Input listeners
+  if (chatInput) {
+    chatInput.addEventListener('input', () => {
+      chatSendBtn.disabled = !chatInput.value.trim();
+    });
+
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !chatSendBtn.disabled) {
+        sendChatMessage();
+      }
+    });
+  }
+
+  if (chatSendBtn) {
+    chatSendBtn.addEventListener('click', sendChatMessage);
+  }
+
+  // Initial slow poll to catch any missed messages when page loads
+  loadChatMessages();
+  chatPollInterval = setInterval(loadChatMessages, 15000);
+
   // Render home stats initially
   updateHomeStats();
 

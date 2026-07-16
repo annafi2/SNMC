@@ -1450,6 +1450,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn.getAttribute('data-target') === 'admin-tab-exams') {
         loadCbtMonitorTable();
       }
+
+      // Live chat toggles
+      if (btn.getAttribute('data-target') === 'admin-tab-chat') {
+        startAdminChatPolling();
+      } else {
+        stopAdminChatPolling();
+      }
     });
   });
 
@@ -1480,5 +1487,279 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // ==========================================
+  // 11. ADMIN CUSTOMER SERVICE CHAT LOGIC
+  // ==========================================
+  let activeChatSessionId = null;
+  let adminChatSessionsInterval = null;
+  let adminChatMessagesInterval = null;
+  let sessionLastMsgCount = {}; // { sessionId: msgCount }
+
+  const startAdminChatPolling = () => {
+    loadChatSessions();
+    if (adminChatSessionsInterval) clearInterval(adminChatSessionsInterval);
+    adminChatSessionsInterval = setInterval(loadChatSessions, 4000);
+  };
+
+  const stopAdminChatPolling = () => {
+    if (adminChatSessionsInterval) clearInterval(adminChatSessionsInterval);
+    if (adminChatMessagesInterval) clearInterval(adminChatMessagesInterval);
+  };
+
+  const loadChatSessions = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/chat/sessions`);
+      if (response.ok) {
+        const sessions = await response.json();
+        renderChatSessions(sessions);
+        updateAdminUnreadBadge(sessions);
+      }
+    } catch (error) {
+      console.error("Gagal memuat sesi chat:", error);
+    }
+  };
+
+  const updateAdminUnreadBadge = (sessions) => {
+    let unreadTotal = 0;
+    sessions.forEach(s => {
+      const msgs = s.messages || [];
+      const currentCount = msgs.length;
+      const prevCount = sessionLastMsgCount[s.sessionId] || 0;
+      
+      // If messages increased and the last message is from user, treat it as unread
+      if (currentCount > prevCount) {
+        const lastMsg = msgs[currentCount - 1];
+        if (lastMsg && lastMsg.sender === 'user' && s.sessionId !== activeChatSessionId) {
+          unreadTotal++;
+        }
+      }
+    });
+
+    const badge = document.getElementById('admin-chat-total-badge');
+    if (badge) {
+      if (unreadTotal > 0) {
+        badge.innerText = unreadTotal;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  };
+
+  const renderChatSessions = (sessions) => {
+    const listContainer = document.getElementById('admin-chat-sessions-list');
+    if (!listContainer) return;
+
+    if (sessions.length === 0) {
+      listContainer.innerHTML = `
+        <div style="padding: 30px 20px; text-align: center; color: var(--text-muted); font-size: 13px;">
+          Tidak ada sesi chat aktif saat ini.
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    sessions.forEach(session => {
+      const isSelected = session.sessionId === activeChatSessionId;
+      const lastMsg = session.lastMessage || 'Belum ada pesan';
+      const sender = session.lastSender || 'User';
+      const timeStr = new Date(session.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Check if this session is unread
+      const msgs = session.messages || [];
+      const currentCount = msgs.length;
+      const prevCount = sessionLastMsgCount[session.sessionId] || 0;
+      let hasUnread = false;
+      if (currentCount > prevCount) {
+        const lastMsgObj = msgs[currentCount - 1];
+        if (lastMsgObj && lastMsgObj.sender === 'user' && !isSelected) {
+          hasUnread = true;
+        }
+      }
+
+      // Name beautification
+      let displayName = session.sessionId;
+      if (session.sessionId.startsWith('google-')) {
+        displayName = session.sessionId.replace('google-', '').replace(/_/g, '.');
+      } else if (session.sessionId.startsWith('guest-')) {
+        displayName = `Guest (${session.sessionId.replace('guest-', '').toUpperCase()})`;
+      }
+
+      html += `
+        <div class="admin-chat-session-item" data-session-id="${session.sessionId}" style="padding: 14px 18px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; background: ${isSelected ? 'rgba(66, 133, 244, 0.15)' : 'transparent'}; display: flex; flex-direction: column; gap: 4px; border-left: 3px solid ${hasUnread ? '#ef4444' : 'transparent'};">
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <strong style="font-size: 13px; color: ${hasUnread ? 'var(--text-main)' : 'var(--text-primary)'}; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 200px;">${displayName}</strong>
+            <span style="font-size: 10px; color: var(--text-muted);">${timeStr}</span>
+          </div>
+          <div style="font-size: 12px; color: ${hasUnread ? 'var(--text-primary)' : 'var(--text-muted)'}; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 100%; font-weight: ${hasUnread ? '700' : '400'};">
+            ${sender === 'Panitia SNM' ? 'Anda: ' : ''}${lastMsg}
+          </div>
+        </div>
+      `;
+    });
+
+    listContainer.innerHTML = html;
+
+    // Add click listeners to session items
+    listContainer.querySelectorAll('.admin-chat-session-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const sessionId = item.getAttribute('data-session-id');
+        selectChatSession(sessionId);
+      });
+    });
+  };
+
+  const selectChatSession = (sessionId) => {
+    activeChatSessionId = sessionId;
+    
+    // UI toggles
+    document.getElementById('admin-chat-window-placeholder').style.display = 'none';
+    document.getElementById('admin-chat-window-header').style.display = 'block';
+    document.getElementById('admin-chat-messages-container').style.display = 'flex';
+    document.getElementById('admin-chat-window-footer').style.display = 'flex';
+
+    // Set Header titles
+    let displayName = sessionId;
+    if (sessionId.startsWith('google-')) {
+      displayName = sessionId.replace('google-', '').replace(/_/g, '.');
+    } else if (sessionId.startsWith('guest-')) {
+      displayName = `Guest User (${sessionId.replace('guest-', '').toUpperCase()})`;
+    }
+    document.getElementById('admin-chat-active-name').innerText = displayName;
+    document.getElementById('admin-chat-active-session-id').innerText = `ID: ${sessionId}`;
+
+    // Mark messages count as seen
+    const activeSessionItem = document.querySelector(`.admin-chat-session-item[data-session-id="${sessionId}"]`);
+    if (activeSessionItem) {
+      activeSessionItem.style.background = 'rgba(66, 133, 244, 0.15)';
+    }
+
+    // Load active conversation immediately and poll every 3 seconds
+    loadActiveConversationMessages();
+    if (adminChatMessagesInterval) clearInterval(adminChatMessagesInterval);
+    adminChatMessagesInterval = setInterval(loadActiveConversationMessages, 3000);
+  };
+
+  const loadActiveConversationMessages = async () => {
+    if (!activeChatSessionId) return;
+    try {
+      const response = await fetch(`${API_BASE}/api/chat/${activeChatSessionId}`);
+      if (response.ok) {
+        const messages = await response.json();
+        
+        // Save current messages count to avoid notification badge on this active chat
+        sessionLastMsgCount[activeChatSessionId] = messages.length;
+        
+        renderActiveConversationMessages(messages);
+      }
+    } catch (error) {
+      console.error("Gagal sinkronisasi pesan chat:", error);
+    }
+  };
+
+  const renderActiveConversationMessages = (messages) => {
+    const messagesContainer = document.getElementById('admin-chat-messages-container');
+    if (!messagesContainer) return;
+
+    let html = '';
+    messages.forEach(msg => {
+      const isAdmin = msg.sender === 'admin';
+      html += `
+        <div class="cs-chat-bubble-msg ${isAdmin ? 'user' : 'admin'}" style="align-self: ${isAdmin ? 'flex-end' : 'flex-start'}; background: ${isAdmin ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'var(--bg-secondary)'}; color: ${isAdmin ? 'white' : 'var(--text-primary)'}; border: ${isAdmin ? 'none' : '1px solid var(--border-color)'};">
+          <div style="font-size: 10px; color: ${isAdmin ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)'}; margin-bottom: 2px; font-weight: 700;">
+            ${msg.senderName}
+          </div>
+          <div>${msg.message}</div>
+        </div>
+      `;
+    });
+
+    const scrollHeightBefore = messagesContainer.scrollHeight;
+    messagesContainer.innerHTML = html;
+
+    // Scroll to bottom
+    if (messagesContainer.scrollHeight > scrollHeightBefore) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  };
+
+  const sendAdminChatMessage = async () => {
+    const input = document.getElementById('admin-chat-input');
+    const sendBtn = document.getElementById('admin-chat-send-btn');
+    if (!input || !sendBtn || !activeChatSessionId) return;
+
+    const message = input.value.trim();
+    if (!message) return;
+
+    input.value = '';
+    sendBtn.disabled = true;
+
+    try {
+      const response = await fetch(`${API_BASE}/api/chat/${activeChatSessionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: 'admin',
+          senderName: 'Panitia SNM',
+          message: message
+        })
+      });
+      if (response.ok) {
+        const messages = await response.json();
+        sessionLastMsgCount[activeChatSessionId] = messages.length;
+        renderActiveConversationMessages(messages);
+        
+        // Refresh session list last message
+        loadChatSessions();
+      }
+    } catch (error) {
+      console.error("Gagal mengirim balasan chat:", error);
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  };
+
+  // Bind admin inputs
+  const adminInput = document.getElementById('admin-chat-input');
+  const adminSendBtn = document.getElementById('admin-chat-send-btn');
+  const refreshBtn = document.getElementById('btn-refresh-admin-chats');
+
+  if (adminInput) {
+    adminInput.addEventListener('input', () => {
+      adminSendBtn.disabled = !adminInput.value.trim();
+    });
+    adminInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !adminSendBtn.disabled) {
+        sendAdminChatMessage();
+      }
+    });
+  }
+
+  if (adminSendBtn) {
+    adminSendBtn.addEventListener('click', sendAdminChatMessage);
+  }
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', loadChatSessions);
+  }
+
+  // Periodic slow checks for incoming messages globally to update the main CS tab badge
+  const checkIncomingChatsGlobally = async () => {
+    // Only fetch globally if we are NOT currently focused on the chat tab
+    const chatTabBtn = document.querySelector('.admin-tab-btn[data-target="admin-tab-chat"]');
+    if (chatTabBtn && !chatTabBtn.classList.contains('btn-gradient')) {
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/sessions`);
+        if (response.ok) {
+          const sessions = await response.json();
+          updateAdminUnreadBadge(sessions);
+        }
+      } catch (e) {}
+    }
+  };
+  setInterval(checkIncomingChatsGlobally, 12000);
 
 });

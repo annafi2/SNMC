@@ -246,6 +246,89 @@ app.post('/api/settings/:key', async (req, res) => {
   }
 });
 
+
+// ==========================================
+// CUSTOMER SERVICE CHAT API ENDPOINTS
+// ==========================================
+
+// 1. Get all active chat sessions (stored as settings keys starting with "chat:")
+app.get('/api/chat/sessions', async (req, res) => {
+  try {
+    const sessions = await prisma.setting.findMany({
+      where: {
+        key: {
+          startsWith: 'chat:'
+        }
+      }
+    });
+    // Format the list of sessions
+    const formatted = sessions.map(s => {
+      const messages = Array.isArray(s.value) ? s.value : [];
+      const lastMsg = messages[messages.length - 1] || null;
+      return {
+        sessionId: s.key.replace('chat:', ''),
+        lastMessage: lastMsg ? lastMsg.message : '',
+        lastSender: lastMsg ? lastMsg.senderName : '',
+        timestamp: lastMsg ? lastMsg.timestamp : Date.now(),
+        messages: messages
+      };
+    }).sort((a, b) => b.timestamp - a.timestamp); // Sort by most recent message
+    res.json(formatted);
+  } catch (error) {
+    console.error('Error fetching chat sessions:', error);
+    res.status(500).json({ error: 'Failed to fetch chat sessions' });
+  }
+});
+
+// 2. Get messages for a specific session ID
+app.get('/api/chat/:sessionId', async (req, res) => {
+  const { sessionId } = req.params;
+  try {
+    const session = await prisma.setting.findUnique({
+      where: { key: `chat:${sessionId}` }
+    });
+    res.json(session ? (Array.isArray(session.value) ? session.value : []) : []);
+  } catch (error) {
+    console.error('Error fetching chat session messages:', error);
+    res.status(500).json({ error: 'Failed to fetch chat messages' });
+  }
+});
+
+// 3. Post a message to a session ID
+app.post('/api/chat/:sessionId', async (req, res) => {
+  const { sessionId } = req.params;
+  const { sender, senderName, message } = req.body;
+
+  if (!sender || !message) {
+    return res.status(400).json({ error: 'Sender and message fields are required' });
+  }
+
+  try {
+    const session = await prisma.setting.findUnique({
+      where: { key: `chat:${sessionId}` }
+    });
+
+    const messages = session ? (Array.isArray(session.value) ? session.value : []) : [];
+    messages.push({
+      sender, // 'user' or 'admin'
+      senderName: senderName || sender,
+      message,
+      timestamp: Date.now()
+    });
+
+    const updated = await prisma.setting.upsert({
+      where: { key: `chat:${sessionId}` },
+      update: { value: messages },
+      create: { key: `chat:${sessionId}`, value: messages }
+    });
+
+    res.json(updated.value);
+  } catch (error) {
+    console.error('Error saving chat message:', error);
+    res.status(500).json({ error: 'Failed to save chat message' });
+  }
+});
+
 // Serve static frontend files first (looking one directory level up)
 app.use(express.static(path.join(__dirname, '..')));
 

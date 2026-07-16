@@ -1372,6 +1372,41 @@
   <!-- App JS -->
   <script src="app.js?v=17"></script>
 
+  <!-- FLOATING CUSTOMER SERVICE CHAT WIDGET -->
+  <div id="cs-chat-widget" class="cs-chat-widget">
+    <button id="cs-chat-bubble" class="cs-chat-bubble" aria-label="Chat Customer Service">
+      <i class="fa-solid fa-comments"></i>
+      <span id="cs-chat-unread-badge" class="unread-badge hidden">0</span>
+    </button>
+    <div id="cs-chat-panel" class="cs-chat-panel">
+      <div class="cs-chat-header">
+        <div class="cs-chat-header-info">
+          <div class="cs-chat-avatar">
+            <i class="fa-solid fa-user-tie"></i>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="cs-chat-header-text">
+            <h4>Customer Service</h4>
+            <span><i class="fa-solid fa-circle" style="font-size: 6px; color: #10b981;"></i> Online</span>
+          </div>
+        </div>
+        <button id="cs-chat-close-btn" class="cs-chat-close-btn" aria-label="Tutup Chat">&times;</button>
+      </div>
+      <div id="cs-chat-body" class="cs-chat-body">
+        <div class="cs-chat-welcome">
+          Halo! Ada yang bisa kami bantu seputar pendaftaran SNM 2026? silakan kirim pesan di bawah ini.
+        </div>
+        <!-- Chat bubbles render here dynamically -->
+      </div>
+      <div class="cs-chat-footer">
+        <input type="text" id="cs-chat-input" class="cs-chat-input" placeholder="Tulis pesan Anda..." aria-label="Tulis pesan">
+        <button id="cs-chat-send-btn" class="cs-chat-send-btn" disabled aria-label="Kirim Pesan">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Maintenance Overlay -->
   <div id="maintenance-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px); z-index: 999999; justify-content: center; align-items: center; text-align: center; color: #ffffff; padding: 20px; flex-direction: column;">
     <style>
