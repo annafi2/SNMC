@@ -1483,6 +1483,52 @@
         violationCount++;
         examLocked = true;
 
+        // Play warning alarm sound using Web Audio API
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            const audioCtx = new AudioContextClass();
+            
+            // Warning beep player
+            const playBeep = (freq, duration, delay) => {
+              setTimeout(() => {
+                try {
+                  const oscillator = audioCtx.createOscillator();
+                  const gainNode = audioCtx.createGain();
+                  
+                  oscillator.type = 'sawtooth'; // Sharp alarm tone
+                  oscillator.frequency.value = freq;
+                  
+                  gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                  
+                  oscillator.connect(gainNode);
+                  gainNode.connect(audioCtx.destination);
+                  
+                  oscillator.start();
+                  oscillator.stop(audioCtx.currentTime + duration);
+                } catch (err) {
+                  console.error(err);
+                }
+              }, delay);
+            };
+
+            if (violationCount >= MAX_VIOLATIONS) {
+              // Descending "game over" warning block sound (sad tone)
+              playBeep(520, 0.35, 0);
+              playBeep(440, 0.35, 200);
+              playBeep(330, 0.65, 400);
+            } else {
+              // Sharp triple beep warning sound
+              playBeep(880, 0.25, 0);
+              playBeep(880, 0.25, 180);
+              playBeep(1200, 0.45, 360);
+            }
+          }
+        } catch (e) {
+          console.error("Gagal memainkan suara peringatan:", e);
+        }
+
         // Send to server
         if (student) {
           fetch(`${API_BASE}/api/applicants/${student.id}`, {
