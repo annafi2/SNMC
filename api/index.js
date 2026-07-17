@@ -10,8 +10,9 @@ const { PrismaClient } = require('@prisma/client');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy';
 const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL,
+  connectionString: databaseUrl,
   max: 2,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000
