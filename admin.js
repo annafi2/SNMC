@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Logout actions
-  const logoutAccount = () => {
-    if (confirm('Apakah Anda yakin ingin keluar dari akun Google?')) {
+  const logoutAccount = async () => {
+    if (await customConfirm('Apakah Anda yakin ingin keluar dari akun Google?', 'Keluar Akun', 'warning')) {
       auth.signOut().then(() => {
         window.location.reload();
       }).catch((error) => {
@@ -573,9 +573,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Delete actions
     document.querySelectorAll('.btn-delete-row').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const id = btn.getAttribute('data-id');
-        if (confirm(`Apakah Anda yakin ingin menghapus data calon pendaftar dengan ID: ${id}?`)) {
+        if (await customConfirm(`Apakah Anda yakin ingin menghapus data calon pendaftar dengan ID: ${id}?`, 'Hapus Calon Pendaftar', 'danger')) {
           deleteRecord(id);
         }
       });
@@ -717,8 +717,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const resetDataBtn = document.getElementById('btn-admin-reset-data');
   if (resetDataBtn) {
-    resetDataBtn.addEventListener('click', () => {
-      if (confirm('Apakah Anda yakin ingin me-reset seluruh database simulator? Data pendaftaran baru buatan Anda akan terhapus.')) {
+    resetDataBtn.addEventListener('click', async () => {
+      if (await customConfirm('Apakah Anda yakin ingin me-reset seluruh database simulator? Data pendaftaran baru buatan Anda akan terhapus.', 'Reset Database', 'danger')) {
         saveApplicants([]);
         loadAdminDashboardData();
 
@@ -768,10 +768,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     tbody.querySelectorAll('.btn-delete-question').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', async (e) => {
         e.preventDefault();
         const qId = btn.getAttribute('data-id');
-        if (confirm('Apakah Anda yakin ingin menghapus soal ini dari ujian?')) {
+        if (await customConfirm('Apakah Anda yakin ingin menghapus soal ini dari ujian?', 'Hapus Soal Ujian', 'danger')) {
           deleteQuestion(qId);
         }
       });
@@ -1029,9 +1029,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attach delete path events
     document.querySelectorAll('.btn-delete-path').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const pathName = btn.getAttribute('data-path');
-        if (confirm(`Apakah Anda yakin ingin menghapus Jalur "${pathName}"? Ini akan menghapus semua konfigurasi passing grade untuk semua role di jalur ini.`)) {
+        if (await customConfirm(`Apakah Anda yakin ingin menghapus Jalur "${pathName}"? Ini akan menghapus semua konfigurasi passing grade untuk semua role di jalur ini.`, 'Hapus Jalur Seleksi', 'danger')) {
           activeJalurList = activeJalurList.filter(j => j !== pathName);
           Object.keys(activePassingGrades).forEach(key => {
             if (key.startsWith(pathName + " - ")) {

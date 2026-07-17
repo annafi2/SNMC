@@ -472,8 +472,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Logouts trigger handlers (Real Firebase Sign Out)
-  const logoutAccount = () => {
-    if (confirm('Apakah Anda yakin ingin keluar dari akun Google? Pendaftaran Anda akan terkunci kembali.')) {
+  const logoutAccount = async () => {
+    if (await customConfirm('Apakah Anda yakin ingin keluar dari akun Google? Pendaftaran Anda akan terkunci kembali.', 'Keluar Akun', 'warning')) {
       auth.signOut().then(() => {
         resetTrackCards();
         showToast('Berhasil keluar akun Google', 'info');

@@ -523,78 +523,7 @@
     }
     .btn-resume-exam:hover { transform: translateY(-2px); }
 
-    /* Custom Popup Modal Styles */
-    .custom-popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .custom-popup-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .custom-popup-box {
-      background: var(--bg-secondary);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-md);
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 10px 10px -5px rgba(0,0,0,0.5);
-      width: 90%;
-      max-width: 420px;
-      padding: 24px;
-      transform: scale(0.9);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      text-align: center;
-    }
-    .custom-popup-overlay.active .custom-popup-box {
-      transform: scale(1);
-    }
-    .custom-popup-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .custom-popup-icon {
-      font-size: 36px;
-    }
-    .custom-popup-title {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--text-primary);
-      font-family: var(--font-display);
-    }
-    .custom-popup-message {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 24px;
-      white-space: pre-line;
-    }
-    .custom-popup-actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-    .custom-popup-actions button {
-      min-width: 100px;
-      height: 38px;
-      font-weight: 700;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-    }
+    /* Custom popup styles removed - using global custom-dialog.js */
 
     /* Subtest Tabs in Sidebar */
     .subtest-tab-list {
@@ -1059,20 +988,7 @@
     </div>
   </div>
 
-  <!-- CUSTOM POPUP MODAL (ALERT/CONFIRM) -->
-  <div id="custom-popup-overlay" class="custom-popup-overlay">
-    <div class="custom-popup-box">
-      <div class="custom-popup-header">
-        <span class="custom-popup-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
-        <span class="custom-popup-title">PEMBERITAHUAN</span>
-      </div>
-      <div id="custom-popup-message" class="custom-popup-message">Pesan pemberitahuan.</div>
-      <div class="custom-popup-actions">
-        <button id="btn-popup-cancel" class="btn btn-outline">Batal</button>
-        <button id="btn-popup-ok" class="btn btn-primary">OK</button>
-      </div>
-    </div>
-  </div>
+  <!-- Custom popup markup removed - dynamically managed by custom-dialog.js -->
 
   </main>
 
@@ -1085,6 +1001,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <!-- Firebase Initializer -->
   <script src="firebase-init.js"></script>
+  <!-- Custom Dialog Modals -->
+  <script src="custom-dialog.js"></script>
 
   <!-- CBT LOGIC ENGINE -->
   <script>
@@ -1134,65 +1052,7 @@
       };
       syncSystemYear();
 
-      function customAlert(message) {
-        return new Promise((resolve) => {
-          const overlay = document.getElementById('custom-popup-overlay');
-          const msgEl = document.getElementById('custom-popup-message');
-          const cancelBtn = document.getElementById('btn-popup-cancel');
-          const okBtn = document.getElementById('btn-popup-ok');
-          const iconEl = document.querySelector('.custom-popup-icon i');
-
-          iconEl.className = 'fa-solid fa-triangle-exclamation';
-          iconEl.style.color = '#f59e0b';
-          
-          msgEl.innerText = message;
-          cancelBtn.classList.add('hidden');
-          
-          overlay.classList.add('active');
-
-          const handleOk = () => {
-            overlay.classList.remove('active');
-            okBtn.removeEventListener('click', handleOk);
-            resolve();
-          };
-          okBtn.addEventListener('click', handleOk);
-        });
-      }
-
-      function customConfirm(message) {
-        return new Promise((resolve) => {
-          const overlay = document.getElementById('custom-popup-overlay');
-          const msgEl = document.getElementById('custom-popup-message');
-          const cancelBtn = document.getElementById('btn-popup-cancel');
-          const okBtn = document.getElementById('btn-popup-ok');
-          const iconEl = document.querySelector('.custom-popup-icon i');
-
-          iconEl.className = 'fa-solid fa-circle-question';
-          iconEl.style.color = '#3b82f6';
-
-          msgEl.innerText = message;
-          cancelBtn.classList.remove('hidden');
-
-          overlay.classList.add('active');
-
-          const handleOk = () => {
-            overlay.classList.remove('active');
-            okBtn.removeEventListener('click', handleOk);
-            cancelBtn.removeEventListener('click', handleCancel);
-            resolve(true);
-          };
-
-          const handleCancel = () => {
-            overlay.classList.remove('active');
-            okBtn.removeEventListener('click', handleOk);
-            cancelBtn.removeEventListener('click', handleCancel);
-            resolve(false);
-          };
-
-          okBtn.addEventListener('click', handleOk);
-          cancelBtn.addEventListener('click', handleCancel);
-        });
-      }
+      /* Local customAlert and customConfirm implementations removed - using global from custom-dialog.js */
 
       // Fetch latest applicants from Prisma backend server
       fetch(`${API_BASE}/api/applicants`)
