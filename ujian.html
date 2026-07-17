@@ -1130,20 +1130,13 @@
       }
 
       // ==========================================
-      // AUTO-LOGIN FROM URL PARAMS (DISABLED FOR SECURITY)
+      // AUTO-LOGIN FROM URL PARAMS ONLY
       // ==========================================
-      /*
       const urlParams = new URLSearchParams(window.location.search);
-      let autoId = urlParams.get('id');
-      let autoCode = urlParams.get('code');
+      const autoId = urlParams.get('id');
+      const autoCode = urlParams.get('code');
  
-      // Fallback: check localStorage if URL parameters are missing
-      if (!autoId || autoId.trim() === '') {
-        autoId = localStorage.getItem('PPDB_RECENT_ID');
-        autoCode = localStorage.getItem('PPDB_RECENT_CODE');
-      }
- 
-      if (autoId) {
+      if (autoId && autoId.trim() !== '') {
         document.getElementById('login-id').value = autoId.trim().toUpperCase();
         if (autoCode && autoCode.trim() !== '') {
           document.getElementById('login-code').value = autoCode.trim().toUpperCase();
@@ -1166,7 +1159,6 @@
             });
         }
       }
-      */
 
       // ==========================================
       // 1. CBT LOGIN
