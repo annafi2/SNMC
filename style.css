@@ -3564,4 +3564,35 @@ textarea.form-control {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
+/* Closed pathway track styling */
+.track-card.closed-track {
+  opacity: 0.55 !important;
+  filter: grayscale(80%) !important;
+  cursor: not-allowed !important;
+  pointer-events: auto !important; /* Allow hover/click so we can trigger click warning toasts */
+}
+
+.track-card.closed-track:hover {
+  transform: none !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.closed-track-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+}
+
+
 

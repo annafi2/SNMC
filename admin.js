@@ -785,6 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
       saveActiveJalurListToServer(activeJalurList);
       savePassingGradesToServer(activePassingGrades);
       renderPassingGradeTable();
+      renderJalurStatusList();
       showToast(`Jalur baru "${newName}" berhasil ditambahkan!`, 'success');
     });
   }
@@ -984,6 +985,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "Jalur Seleksi Ujian (CBT)"
   ];
 
+  let closedJalurList = [];
   let activePassingGrades = {};
 
   const syncPassingGradesFromServer = async () => {
@@ -996,6 +998,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      try {
+        const resClosed = await fetch(`${API_BASE}/api/settings/closed_jalur_list`);
+        if (resClosed.ok) {
+          const closedData = await resClosed.json();
+          if (closedData && Array.isArray(closedData)) {
+            closedJalurList = closedData;
+          }
+        }
+      } catch (errClosed) {
+        console.error("Gagal sinkronisasi closed_jalur_list: ", errClosed);
+      }
+
       const resPG = await fetch(`${API_BASE}/api/settings/passing_grades`);
       if (resPG.ok) {
         const pgData = await resPG.json();
@@ -1006,9 +1020,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ensurePassingGradeCombinations();
       renderPassingGradeTable();
+      renderJalurStatusList();
     } catch (error) {
       console.error("Gagal melakukan sync passing grades: ", error);
       renderPassingGradeTable();
+      renderJalurStatusList();
     }
   };
 
@@ -1107,6 +1123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pathName = btn.getAttribute('data-path');
         if (await customConfirm(`Apakah Anda yakin ingin menghapus Jalur "${pathName}"? Ini akan menghapus semua konfigurasi passing grade untuk semua role di jalur ini.`, 'Hapus Jalur Seleksi', 'danger')) {
           activeJalurList = activeJalurList.filter(j => j !== pathName);
+          closedJalurList = closedJalurList.filter(j => j !== pathName); // Also clean from closed list
           Object.keys(activePassingGrades).forEach(key => {
             if (key.startsWith(pathName + " - ")) {
               delete activePassingGrades[key];
@@ -1114,10 +1131,59 @@ document.addEventListener('DOMContentLoaded', () => {
           });
           saveActiveJalurListToServer(activeJalurList);
           savePassingGradesToServer(activePassingGrades);
+          
+          // Save updated closed pathways list to server too
+          fetch(`${API_BASE}/api/settings/closed_jalur_list`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: closedJalurList })
+          }).catch(err => console.error("Gagal update closed list setelah delete:", err));
+
           renderPassingGradeTable();
+          renderJalurStatusList();
           showToast(`Jalur "${pathName}" berhasil dihapus.`, 'success');
         }
       });
+    });
+  }
+
+  function renderJalurStatusList() {
+    const container = document.getElementById('admin-jalur-status-list');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (activeJalurList.length === 0) {
+      container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 10px 0;">Belum ada jalur seleksi aktif.</div>`;
+      return;
+    }
+    
+    activeJalurList.forEach(jalur => {
+      const isClosed = closedJalurList.includes(jalur);
+      const row = document.createElement('div');
+      row.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-xs); font-size: 13px; margin-bottom: 8px;";
+      
+      row.innerHTML = `
+        <span style="font-weight: 600; color: var(--text-primary);">${jalur}</span>
+        <label class="custom-checkbox" style="margin-bottom: 0; display: inline-flex; align-items: center; cursor: pointer;">
+          <input type="checkbox" class="admin-jalur-toggle" data-jalur="${jalur}" ${!isClosed ? 'checked' : ''} style="width: auto; height: auto;">
+          <span class="checkmark" style="position: relative; top: 0; left: 0;"></span>
+          <span class="label-text" style="font-size: 12px; margin-left: 8px; font-weight: 600; color: ${!isClosed ? '#10b981' : '#ef4444'};">${!isClosed ? 'Dibuka' : 'Ditutup'}</span>
+        </label>
+      `;
+      
+      const toggle = row.querySelector('.admin-jalur-toggle');
+      const label = row.querySelector('.label-text');
+      toggle.addEventListener('change', () => {
+        if (toggle.checked) {
+          label.textContent = 'Dibuka';
+          label.style.color = '#10b981';
+        } else {
+          label.textContent = 'Ditutup';
+          label.style.color = '#ef4444';
+        }
+      });
+      
+      container.appendChild(row);
     });
   }
 
@@ -1342,12 +1408,38 @@ document.addEventListener('DOMContentLoaded', () => {
     saveRegStatusBtn.addEventListener('click', async () => {
       const active = document.getElementById('admin-reg-active').checked;
       
+      // Gather closed pathways from toggle switches
+      const toggles = document.querySelectorAll('.admin-jalur-toggle');
+      const newClosedList = [];
+      toggles.forEach(toggle => {
+        if (!toggle.checked) {
+          newClosedList.push(toggle.getAttribute('data-jalur'));
+        }
+      });
+      closedJalurList = newClosedList;
+      
       const config = getSystemConfig();
       config.registrationActive = active;
       saveSystemConfig(config);
-      showToast(`Status pendaftaran berhasil diubah menjadi: ${active ? 'DIBUKA' : 'DITUTUP'}`, "success");
 
-      await saveSystemConfigToServer(config);
+      try {
+        await saveSystemConfigToServer(config);
+        
+        const res = await fetch(`${API_BASE}/api/settings/closed_jalur_list`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value: closedJalurList })
+        });
+        
+        if (res.ok) {
+          showToast(`Status pendaftaran berhasil disimpan!`, "success");
+        } else {
+          throw new Error('Save closed list failed');
+        }
+      } catch (err) {
+        console.error("Gagal menyimpan status pendaftaran:", err);
+        showToast('Gagal menyimpan konfigurasi status pendaftaran!', 'error');
+      }
     });
   }
 

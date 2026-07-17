@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const STORAGE_KEY = 'PPDB_APPLICANTS';
   let justRegistered = false;
+  let closedJalurList = [];
 
   // Initialize DB helper functions
   const getApplicants = () => {
@@ -779,6 +780,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const selectedValue = card.getAttribute('data-value');
 
+      // Check if this pathway is closed
+      if (card.classList.contains('closed-track') || closedJalurList.includes(selectedValue)) {
+        showToast(`Pendaftaran untuk "${selectedValue.replace('Jalur ', '')}" sudah ditutup!`, 'error');
+        return;
+      }
+
       const roleSelect = document.getElementById('role-minecraft');
       if (roleSelect && roleSelect.value === 'PvP Honor' && selectedValue !== 'Jalur Seleksi Ujian (CBT)') {
         showToast('Khusus pemilih role PvP Honor, wajib mengikuti Jalur Seleksi Ujian (CBT)!', 'error');
@@ -881,10 +888,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function resetTrackCards() {
     jalurHiddenInput.value = '';
+    const trackCards = document.querySelectorAll('.track-card');
     trackCards.forEach(c => {
+      const val = c.getAttribute('data-value');
+      const isClosed = closedJalurList.includes(val);
+      
       c.style.borderColor = 'var(--border-color)';
-      c.style.background = 'var(--bg-secondary)';
+      c.style.background = isClosed ? 'rgba(0,0,0,0.03)' : 'var(--bg-secondary)';
       c.querySelector('.track-check-indicator').style.opacity = '0';
+      if (isClosed) {
+        c.classList.add('closed-track');
+      } else {
+        c.classList.remove('closed-track');
+      }
     });
     if (step2Container) {
       step2Container.style.maxHeight = '0';
@@ -1826,6 +1842,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const syncPassingGradesAndTracks = async () => {
     try {
+      try {
+        const resClosed = await fetch(`${API_BASE}/api/settings/closed_jalur_list`);
+        if (resClosed.ok) {
+          const closedData = await resClosed.json();
+          if (closedData && Array.isArray(closedData)) {
+            closedJalurList = closedData;
+          } else {
+            closedJalurList = [];
+          }
+        }
+      } catch (errClosed) {
+        console.error("Gagal sinkronisasi closed_jalur_list:", errClosed);
+      }
+
       const response = await fetch(`${API_BASE}/api/settings/active_jalur_list`);
       if (response.ok) {
         const data = await response.json();
@@ -1874,6 +1904,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = grid.querySelectorAll('.track-card');
     cards.forEach(card => {
       const val = card.getAttribute('data-value');
+      const isClosed = closedJalurList.includes(val);
+      
+      if (isClosed) {
+        card.classList.add('closed-track');
+        let badge = card.querySelector('.closed-track-badge');
+        if (!badge) {
+          badge = document.createElement('div');
+          badge.className = 'closed-track-badge';
+          badge.innerText = 'Ditutup';
+          card.appendChild(badge);
+        }
+      } else {
+        card.classList.remove('closed-track');
+        const badge = card.querySelector('.closed-track-badge');
+        if (badge) badge.remove();
+      }
+
       if (!corePaths.includes(val) && !jalurList.includes(val)) {
         card.remove();
       }
