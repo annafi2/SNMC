@@ -375,67 +375,38 @@
 
               <!-- DYNAMIC FIELD: Stats Upload (shown for Jalur Stats Minecraft) -->
               <div id="field-stats-upload" class="form-group col-12" style="display:none;">
-                <label for="minecraft-stats-upload" class="form-label required"><i class="fa-solid fa-gamepad"
-                    style="color:#FBBC05;"></i> Upload Screenshot Stats Minecraft Bedrock</label>
+                <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">Statistik Game Minecraft Bedrock</label>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom: 16px;">Masukkan statistik profil Minecraft Bedrock Anda secara manual sesuai dengan data yang tertera pada game.</p>
+                
+                <div class="row" style="margin-bottom: 20px;">
+                  <div class="form-group col-md-6 col-12" style="margin-bottom: 12px;">
+                    <label for="raw-stat-time" class="form-label">Time Played (Jam)</label>
+                    <input type="number" id="raw-stat-time" name="statTime" class="form-control" placeholder="Contoh: 443" min="0">
+                  </div>
+                  <div class="form-group col-md-6 col-12" style="margin-bottom: 12px;">
+                    <label for="raw-stat-mined" class="form-label">Blocks Mined</label>
+                    <input type="number" id="raw-stat-mined" name="statMined" class="form-control" placeholder="Contoh: 65882" min="0">
+                  </div>
+                  <div class="form-group col-md-6 col-12" style="margin-bottom: 12px;">
+                    <label for="raw-stat-placed" class="form-label">Blocks Placed</label>
+                    <input type="number" id="raw-stat-placed" name="statPlaced" class="form-control" placeholder="Contoh: 49392" min="0">
+                  </div>
+                  <div class="form-group col-md-6 col-12" style="margin-bottom: 12px;">
+                    <label for="raw-stat-diamonds" class="form-label">Diamonds Found</label>
+                    <input type="number" id="raw-stat-diamonds" name="statDiamonds" class="form-control" placeholder="Contoh: 472" min="0">
+                  </div>
+                </div>
+
+                <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">Bukti Screenshot Statistik (Bukti Stats)</label>
                 <div
                   style="border:2px dashed var(--border-color);border-radius:var(--radius-sm);padding:24px;text-align:center;background:var(--bg-tertiary);cursor:pointer;"
                   id="upload-drop-zone" onclick="document.getElementById('minecraft-stats-upload').click()">
                   <i class="fa-solid fa-cloud-arrow-up"
                     style="font-size:32px;color:var(--text-muted);margin-bottom:10px;"></i>
-                  <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px;">Klik atau drag &amp; drop gambar di
-                    sini</p>
+                  <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px;">Klik atau drag &amp; drop gambar bukti stats di sini</p>
                   <p style="font-size:11px;color:var(--text-light);margin:0;">Format: JPG, PNG, WEBP (Maks. 5MB)</p>
                   <input type="file" id="minecraft-stats-upload" name="statsUpload" accept="image/*"
                     style="display:none;">
-                </div>
-                <div id="scanning-wrapper" class="hidden"
-                  style="margin-top:12px; padding: 15px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); position: relative; overflow: hidden;">
-                  <div class="scan-line"></div>
-                  <p style="font-size: 13px; color: var(--text-main); margin-bottom: 8px;"><i
-                      class="fa-solid fa-sync fa-spin" style="color: #34A853;"></i> Menganalisis Gambar & Mengekstrak
-                    Data Stats...</p>
-                  <div
-                    style="height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin-bottom: 12px;">
-                    <div id="scanning-progress-bar"
-                      style="width: 0%; height: 100%; background: #34A853; transition: width 0.1s ease;"></div>
-                  </div>
-                  <div id="extracted-stats-log"
-                    style="font-family: monospace; font-size: 11px; text-align: left; color: var(--text-muted); max-height: 100px; overflow-y: auto; line-height: 1.5; padding: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-color);">
-                    <!-- Scanning log steps inserted here -->
-                  </div>
-                </div>
-
-                <div id="stats-extracted-results" class="hidden"
-                  style="margin-top: 15px; padding: 15px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary);">
-                  <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-main);"><i
-                      class="fa-solid fa-square-poll-vertical" style="color: #34A853;"></i> Data Statistik Terdeteksi
-                    (Hasil Scan)</h4>
-                  <div class="stats-display-grid">
-                    <div class="stat-metric-card">
-                      <span class="stat-metric-label">Time Played</span>
-                      <div class="stat-metric-val" id="stat-val-time">0h</div>
-                    </div>
-                    <div class="stat-metric-card">
-                      <span class="stat-metric-label">Blocks Mined</span>
-                      <div class="stat-metric-val" id="stat-val-mined">0</div>
-                    </div>
-                    <div class="stat-metric-card">
-                      <span class="stat-metric-label">Blocks Placed</span>
-                      <div class="stat-metric-val" id="stat-val-placed">0</div>
-                    </div>
-                    <div class="stat-metric-card">
-                      <span class="stat-metric-label">Diamonds Found</span>
-                      <div class="stat-metric-val" id="stat-val-diamonds">0</div>
-                    </div>
-                  </div>
-                  <div id="stats-irt-status-note"
-                    style="margin-top: 12px; font-size: 11px; text-align: center; font-weight: 600;">
-                    <i class="fa-solid fa-circle-check"></i> Validasi IRT: Mengevaluasi performa...
-                  </div>
-                  <input type="hidden" id="raw-stat-time" name="statTime" value="0">
-                  <input type="hidden" id="raw-stat-mined" name="statMined" value="0">
-                  <input type="hidden" id="raw-stat-placed" name="statPlaced" value="0">
-                  <input type="hidden" id="raw-stat-diamonds" name="statDiamonds" value="0">
                 </div>
 
                 <div id="upload-preview-wrapper" class="hidden" style="margin-top:12px;text-align:center;">

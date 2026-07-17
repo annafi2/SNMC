@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (student.jalur === 'Jalur Stats Minecraft (Bedrock)' && student.stats) {
         html += `
-          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;"><i class="fa-solid fa-chart-simple text-primary"></i> Data Hasil Scan Stats Bedrock</h4>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;"><i class="fa-solid fa-chart-simple text-primary"></i> Data Statistik Bedrock (Input Manual)</h4>
           <div class="bedrock-stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 8px;">
             <div style="background: rgba(66, 133, 244, 0.06); padding: 12px; border: 1px solid rgba(66, 133, 244, 0.15); border-radius: var(--radius-sm); text-align: center;">
               <div style="font-size: 11px; color: var(--text-muted);">Waktu Bermain (Time Played)</div>
@@ -546,15 +546,38 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div style="background: rgba(52, 168, 83, 0.06); padding: 12px; border: 1px solid rgba(52, 168, 83, 0.15); border-radius: var(--radius-sm); text-align: center;">
               <div style="font-size: 11px; color: var(--text-muted);">Blok Ditambang (Mined)</div>
-              <div style="font-size: 18px; font-weight: 800; color: #34A853; margin-top: 4px;">${student.stats.mined.toLocaleString()}</div>
+              <div style="font-size: 18px; font-weight: 800; color: #34A853; margin-top: 4px;">${student.stats.mined ? student.stats.mined.toLocaleString() : 0}</div>
             </div>
             <div style="background: rgba(251, 188, 5, 0.06); padding: 12px; border: 1px solid rgba(251, 188, 5, 0.15); border-radius: var(--radius-sm); text-align: center;">
               <div style="font-size: 11px; color: var(--text-muted);">Blok Diletakkan (Placed)</div>
-              <div style="font-size: 18px; font-weight: 800; color: #FBBC05; margin-top: 4px;">${student.stats.placed.toLocaleString()}</div>
+              <div style="font-size: 18px; font-weight: 800; color: #FBBC05; margin-top: 4px;">${student.stats.placed ? student.stats.placed.toLocaleString() : 0}</div>
             </div>
             <div style="background: rgba(234, 67, 53, 0.06); padding: 12px; border: 1px solid rgba(234, 67, 53, 0.15); border-radius: var(--radius-sm); text-align: center;">
               <div style="font-size: 11px; color: var(--text-muted);">Diamond Ditemukan</div>
-              <div style="font-size: 18px; font-weight: 800; color: #EA4335; margin-top: 4px;">${student.stats.diamonds.toLocaleString()}</div>
+              <div style="font-size: 18px; font-weight: 800; color: #EA4335; margin-top: 4px;">${student.stats.diamonds ? student.stats.diamonds.toLocaleString() : 0}</div>
+            </div>
+          </div>
+          
+          ${student.stats.buktiStats ? `
+            <div style="margin-top: 15px; margin-bottom: 15px;">
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 6px; text-transform: uppercase;">Bukti Screenshot Stats</div>
+              <a href="${student.stats.buktiStats}" target="_blank" title="Klik untuk memperbesar">
+                <img src="${student.stats.buktiStats}" alt="Bukti Stats" style="width: 100%; max-height: 250px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: zoom-in;" />
+              </a>
+            </div>
+          ` : `
+            <div style="margin-top: 15px; margin-bottom: 15px; color: var(--text-muted); font-style: italic; font-size: 12px;">
+              Tidak ada bukti screenshot stats yang diunggah.
+            </div>
+          `}
+
+          <div style="margin-top: 16px; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary);">
+            <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">Penilaian &amp; Penentuan Skor IRT Stats</div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <div style="flex: 1;">
+                <input type="number" id="input-override-irt-score" class="form-control" style="font-size: 13px; padding: 6px 10px;" value="${student.scoreIRT !== null ? student.scoreIRT : 0}" min="0" max="100" placeholder="Skor IRT (0 - 100)" />
+              </div>
+              <button id="btn-save-override-irt" class="btn btn-primary" style="padding: 6px 12px; font-size: 13px; border-radius: var(--radius-sm);">Simpan Skor</button>
             </div>
           </div>
         `;
@@ -569,6 +592,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
       contentEl.innerHTML = html;
       document.getElementById('applicant-detail-modal').classList.add('active');
+
+      const btnSaveOverride = document.getElementById('btn-save-override-irt');
+      if (btnSaveOverride) {
+        btnSaveOverride.addEventListener('click', () => {
+          const scoreInput = document.getElementById('input-override-irt-score');
+          const newScore = parseFloat(scoreInput.value);
+          if (isNaN(newScore) || newScore < 0 || newScore > 100) {
+            showToast('Skor IRT harus berupa angka antara 0 dan 100!', 'error');
+            return;
+          }
+
+          // Disable button
+          btnSaveOverride.disabled = true;
+          btnSaveOverride.innerText = 'Menyimpan...';
+
+          // Update server
+          fetch(`${API_BASE}/api/applicants/${student.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ scoreIRT: newScore })
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('Failed to update score');
+            return res.json();
+          })
+          .then(data => {
+            // Update local memory list
+            let list = getApplicants();
+            const idx = list.findIndex(a => a.id === student.id);
+            if (idx !== -1) {
+              list[idx].scoreIRT = newScore;
+              saveApplicants(list);
+            }
+
+            showToast('Skor IRT stats berhasil diperbarui!', 'success');
+            btnSaveOverride.disabled = false;
+            btnSaveOverride.innerText = 'Simpan Skor';
+            
+            // Reload the table view
+            loadAdminDashboardData();
+          })
+          .catch(err => {
+            console.error(err);
+            showToast('Gagal menyimpan skor ke database server.', 'error');
+            btnSaveOverride.disabled = false;
+            btnSaveOverride.innerText = 'Simpan Skor';
+          });
+        });
+      }
     }
 
     // Delete actions

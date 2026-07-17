@@ -858,92 +858,23 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
-        const scanningWrapper = document.getElementById('scanning-wrapper');
-        const progressBar = document.getElementById('scanning-progress-bar');
-        const logBox = document.getElementById('extracted-stats-log');
-        const resultsBox = document.getElementById('stats-extracted-results');
         const uploadPreviewWrapper = document.getElementById('upload-preview-wrapper');
         const uploadPreviewImg = document.getElementById('upload-preview-img');
         const uploadPreviewName = document.getElementById('upload-preview-name');
+        const errEl = document.getElementById('stats-upload-error');
+        if (errEl) errEl.closest('.form-group').classList.remove('has-error');
 
-        if (uploadPreviewWrapper) uploadPreviewWrapper.classList.add('hidden');
-        if (resultsBox) resultsBox.classList.add('hidden');
-        if (scanningWrapper) scanningWrapper.classList.remove('hidden');
-        if (progressBar) progressBar.style.width = '0%';
-        if (logBox) logBox.innerHTML = '';
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          if (uploadPreviewImg) uploadPreviewImg.src = ev.target.result;
+          if (uploadPreviewName) uploadPreviewName.textContent = file.name;
+          if (uploadPreviewWrapper) uploadPreviewWrapper.classList.remove('hidden');
+          
+          window.lastUploadedStatsBase64 = ev.target.result;
+        };
+        reader.readAsDataURL(file);
 
-        const logs = [
-          { time: 100, text: "[SYSTEM] Memuat modul OCR Vision Minecraft..." },
-          { time: 400, text: "[PROCESS] Mengidentifikasi layout GUI Minecraft Bedrock..." },
-          { time: 800, text: "[PROCESS] Menemukan blok 'Profil' & 'Statistik Permainan'..." },
-          { time: 1200, text: "[OCR] Membaca data 'Time Played'..." },
-          { time: 1600, text: "[OCR] Membaca data 'Blocks Mined'..." },
-          { time: 1900, text: "[OCR] Membaca data 'Blocks Placed'..." },
-          { time: 2200, text: "[OCR] Membaca data 'Diamonds Found'..." },
-          { time: 2500, text: "[SYSTEM] Ekstraksi sukses. Menganalisis parameter kemampuan..." }
-        ];
-
-        logs.forEach(l => {
-          setTimeout(() => {
-            const line = document.createElement('div');
-            line.textContent = l.text;
-            if (logBox) {
-              logBox.appendChild(line);
-              logBox.scrollTop = logBox.scrollHeight;
-            }
-          }, l.time);
-        });
-
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-          progress += 4;
-          if (progressBar) progressBar.style.width = `${Math.min(100, progress)}%`;
-          if (progress >= 100) {
-            clearInterval(progressInterval);
-          }
-        }, 100);
-
-        setTimeout(() => {
-          // Generate Stats (mostly high / above average to reward the player)
-          const timeVal = Math.floor(80 + Math.random() * 370); // 80 - 450 hours
-          const minedVal = Math.floor(15000 + Math.random() * 105000); // 15k - 120k
-          const placedVal = Math.floor(8000 + Math.random() * 82000); // 8k - 90k
-          const diamondsVal = Math.floor(40 + Math.random() * 510); // 40 - 550
-
-          document.getElementById('stat-val-time').textContent = `${timeVal}h`;
-          document.getElementById('stat-val-mined').textContent = minedVal.toLocaleString();
-          document.getElementById('stat-val-placed').textContent = placedVal.toLocaleString();
-          document.getElementById('stat-val-diamonds').textContent = diamondsVal.toLocaleString();
-
-          document.getElementById('raw-stat-time').value = timeVal;
-          document.getElementById('raw-stat-mined').value = minedVal;
-          document.getElementById('raw-stat-placed').value = placedVal;
-          document.getElementById('raw-stat-diamonds').value = diamondsVal;
-
-          const irtScore = calculateStatsIRTScore(timeVal, minedVal, placedVal, diamondsVal);
-
-          const statusNote = document.getElementById('stats-irt-status-note');
-          if (irtScore >= 75) {
-            statusNote.style.color = '#34d399';
-            statusNote.innerHTML = `<i class="fa-solid fa-circle-check"></i> Validasi IRT: Performa luar biasa (Skor: ${irtScore}) - Di atas rata-rata!`;
-          } else {
-            statusNote.style.color = '#f59e0b';
-            statusNote.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Validasi IRT: Performa standar (Skor: ${irtScore}) - Rata-rata.`;
-          }
-
-          if (scanningWrapper) scanningWrapper.classList.add('hidden');
-          if (resultsBox) resultsBox.classList.remove('hidden');
-
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            if (uploadPreviewImg) uploadPreviewImg.src = ev.target.result;
-            if (uploadPreviewName) uploadPreviewName.textContent = file.name;
-            if (uploadPreviewWrapper) uploadPreviewWrapper.classList.remove('hidden');
-          };
-          reader.readAsDataURL(file);
-
-          showToast('Analisis stats selesai. Performa dievaluasi dengan IRT!', 'success');
-        }, 2700);
+        showToast('Bukti screenshot stats berhasil dimuat.', 'success');
       }
     });
   }
@@ -965,6 +896,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (scanningWrapper) scanningWrapper.classList.add('hidden');
     if (resultsBox) resultsBox.classList.add('hidden');
     if (statsUploadInput) statsUploadInput.value = '';
+    const timeValInput = document.getElementById('raw-stat-time');
+    const minedValInput = document.getElementById('raw-stat-mined');
+    const placedValInput = document.getElementById('raw-stat-placed');
+    const diamondsValInput = document.getElementById('raw-stat-diamonds');
+    [timeValInput, minedValInput, placedValInput, diamondsValInput].forEach(input => {
+      if (input) input.value = '';
+    });
+    window.lastUploadedStatsBase64 = null;
+    const uploadPreviewWrapper = document.getElementById('upload-preview-wrapper');
+    if (uploadPreviewWrapper) uploadPreviewWrapper.classList.add('hidden');
   }
 
   form.addEventListener('submit', (e) => {
@@ -981,6 +922,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Clear errors
     namaInput.closest('.form-group').classList.remove('has-error');
+    const timeValInput = document.getElementById('raw-stat-time');
+    const minedValInput = document.getElementById('raw-stat-mined');
+    const placedValInput = document.getElementById('raw-stat-placed');
+    const diamondsValInput = document.getElementById('raw-stat-diamonds');
+    [timeValInput, minedValInput, placedValInput, diamondsValInput].forEach(input => {
+      if (input) input.closest('.form-group').classList.remove('has-error');
+    });
+    const statsUploadErrorEl = document.getElementById('stats-upload-error');
+    if (statsUploadErrorEl) statsUploadErrorEl.closest('.form-group').classList.remove('has-error');
     emailInput.closest('.form-group').classList.remove('has-error');
     dobInput.closest('.form-group').classList.remove('has-error');
     agree.closest('.agreement-box').classList.remove('has-error');
@@ -1027,6 +977,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Jalur-specific validations
     if (jalurInput.value === 'Jalur Stats Minecraft (Bedrock)') {
       const statsFileInput = document.getElementById('minecraft-stats-upload');
+      const timeValInput = document.getElementById('raw-stat-time');
+      const minedValInput = document.getElementById('raw-stat-mined');
+      const placedValInput = document.getElementById('raw-stat-placed');
+      const diamondsValInput = document.getElementById('raw-stat-diamonds');
+      
+      let isStatsValid = true;
+      [timeValInput, minedValInput, placedValInput, diamondsValInput].forEach(input => {
+        if (!input || input.value.trim() === '' || isNaN(input.value) || parseInt(input.value, 10) < 0) {
+          if (input) input.closest('.form-group').classList.add('has-error');
+          isStatsValid = false;
+        }
+      });
+
+      if (!isStatsValid) {
+        isValid = false;
+      }
+
       if (!statsFileInput || !statsFileInput.files || statsFileInput.files.length === 0) {
         const errEl = document.getElementById('stats-upload-error');
         if (errEl) errEl.closest('.form-group').classList.add('has-error');
@@ -1076,7 +1043,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const placedVal = parseInt(document.getElementById('raw-stat-placed').value, 10) || 0;
       const diamondsVal = parseInt(document.getElementById('raw-stat-diamonds').value, 10) || 0;
       score = calculateStatsIRTScore(timeVal, minedVal, placedVal, diamondsVal);
-      statsObj = { time: timeVal, mined: minedVal, placed: placedVal, diamonds: diamondsVal };
+      statsObj = { 
+        time: timeVal, 
+        mined: minedVal, 
+        placed: placedVal, 
+        diamonds: diamondsVal,
+        buktiStats: window.lastUploadedStatsBase64 || null
+      };
     } else if (jalurInput.value === 'Jalur Seleksi Ujian (CBT)') {
       score = null;
     } else {
