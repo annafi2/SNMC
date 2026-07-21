@@ -1627,42 +1627,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function ensureHtml2Canvas(callback) {
+    if (typeof html2canvas !== 'undefined') {
+      callback(html2canvas);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.onload = () => {
+      if (typeof html2canvas !== 'undefined') {
+        callback(html2canvas);
+      } else {
+        if (window.showToast) window.showToast("Library html2canvas gagal dimuat!", "error");
+      }
+    };
+    script.onerror = () => {
+      if (window.showToast) window.showToast("Gagal mengunduh script html2canvas!", "error");
+    };
+    document.head.appendChild(script);
+  }
+
   function downloadJpgFromElement(elementId, filename, orientation = 'landscape') {
     const original = document.getElementById(elementId);
     if (!original) return;
 
     if (window.showToast) window.showToast("Menggenerasi Sertifikat (JPG)...", "info");
 
-    const clone = original.cloneNode(true);
-    const widthPx = orientation === 'landscape' ? 1000 : 750;
+    ensureHtml2Canvas((h2c) => {
+      const clone = original.cloneNode(true);
+      const widthPx = orientation === 'landscape' ? 1000 : 750;
 
-    clone.style.position = 'fixed';
-    clone.style.left = '-9999px';
-    clone.style.top = '0';
-    clone.style.width = widthPx + 'px';
-    clone.style.height = 'auto';
-    clone.style.maxHeight = 'none';
-    clone.style.overflow = 'visible';
-    clone.style.background = '#ffffff';
-    clone.style.color = '#1e293b';
-    clone.style.display = 'block';
-    clone.style.visibility = 'visible';
-    clone.style.opacity = '1';
+      clone.style.position = 'fixed';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      clone.style.width = widthPx + 'px';
+      clone.style.height = 'auto';
+      clone.style.maxHeight = 'none';
+      clone.style.overflow = 'visible';
+      clone.style.background = '#ffffff';
+      clone.style.color = '#1e293b';
+      clone.style.display = 'block';
+      clone.style.visibility = 'visible';
+      clone.style.opacity = '1';
 
-    document.body.appendChild(clone);
+      document.body.appendChild(clone);
 
-    const images = clone.querySelectorAll('img');
-    const promises = Array.from(images).map(img => {
-      if (img.complete) return Promise.resolve();
-      return new Promise(resolve => {
-        img.onload = resolve;
-        img.onerror = resolve;
+      const images = clone.querySelectorAll('img');
+      const promises = Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
       });
-    });
 
-    Promise.all(promises).then(() => {
-      if (typeof html2canvas !== 'undefined') {
-        html2canvas(clone, {
+      Promise.all(promises).then(() => {
+        h2c(clone, {
           scale: 2.5,
           useCORS: true,
           scrollY: 0,
@@ -1683,10 +1703,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (clone.parentNode) document.body.removeChild(clone);
           if (window.showToast) window.showToast("Gagal mengunduh gambar sertifikat!", "error");
         });
-      } else {
-        if (clone.parentNode) document.body.removeChild(clone);
-        if (window.showToast) window.showToast("Library html2canvas tidak ditemukan!", "error");
-      }
+      });
     });
   }
 
