@@ -536,15 +536,19 @@
           </div>
 
           <!-- Progress Bar Container -->
-          <div style="width: 100%; height: 12px; border-radius: 99px; background: var(--bg-tertiary); border: 1px solid var(--border-color); overflow: hidden; position: relative;">
-            <div id="honor-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #f59e0b 0%, #10b981 50%, #0284c7 100%); transition: width 0.5s ease; border-radius: 99px;"></div>
+          <div style="width: 100%; height: 14px; border-radius: 99px; background: var(--bg-tertiary); border: 1px solid var(--border-color); position: relative; overflow: hidden;">
+            <div id="honor-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #f59e0b 0%, #10b981 60%, #0284c7 100%); transition: width 0.5s ease; border-radius: 99px;"></div>
+            <!-- Milestone markers on bar track -->
+            <div style="position: absolute; top: 0; bottom: 0; left: 60%; width: 2px; background: rgba(255,255,255,0.4); z-index: 2;" title="Cumlaude 1.500 Poin"></div>
+            <div style="position: absolute; top: 0; bottom: 0; left: 80%; width: 2px; background: rgba(255,255,255,0.4); z-index: 2;" title="Magna Cumlaude 2.000 Poin"></div>
           </div>
 
-          <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text-muted); font-weight: 700;">
-            <span>0 Poin</span>
-            <span style="color: #d97706;">🏆 1.500 (Cumlaude)</span>
-            <span style="color: #7c3aed;">👑 2.000 (Magna)</span>
-            <span style="color: #0284c7;">💎 2.500 (Summa)</span>
+          <!-- Milestones Scale Labels (Absolute positioned to match 0%, 60%, 80%, 100% exact sync!) -->
+          <div style="position: relative; height: 22px; margin-top: 6px; font-size: 11px; color: var(--text-muted); font-weight: 700;">
+            <span style="position: absolute; left: 0%;">0 Poin</span>
+            <span style="position: absolute; left: 60%; transform: translateX(-50%); color: #d97706; white-space: nowrap;">🏆 1.500 (Cumlaude)</span>
+            <span style="position: absolute; left: 80%; transform: translateX(-50%); color: #7c3aed; white-space: nowrap;">👑 2.000 (Magna)</span>
+            <span style="position: absolute; right: 0%; color: #0284c7; white-space: nowrap;">💎 2.500 (Summa)</span>
           </div>
         </div>
 
@@ -1794,25 +1798,23 @@
       const progressFill = document.getElementById('honor-progress-fill');
 
       if (progressFill) {
-        let percent = 0;
+        // Universal 0-2500 Scale (100% Synchronized with 0%, 60% Cumlaude, 80% Magna, 100% Summa)
+        const percent = Math.min(100, Math.max(0, (points / 2500) * 100));
+        progressFill.style.width = `${percent}%`;
+
         if (points < 1500) {
-          percent = Math.min(100, Math.max(0, (points / 1500) * 100));
           if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-trophy" style="color: #f59e0b;"></i> Target Cumlaude (1.500 Poin)`;
           if (progressText) progressText.innerText = `${points} / 1.500 Poin (${1500 - points} poin lagi)`;
         } else if (points < 2000) {
-          percent = Math.min(100, Math.max(0, ((points - 1500) / 500) * 100));
           if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-crown" style="color: #7c3aed;"></i> Target Magna Cumlaude (2.000 Poin)`;
           if (progressText) progressText.innerText = `${points} / 2.000 Poin (${2000 - points} poin lagi)`;
         } else if (points < 2500) {
-          percent = Math.min(100, Math.max(0, ((points - 2000) / 500) * 100));
           if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-gem" style="color: #0284c7;"></i> Target Summa Cumlaude (2.500 Poin)`;
           if (progressText) progressText.innerText = `${points} / 2.500 Poin (${2500 - points} poin lagi)`;
         } else {
-          percent = 100;
           if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-gem" style="color: #0284c7;"></i> 🏆 SUMMA CUM LAUDE REACHED!`;
           if (progressText) progressText.innerText = `${points} Poin (Maksimum)`;
         }
-        progressFill.style.width = `${percent}%`;
       }
 
       // CHECK IF SUMMA CUMLAUDE (>= 2500 POIN) LOCK OVERLAY
