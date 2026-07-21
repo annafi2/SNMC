@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <title>Portal Sekolah Minecraft – SNM 2026</title>
-  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, kuis interaktif, dan komunitas siswa resmi.">
+  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, kuis harian, dan komunitas siswa resmi.">
   <!-- Google Fonts - Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -485,7 +485,7 @@
               <div class="portal-card-header">
                 <div class="portal-card-icon"><i class="fa-solid fa-clipboard-question"></i></div>
                 <div>
-                  <h3 class="portal-card-title">Jadwal Kuis & Uji Kompetensi Kampus</h3>
+                  <h3 class="portal-card-title">Kuis Harian & Uji Kompetensi Kampus</h3>
                   <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Kerjakan kuis harian interaktif sesuai spesialisasi sekolah Anda untuk mengumpulkan poin.</p>
                 </div>
               </div>
@@ -526,7 +526,7 @@
               </div>
 
               <div style="font-size: 13px; color: var(--text-main); line-height: 1.6; background: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-sm); border-left: 3.5px solid var(--school-accent);" id="headmaster-announcement">
-                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Orientasi kuis & pelatihan server telah dibuka secara resmi.
+                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Kuis harian & pelatihan server telah dibuka secara resmi.
               </div>
             </div>
 
@@ -725,13 +725,12 @@
       });
     }
 
-    // School Quiz Databases for all 5 schools
+    // School Quiz Databases for all 5 schools (CLEAN WITHOUT DATES/DAYS)
     const QUIZ_DATABASE = {
       'sekolah redstone nasional': [
         {
           id: 'redstone-1',
           title: 'Kuis Sirkuit & Gerbang Logika Redstone',
-          day: 'Senin, 09:00 - 11:30 WIB',
           room: 'Lab Redstone Utama',
           questions: [
             {
@@ -753,8 +752,7 @@
         },
         {
           id: 'redstone-2',
-          title: 'Kuis Otomasi Micro-Tick & Sorter',
-          day: 'Rabu, 13:00 - 15:30 WIB',
+          title: 'Kuis Otomasi Micro-Tick & Sorter Engine',
           room: 'Sektor Otomasi',
           questions: [
             {
@@ -772,7 +770,6 @@
         {
           id: 'redstone-3',
           title: 'Kuis Command Block & Datapack Scripting',
-          day: 'Jumat, 15:00 - 17:30 WIB',
           room: 'Auditorium Algoritma',
           questions: [
             {
@@ -792,7 +789,6 @@
         {
           id: 'mining-1',
           title: 'Kuis Geologi Deepslate Y=-58 & Ore',
-          day: 'Senin, 08:30 - 11:00 WIB',
           room: 'Zona Tambang Deepslate',
           questions: [
             {
@@ -814,8 +810,7 @@
         },
         {
           id: 'mining-2',
-          title: 'Kuis Metalurgi & Blast Furnace',
-          day: 'Rabu, 13:30 - 16:00 WIB',
+          title: 'Kuis Metalurgi & Blast Furnace Skala Industri',
           room: 'Pengolahan Bijih Utama',
           questions: [
             {
@@ -832,8 +827,7 @@
         },
         {
           id: 'mining-3',
-          title: 'Kuis Infrastruktur & Safety Tambang',
-          day: 'Jumat, 14:00 - 16:30 WIB',
+          title: 'Kuis Infrastruktur & Safety Tambang Subterranean',
           room: 'Lab Geologi Subterranean',
           questions: [
             {
@@ -847,8 +841,7 @@
       'persatuan farmercraft velixir': [
         {
           id: 'farmer-1',
-          title: 'Kuis Bio-Factory Tanaman & Pohon',
-          day: 'Senin, 09:00 - 11:30 WIB',
+          title: 'Kuis Bio-Factory Tanaman & Micro-Tick',
           room: 'Rumah Kaca Bio-Velixir',
           questions: [
             {
@@ -866,7 +859,6 @@
         {
           id: 'farmer-2',
           title: 'Kuis Alkimia Ramuan & Brewing Stand',
-          day: 'Rabu, 13:00 - 15:30 WIB',
           room: 'Laboratorium Alkimia',
           questions: [
             {
@@ -884,7 +876,6 @@
         {
           id: 'farmer-3',
           title: 'Kuis Villager Breeding & Emerald Market',
-          day: 'Jumat, 15:00 - 17:30 WIB',
           room: 'Pusat Perdagangan Realm',
           questions: [
             {
@@ -899,7 +890,6 @@
         {
           id: 'pvp-1',
           title: 'Kuis Refleks 1.9+ Combat & Shield',
-          day: 'Senin, 09:00 - 11:30 WIB',
           room: 'Arena Utama Mojang',
           questions: [
             {
@@ -917,7 +907,6 @@
         {
           id: 'pvp-2',
           title: 'Kuis Crystal & Bed PvP Taktis',
-          day: 'Rabu, 13:00 - 15:30 WIB',
           room: 'Colosseum Taktis',
           questions: [
             {
@@ -935,7 +924,6 @@
         {
           id: 'pvp-3',
           title: 'Kuis Elytra Aerial Combat',
-          day: 'Jumat, 15:30 - 18:00 WIB',
           room: 'Sky Arena Realm',
           questions: [
             {
@@ -950,7 +938,6 @@
         {
           id: 'builder-1',
           title: 'Kuis Komposisi Arsitektur & Palet',
-          day: 'Senin, 09:00 - 11:30 WIB',
           room: 'Studio Desain Builder',
           questions: [
             {
@@ -968,7 +955,6 @@
         {
           id: 'builder-2',
           title: 'Kuis WorldEdit & Axiom Studio Tooling',
-          day: 'Rabu, 13:00 - 15:30 WIB',
           room: 'Plot Kreatif Server',
           questions: [
             {
@@ -986,7 +972,6 @@
         {
           id: 'builder-3',
           title: 'Kuis Organic Sculpting & Terrain',
-          day: 'Jumat, 15:00 - 17:30 WIB',
           room: 'Dunia Pahat Alam',
           questions: [
             {
@@ -1145,7 +1130,6 @@
         {
           id: 'custom-1',
           title: 'Kuis Pengetahuan Umum Realm',
-          day: 'Senin, 09:00 - 11:30 WIB',
           room: 'Ruang Teori Utama',
           questions: [
             {
@@ -1225,6 +1209,22 @@
       }
     }
 
+    function getStudentQuizBatchIndex() {
+      if (!currentStudent) return 1;
+      try {
+        return parseInt(localStorage.getItem(`PPDB_QUIZ_BATCH_${currentStudent.id}`) || '1', 10);
+      } catch (e) {
+        return 1;
+      }
+    }
+
+    function incrementStudentQuizBatch() {
+      if (!currentStudent) return;
+      const current = getStudentQuizBatchIndex();
+      localStorage.setItem(`PPDB_QUIZ_BATCH_${currentStudent.id}`, (current + 1).toString());
+      if (window.showToast) window.showToast(`Set Kuis Harian #${current + 1} Berhasil Digenerasi!`, "success");
+    }
+
     function getStudentQuizPoints() {
       if (!currentStudent) return 0;
       try {
@@ -1253,9 +1253,13 @@
       schedContainer.innerHTML = '';
 
       const completedMap = getStudentCompletedQuizzes();
+      const batchIdx = getStudentQuizBatchIndex();
 
-      quizzes.forEach((quiz) => {
-        const isDone = completedMap[quiz.id];
+      let allDone = quizzes.length > 0 && quizzes.every(q => completedMap[`${q.id}_b${batchIdx}`]);
+
+      quizzes.forEach((quiz, index) => {
+        const uniqueQuizId = `${quiz.id}_b${batchIdx}`;
+        const isDone = completedMap[uniqueQuizId];
         const donePoints = isDone ? isDone.score : 0;
 
         const itemEl = document.createElement('div');
@@ -1264,7 +1268,7 @@
         itemEl.innerHTML = `
           <div>
             <div style="font-size: 11px; font-weight: 700; color: var(--school-accent); text-transform: uppercase; margin-bottom: 2px;">
-              <i class="fa-regular fa-clock"></i> ${quiz.day} &bull; ${quiz.room}
+              <i class="fa-solid fa-layer-group"></i> Sub-Kuis #${index + 1} (Set Kuis Harian #${batchIdx}) &bull; ${quiz.room}
             </div>
             <div style="font-size: 14.5px; font-weight: 800; color: var(--text-main);">${quiz.title}</div>
             <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${quiz.questions.length} Pertanyaan Pilihan Ganda</div>
@@ -1282,6 +1286,30 @@
         `;
         schedContainer.appendChild(itemEl);
       });
+
+      // Show Auto-Regeneration Banner when 3 subquizzes are completed
+      if (allDone) {
+        const regenBanner = document.createElement('div');
+        regenBanner.style.cssText = `background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%); border: 1.5px solid var(--school-accent); padding: 18px; border-radius: var(--radius-sm); text-align: center; margin-top: 10px; box-shadow: 0 4px 15px var(--school-glow);`;
+        regenBanner.innerHTML = `
+          <div style="font-size: 24px; color: var(--school-accent); margin-bottom: 6px;"><i class="fa-solid fa-award"></i></div>
+          <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 800; color: var(--text-main);">Selamat! Semua 3 Sub-Kuis Hari Ini Telah Selesai</h4>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">Klik tombol di bawah untuk mengenerasi Set Kuis Harian Baru dan kumpulkan poin lebih banyak!</p>
+          <button onclick="handleRegenQuizBatch()" class="btn btn-gradient" style="font-weight: 800; padding: 10px 24px;">
+            <i class="fa-solid fa-arrows-rotate"></i> Generasi Kuis Harian Baru (Set #${batchIdx + 1})
+          </button>
+        `;
+        schedContainer.appendChild(regenBanner);
+      }
+    }
+
+    function handleRegenQuizBatch() {
+      incrementStudentQuizBatch();
+      if (currentStudent) {
+        const sekolahName = currentStudent.sekolahMinecraft || 'Sekolah Redstone Nasional';
+        const config = getSchoolConfig(sekolahName);
+        renderQuizScheduleList(config.quizzes);
+      }
     }
 
     function startSchoolQuiz(quizId) {
@@ -1359,10 +1387,12 @@
       });
 
       const earnedPoints = correctCount * 100;
+      const batchIdx = getStudentQuizBatchIndex();
+      const uniqueQuizId = `${activeQuizObj.id}_b${batchIdx}`;
 
       // Save progress to localStorage
       const completed = getStudentCompletedQuizzes();
-      completed[activeQuizObj.id] = {
+      completed[uniqueQuizId] = {
         score: earnedPoints,
         correct: correctCount,
         total: questions.length,
