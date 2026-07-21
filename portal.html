@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <title>Portal Sekolah Minecraft – SNM 2026</title>
-  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, jadwal pelajaran, dan komunitas siswa resmi.">
+  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, kuis interaktif, dan komunitas siswa resmi.">
   <!-- Google Fonts - Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -261,6 +261,33 @@
       backdrop-filter: blur(8px);
       padding: 20px;
     }
+
+    /* Quiz Option Custom Radio Cards */
+    .quiz-option-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .quiz-option-card:hover {
+      border-color: var(--school-accent);
+      background: var(--school-glow);
+    }
+
+    .quiz-option-card input[type="radio"] {
+      accent-color: var(--school-accent);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -345,8 +372,8 @@
 
               <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-tertiary); padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 13px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
-                  <span><strong>Server Realm:</strong> Online (1,420 Minecrafters)</span>
+                  <i class="fa-solid fa-trophy" style="color: #f59e0b;"></i>
+                  <span><strong>Poin Kuis:</strong> <span id="user-quiz-points-display" style="color: var(--school-accent); font-weight: 800;">0 Poin</span></span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-tertiary); padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 13px;">
                   <i class="fa-solid fa-graduation-cap" style="color: var(--school-accent);"></i>
@@ -453,18 +480,18 @@
               </div>
             </div>
 
-            <!-- JADWAL PELAJARAN & ORIENTASI KAMPUS (DYNAMIC PER SCHOOL) -->
+            <!-- JADWAL KUIS & UJI KOMPETENSI KAMPUS (DYNAMIC PER SCHOOL) -->
             <div class="portal-card">
               <div class="portal-card-header">
-                <div class="portal-card-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="portal-card-icon"><i class="fa-solid fa-clipboard-question"></i></div>
                 <div>
-                  <h3 class="portal-card-title">Jadwal Pelajaran & Orientasi Kampus</h3>
-                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Agenda perkuliahan & pelatihan khusus sekolah pilihan Anda.</p>
+                  <h3 class="portal-card-title">Jadwal Kuis & Uji Kompetensi Kampus</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Kerjakan kuis harian interaktif sesuai spesialisasi sekolah Anda untuk mengumpulkan poin.</p>
                 </div>
               </div>
 
               <div id="schedule-container" style="display: flex; flex-direction: column; gap: 12px;">
-                <!-- Dynamic Schedules Rendered Here -->
+                <!-- Dynamic Quiz Schedules Rendered Here -->
               </div>
             </div>
 
@@ -499,7 +526,7 @@
               </div>
 
               <div style="font-size: 13px; color: var(--text-main); line-height: 1.6; background: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-sm); border-left: 3.5px solid var(--school-accent);" id="headmaster-announcement">
-                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Orientasi server akan dimulai pada awal pekan mendatang. Pastikan kalian telah mengklaim Whitelist dan Land Plot.
+                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Orientasi kuis & pelatihan server telah dibuka secara resmi.
               </div>
             </div>
 
@@ -563,6 +590,46 @@
     </div>
   </div>
 
+  <!-- MODAL KUIS INTERAKTIF -->
+  <div id="modal-quiz" class="modal-wrapper">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 620px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: left; position: relative; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+        <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main);" id="quiz-modal-title"><i class="fa-solid fa-graduation-cap" style="color: var(--school-accent); margin-right: 8px;"></i> Kuis Interaktif Sekolah</h3>
+        <button onclick="closeQuizModal()" style="background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+
+      <!-- State 1: Form Pertanyaan Kuis -->
+      <div id="quiz-questions-body">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;" id="quiz-modal-subtitle">Jawab pertanyaan di bawah dengan cermat. Setiap jawaban benar bernilai <strong>+100 Poin</strong>.</p>
+        <form id="form-quiz-questions" style="display: flex; flex-direction: column; gap: 20px;" onsubmit="submitQuizAnswers(event)">
+          <!-- Dynamic questions injected here -->
+        </form>
+      </div>
+
+      <!-- State 2: Hasil & Penilaian Poin (Hidden Default) -->
+      <div id="quiz-result-body" style="display: none; text-align: center; padding: 20px 10px;">
+        <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--school-glow); border: 2px solid var(--school-accent); color: var(--school-accent); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 16px; box-shadow: 0 0 20px var(--school-glow);">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">Kuis Selesai!</h2>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;" id="quiz-result-text">Hasil evaluasi kuis Anda telah dicatat.</p>
+
+        <div style="background: var(--bg-tertiary); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center;">
+          <div>
+            <span style="font-size: 12px; color: var(--text-muted);">Jawaban Benar</span>
+            <div style="font-size: 24px; font-weight: 800; color: #10b981;" id="quiz-stat-correct">0 / 0</div>
+          </div>
+          <div>
+            <span style="font-size: 12px; color: var(--text-muted);">Poin Diperoleh</span>
+            <div style="font-size: 24px; font-weight: 800; color: var(--school-accent);" id="quiz-stat-points">+0 Poin</div>
+          </div>
+        </div>
+
+        <button onclick="closeQuizModal()" class="btn btn-gradient btn-block" style="width: 100%;">Tutup & Lihat Poin Portal</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer Section -->
   <footer class="main-footer">
     <div class="container footer-grid">
@@ -598,6 +665,9 @@
   <!-- SCRIPT -->
   <script>
     const API_BASE = (window.location.port === '3000' || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.hostname !== '')) ? '' : 'http://localhost:3000';
+
+    let currentStudent = null;
+    let activeQuizObj = null;
 
     // Toast Notification System matching app.js
     window.showToast = (message, type = 'info') => {
@@ -655,7 +725,281 @@
       });
     }
 
-    // School Configurations Matrix for Schools with Class Schedules
+    // School Quiz Databases for all 5 schools
+    const QUIZ_DATABASE = {
+      'sekolah redstone nasional': [
+        {
+          id: 'redstone-1',
+          title: 'Kuis Sirkuit & Gerbang Logika Redstone',
+          day: 'Senin, 09:00 - 11:30 WIB',
+          room: 'Lab Redstone Utama',
+          questions: [
+            {
+              q: 'Gerbang logika manakah yang menghasilkan output HIGH jika HANYA SALAH SATU input bernilai HIGH?',
+              options: ['AND Gate', 'XOR Gate', 'OR Gate', 'NOT Gate'],
+              answer: 1
+            },
+            {
+              q: 'Komponen Redstone yang dapat menyimpan status memori (Memory Latch) adalah?',
+              options: ['RS Flip-Flop', 'Redstone Dust', 'Lever', 'Comparator'],
+              answer: 0
+            },
+            {
+              q: 'Berapa jarak maksimum sinyal Redstone Dust sebelum memudar tanpa Repeater?',
+              options: ['10 Blok', '12 Blok', '15 Blok', '20 Blok'],
+              answer: 2
+            }
+          ]
+        },
+        {
+          id: 'redstone-2',
+          title: 'Kuis Otomasi Micro-Tick & Sorter',
+          day: 'Rabu, 13:00 - 15:30 WIB',
+          room: 'Sektor Otomasi',
+          questions: [
+            {
+              q: 'Komponen apakah yang digunakan untuk mendeteksi jumlah item dalam Container (Chest/Hopper)?',
+              options: ['Redstone Repeater', 'Redstone Comparator', 'Observer', 'Dispenser'],
+              answer: 1
+            },
+            {
+              q: 'Blok manakah yang memancarkan sinyal Redstone instan saat mengalami perubahan status di depannya?',
+              options: ['Observer Block', 'Target Block', 'Dropper', 'Daylight Detector'],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: 'redstone-3',
+          title: 'Kuis Command Block & Datapack Scripting',
+          day: 'Jumat, 15:00 - 17:30 WIB',
+          room: 'Auditorium Algoritma',
+          questions: [
+            {
+              q: 'Tipe Command Block manakah yang mengeksekusi perintah secara berulang setiap tick (20x per detik)?',
+              options: ['Impulse Command Block', 'Chain Command Block', 'Repeating Command Block', 'Structure Block'],
+              answer: 2
+            },
+            {
+              q: 'Perintah Minecraft apakah yang digunakan untuk memberikan status effect ke pemain?',
+              options: ['/give', '/effect give', '/attribute', '/execute'],
+              answer: 1
+            }
+          ]
+        }
+      ],
+      'sekolah pertambangan': [
+        {
+          id: 'mining-1',
+          title: 'Kuis Geologi Deepslate Y=-58 & Ore',
+          day: 'Senin, 08:30 - 11:00 WIB',
+          room: 'Zona Tambang Deepslate',
+          questions: [
+            {
+              q: 'Di koordinat Y manakah bijih Diamond paling melimpah secara statistik di versi 1.20+?',
+              options: ['Y = 12', 'Y = 0', 'Y = -58', 'Y = -30'],
+              answer: 2
+            },
+            {
+              q: 'Pickaxe dengan tingkat material apakah yang minimal dibutuhkan untuk menambang Ancient Debris di Nether?',
+              options: ['Stone Pickaxe', 'Iron Pickaxe', 'Diamond/Netherite Pickaxe', 'Gold Pickaxe'],
+              answer: 2
+            },
+            {
+              q: 'Enchantment manakah yang meningkatkan jumlah hasil tetesan ore per blok yang dihancurkan?',
+              options: ['Silk Touch', 'Fortune III', 'Efficiency V', 'Unbreaking III'],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: 'mining-2',
+          title: 'Kuis Metalurgi & Blast Furnace',
+          day: 'Rabu, 13:30 - 16:00 WIB',
+          room: 'Pengolahan Bijih Utama',
+          questions: [
+            {
+              q: 'Blok peleburan manakah yang melebur bijih mineral 2x lebih cepat dibanding Furnace biasa?',
+              options: ['Smoker', 'Blast Furnace', 'Campfire', 'Lava Bucket'],
+              answer: 1
+            },
+            {
+              q: 'Bahan bakar manakah yang memiliki durasi pembakaran terlama per satu unitnya?',
+              options: ['Coal Block', 'Lava Bucket', 'Blaze Rod', 'Dried Kelp Block'],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: 'mining-3',
+          title: 'Kuis Infrastruktur & Safety Tambang',
+          day: 'Jumat, 14:00 - 16:30 WIB',
+          room: 'Lab Geologi Subterranean',
+          questions: [
+            {
+              q: 'Ramuan apakah yang wajib diminum penambang untuk kebal sepenuhnya terhadap cairan Lava?',
+              options: ['Potion of Night Vision', 'Potion of Fire Resistance', 'Potion of Healing', 'Potion of Water Breathing'],
+              answer: 1
+            }
+          ]
+        }
+      ],
+      'persatuan farmercraft velixir': [
+        {
+          id: 'farmer-1',
+          title: 'Kuis Bio-Factory Tanaman & Pohon',
+          day: 'Senin, 09:00 - 11:30 WIB',
+          room: 'Rumah Kaca Bio-Velixir',
+          questions: [
+            {
+              q: 'Item apakah yang dapat digunakan sebagai pupuk instan mempercepat pertumbuhan tanaman?',
+              options: ['Bone Meal', 'Composter', 'Dirt', 'Wheat Seeds'],
+              answer: 0
+            },
+            {
+              q: 'Cairan manakah yang dibutuhkan agar Farmland tanah pertanian tidak mengering menjadi Dirt biasa?',
+              options: ['Water', 'Lava', 'Milk', 'Potion'],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: 'farmer-2',
+          title: 'Kuis Alkimia Ramuan & Brewing Stand',
+          day: 'Rabu, 13:00 - 15:30 WIB',
+          room: 'Laboratorium Alkimia',
+          questions: [
+            {
+              q: 'Bahan bakar wajib untuk mengoperasikan Brewing Stand adalah?',
+              options: ['Blaze Powder', 'Redstone Dust', 'Glowstone Dust', 'Gunpowder'],
+              answer: 0
+            },
+            {
+              q: 'Bahan utama untuk meracik Potion of Health (Healing) adalah?',
+              options: ['Ghast Tear', 'Glistering Melon Slice', 'Magma Cream', 'Pufferfish'],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: 'farmer-3',
+          title: 'Kuis Villager Breeding & Emerald Market',
+          day: 'Jumat, 15:00 - 17:30 WIB',
+          room: 'Pusat Perdagangan Realm',
+          questions: [
+            {
+              q: 'Villager dengan profesi apakah yang menjual buku Enchantment langka seperti Mending?',
+              options: ['Librarian', 'Cleric', 'Fletcher', 'Armorer'],
+              answer: 0
+            }
+          ]
+        }
+      ],
+      'institut pvp mojang': [
+        {
+          id: 'pvp-1',
+          title: 'Kuis Refleks 1.9+ Combat & Shield',
+          day: 'Senin, 09:00 - 11:30 WIB',
+          room: 'Arena Utama Mojang',
+          questions: [
+            {
+              q: 'Berapakah cooldown jeda serangan Sword di Java Edition 1.9+ untuk damage penuh?',
+              options: ['0.1 Detik', '0.625 Detik', '1.5 Detik', 'Tanpa Cooldown'],
+              answer: 1
+            },
+            {
+              q: 'Senjata jarak dekat manakah yang memiliki damage dasar tertinggi per pukulan tunggal?',
+              options: ['Netherite Sword', 'Netherite Axe', 'Trident', 'Diamond Pickaxe'],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: 'pvp-2',
+          title: 'Kuis Crystal & Bed PvP Taktis',
+          day: 'Rabu, 13:00 - 15:30 WIB',
+          room: 'Colosseum Taktis',
+          questions: [
+            {
+              q: 'Blok manakah yang paling tahan terhadap ledakan End Crystal di medan pertempuran arena?',
+              options: ['Obsidian', 'Bedrock', 'Cobblestone', 'Anvil'],
+              answer: 0
+            },
+            {
+              q: 'Di dimensi manakah item Bed akan meledak dahsyat saat digunakan untuk tidur?',
+              options: ['Overworld & Nether', 'Nether & The End', 'The End & Overworld', 'Semua Dimensi'],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: 'pvp-3',
+          title: 'Kuis Elytra Aerial Combat',
+          day: 'Jumat, 15:30 - 18:00 WIB',
+          room: 'Sky Arena Realm',
+          questions: [
+            {
+              q: 'Item apakah yang digunakan sebagai dorongan kecepatan saat terbang menggunakan Elytra?',
+              options: ['Firework Rocket', 'Feather', 'Wind Charge', 'Chorus Fruit'],
+              answer: 0
+            }
+          ]
+        }
+      ],
+      'sekolah builder': [
+        {
+          id: 'builder-1',
+          title: 'Kuis Komposisi Arsitektur & Palet',
+          day: 'Senin, 09:00 - 11:30 WIB',
+          room: 'Studio Desain Builder',
+          questions: [
+            {
+              q: 'Prinsip arsitektur apakah yang menambah kedalaman dinding bangunan agar tidak terlihat datar?',
+              options: ['Texturing & Layering', 'Flat Wall Grid', 'Mono Palette', 'Block Sorting'],
+              answer: 0
+            },
+            {
+              q: 'Kombinasi blok manakah yang cocok untuk tema bangunan Medieval Nusantara?',
+              options: ['Deepslate, Oak Wood, & Stone Bricks', 'Purpur Block & End Stone', 'Prismarine & Sea Lantern', 'Quartz & White Concrete'],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: 'builder-2',
+          title: 'Kuis WorldEdit & Axiom Studio Tooling',
+          day: 'Rabu, 13:00 - 15:30 WIB',
+          room: 'Plot Kreatif Server',
+          questions: [
+            {
+              q: 'Perintah WorldEdit apakah yang digunakan untuk mengganti jenis blok tertentu dalam area seleksi?',
+              options: ['//set', '//replace', '//cut', '//copy'],
+              answer: 1
+            },
+            {
+              q: 'Tooling studio baru yang sangat efisien untuk sculpting terraforming secara real-time adalah?',
+              options: ['Axiom Studio', 'MCEdit', 'WorldPainter', 'Structure Block'],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: 'builder-3',
+          title: 'Kuis Organic Sculpting & Terrain',
+          day: 'Jumat, 15:00 - 17:30 WIB',
+          room: 'Dunia Pahat Alam',
+          questions: [
+            {
+              q: 'Teknik apakah yang digunakan untuk menghaluskan kurva bentuk patung organik di Minecraft?',
+              options: ['Smoothing & Polishing', 'Stair & Slab Blending', 'Voxel Grid', 'Block Noise'],
+              answer: 1
+            }
+          ]
+        }
+      ]
+    };
+
+    // School Configurations Matrix for Schools
     const SCHOOL_CONFIGS = {
       'sekolah redstone nasional': {
         name: 'Sekolah Redstone Nasional',
@@ -671,11 +1015,6 @@
           { title: 'Redstone Logic Gates Masterclass', desc: 'Pemahaman AND, OR, XOR, RS-Latch, dan T-FlipFlop otomasi.' },
           { title: 'Automated Farm & Item Sorter Engine', desc: 'Sistem klasifikasi item otomatis berkecepatan tinggi tanpa lag.' },
           { title: 'Command Block & Datapack Scripting', desc: 'Algoritma kustom game mechanic dalam dunia Minecraft.' }
-        ],
-        schedule: [
-          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Redstone Logic Gates & Sirkuit Dasar', room: 'Lab Redstone Utama' },
-          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Otomasi Micro-Tick Farm & Item Sorter Engine', room: 'Sektor Otomasi' },
-          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Command Block & Datapack Scripting', room: 'Auditorium Algoritma' }
         ]
       },
       'sekolah pertambangan': {
@@ -692,11 +1031,6 @@
           { title: 'Y=-58 Diamond & Netherite Prospecting', desc: 'Teknik strip-mining efisien & navigasi gua Deepslate berbahaya.' },
           { title: 'Metallurgy & Automatic Blast Furnace', desc: 'Pengolahan bijih mineral skala industri berkapasitas tinggi.' },
           { title: 'Subterranean Infrastructure & Safety', desc: 'Konstruksi terowongan tambang anti-lava dan penopang goa.' }
-        ],
-        schedule: [
-          { day: 'Senin, 08:30 - 11:00 WIB', subject: 'Eksplorasi Deepslate Y=-58 & Geologi Netherite', room: 'Zona Tambang Deepslate' },
-          { day: 'Rabu, 13:30 - 16:00 WIB', subject: 'Metalurgi & Automatic Blast Furnace Skala Industri', room: 'Pengolahan Bijih Utama' },
-          { day: 'Jumat, 14:00 - 16:30 WIB', subject: 'Konstruksi Terowongan Anti-Lava & Keselamatan Tambang', room: 'Lab Geologi Subterranean' }
         ]
       },
       'persatuan farmercraft velixir': {
@@ -713,11 +1047,6 @@
           { title: 'Automatic Crop & Tree Bio-Factory', desc: 'Desain pertanian micro-tick & pengumpul panen otomatis.' },
           { title: 'Potion Alchemy & Enchanted Brewing', desc: 'Racikan ramuan khusus efek tingkat tinggi untuk kebutuhan realm.' },
           { title: 'Villager Breeding & Emerald Market', desc: 'Ekosistem perdagangan villager & pengoptimalan harga emerald.' }
-        ],
-        schedule: [
-          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Bio-Factory Tanaman & Pohon Otomatis', room: 'Rumah Kaca Bio-Velixir' },
-          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Alkimia Ramuan & Enchanted Brewing Efek Tinggi', room: 'Laboratorium Alkimia' },
-          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Manajemen Villager Breeding & Emerald Market', room: 'Pusat Perdagangan Realm' }
         ]
       },
       'institut pvp mojang': {
@@ -734,11 +1063,6 @@
           { title: '1.9+ Combat Mechanics & Shield Parrying', desc: 'Penguasaan timing serangan, strafe, dan pertahanan perisai.' },
           { title: 'End Crystal & Bed PvP Mastery', desc: 'Taktik peledakan instan dalam situasi pertarungan darurat.' },
           { title: 'Elytra Dogfight & Aerial Combat', desc: 'Navigasi penerbangan cepat dan serangan jarak jauh busur.' }
-        ],
-        schedule: [
-          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Refleks Serangan 1.9+ Combat & Shield Parrying', room: 'Arena Utama Mojang' },
-          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Crystal & Bed PvP Tactics di Medan Tempur', room: 'Colosseum Taktis' },
-          { day: 'Jumat, 15:30 - 18:00 WIB', subject: 'Elytra Aerial Combat & Dogfight Busur', room: 'Sky Arena Realm' }
         ]
       },
       'sekolah builder': {
@@ -755,11 +1079,6 @@
           { title: 'Mega-Structure Planning & Palette', desc: 'Teori pewarnaan blok, kedalaman dinding, dan struktur megah.' },
           { title: 'WorldEdit & Axiom Studio Tooling', desc: 'Penggunaan tool pemahat dunia berkecepatan tinggi.' },
           { title: 'Organic Modeling & Terrain Terraforming', desc: 'Pembuatan patung organik dan lanskap alam realistis.' }
-        ],
-        schedule: [
-          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Teori Komposisi Arsitektur & Pewarnaan Palet Blok', room: 'Studio Desain Builder' },
-          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Axiom Studio & WorldEdit Tooling Mega-Structure', room: 'Plot Kreatif Server' },
-          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Organic Sculpting & Realistic Terrain Terraforming', room: 'Dunia Pahat Alam' }
         ]
       }
     };
@@ -768,51 +1087,85 @@
       if (!schoolName) return { ...SCHOOL_CONFIGS['sekolah redstone nasional'], name: 'Sekolah Redstone Nasional' };
       const key = schoolName.toLowerCase().trim();
 
+      let baseConfig = null;
+      let matchedKey = 'sekolah redstone nasional';
+
       // 1. Exact or partial dictionary match
       for (const k in SCHOOL_CONFIGS) {
         if (key.includes(k) || k.includes(key)) {
-          return { ...SCHOOL_CONFIGS[k], name: schoolName };
+          baseConfig = SCHOOL_CONFIGS[k];
+          matchedKey = k;
+          break;
         }
       }
 
       // 2. Keyword-based matching for all 5 school types
-      if (key.includes('tambang') || key.includes('miner') || key.includes('mining') || key.includes('prospect')) {
-        return { ...SCHOOL_CONFIGS['sekolah pertambangan'], name: schoolName };
-      }
-      if (key.includes('farmer') || key.includes('farm') || key.includes('velixir') || key.includes('tani')) {
-        return { ...SCHOOL_CONFIGS['persatuan farmercraft velixir'], name: schoolName };
-      }
-      if (key.includes('pvp') || key.includes('mojang') || key.includes('combat') || key.includes('sword')) {
-        return { ...SCHOOL_CONFIGS['institut pvp mojang'], name: schoolName };
-      }
-      if (key.includes('builder') || key.includes('build') || key.includes('arsitek') || key.includes('kreatif')) {
-        return { ...SCHOOL_CONFIGS['sekolah builder'], name: schoolName };
-      }
-      if (key.includes('redstone') || key.includes('sirkuit') || key.includes('logic')) {
-        return { ...SCHOOL_CONFIGS['sekolah redstone nasional'], name: schoolName };
+      if (!baseConfig) {
+        if (key.includes('tambang') || key.includes('miner') || key.includes('mining') || key.includes('prospect')) {
+          baseConfig = SCHOOL_CONFIGS['sekolah pertambangan'];
+          matchedKey = 'sekolah pertambangan';
+        } else if (key.includes('farmer') || key.includes('farm') || key.includes('velixir') || key.includes('tani')) {
+          baseConfig = SCHOOL_CONFIGS['persatuan farmercraft velixir'];
+          matchedKey = 'persatuan farmercraft velixir';
+        } else if (key.includes('pvp') || key.includes('mojang') || key.includes('combat') || key.includes('sword')) {
+          baseConfig = SCHOOL_CONFIGS['institut pvp mojang'];
+          matchedKey = 'institut pvp mojang';
+        } else if (key.includes('builder') || key.includes('build') || key.includes('arsitek') || key.includes('kreatif')) {
+          baseConfig = SCHOOL_CONFIGS['sekolah builder'];
+          matchedKey = 'sekolah builder';
+        } else if (key.includes('redstone') || key.includes('sirkuit') || key.includes('logic')) {
+          baseConfig = SCHOOL_CONFIGS['sekolah redstone nasional'];
+          matchedKey = 'sekolah redstone nasional';
+        }
       }
 
-      // 3. Fallback dynamic config for any custom school name
+      // Fallback dynamic config
+      if (!baseConfig) {
+        baseConfig = {
+          name: schoolName,
+          accent: '#38bdf8',
+          glow: 'rgba(56, 189, 248, 0.2)',
+          gradient: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
+          icon: 'fa-graduation-cap',
+          serverIp: 'campus.snm2026.net:25565',
+          motto: '"Pusat Keunggulan & Inovasi Pembelajaran Minecraft Indonesia"',
+          headmaster: 'Kepala Sekolah Minecraft',
+          announcement: `Selamat datang siswa baru di ${schoolName}! Kurikulum & kuis harian telah disiapkan secara khusus untuk mengasah keahlian Anda.`,
+          curriculum: [
+            { title: 'Modul Eksplorasi & Dasar Realm', desc: 'Pemahaman mendalam mengenai fondasi dan eksplorasi realm Minecraft.' },
+            { title: 'Spesialisasi Keahlian & Kolaborasi', desc: 'Pengembangan kemampuan teknis dan kolaborasi antar minecrafter.' },
+            { title: 'Proyek Akhir & Kelayakan Sertifikasi', desc: 'Penerapan ilmu dalam proyek nyata untuk sertifikasi resmi.' }
+          ]
+        };
+        matchedKey = 'custom';
+      }
+
+      // Attach quiz schedule
+      const quizzes = QUIZ_DATABASE[matchedKey] || [
+        {
+          id: 'custom-1',
+          title: 'Kuis Pengetahuan Umum Realm',
+          day: 'Senin, 09:00 - 11:30 WIB',
+          room: 'Ruang Teori Utama',
+          questions: [
+            {
+              q: 'Bahan manakah yang paling keras dan tahan ledakan di Overworld Minecraft?',
+              options: ['Obsidian', 'Iron Block', 'Deepslate', 'Diamond Block'],
+              answer: 0
+            },
+            {
+              q: 'Berapa total Obsidian minimal yang dibutuhkan untuk membuat Portal Nether standar?',
+              options: ['8', '10', '12', '14'],
+              answer: 1
+            }
+          ]
+        }
+      ];
+
       return {
+        ...baseConfig,
         name: schoolName,
-        accent: '#38bdf8',
-        glow: 'rgba(56, 189, 248, 0.2)',
-        gradient: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
-        icon: 'fa-graduation-cap',
-        serverIp: 'campus.snm2026.net:25565',
-        motto: '"Pusat Keunggulan & Inovasi Pembelajaran Minecraft Indonesia"',
-        headmaster: 'Kepala Sekolah Minecraft',
-        announcement: `Selamat datang siswa baru di ${schoolName}! Kurikulum pembelajaran telah disiapkan secara khusus untuk mengasah keahlian Minecraft Anda.`,
-        curriculum: [
-          { title: 'Modul Eksplorasi & Dasar Realm', desc: 'Pemahaman mendalam mengenai fondasi dan eksplorasi realm Minecraft.' },
-          { title: 'Spesialisasi Keahlian & Kolaborasi', desc: 'Pengembangan kemampuan teknis dan kolaborasi antar minecrafter.' },
-          { title: 'Proyek Akhir & Kelayakan Sertifikasi', desc: 'Penerapan ilmu dalam proyek nyata untuk sertifikasi resmi.' }
-        ],
-        schedule: [
-          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Orientasi Dasar & Pengenalan Realm Sekolah', room: 'Ruang Teori Utama' },
-          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Spesialisasi Keahlian & Praktik Lapangan', room: 'Sektor Praktik' },
-          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Evaluasi Proyek & Sertifikasi Keahlian', room: 'Auditorium Kampus' }
-        ]
+        quizzes: quizzes
       };
     }
 
@@ -840,27 +1193,8 @@
       const iconEl = document.getElementById('hero-school-icon');
       if (iconEl) iconEl.className = `fa-solid ${config.icon}`;
 
-      // Render Schedule List
-      const schedContainer = document.getElementById('schedule-container');
-      if (schedContainer && config.schedule) {
-        schedContainer.innerHTML = '';
-        config.schedule.forEach(item => {
-          const itemEl = document.createElement('div');
-          itemEl.style.cssText = `background: var(--bg-tertiary); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;`;
-          itemEl.innerHTML = `
-            <div>
-              <div style="font-size: 11px; font-weight: 700; color: var(--school-accent); text-transform: uppercase; margin-bottom: 2px;">
-                <i class="fa-regular fa-clock"></i> ${item.day}
-              </div>
-              <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">${item.subject}</div>
-            </div>
-            <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-secondary); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color); font-weight: 600;">
-              <i class="fa-solid fa-location-dot" style="color: var(--school-accent);"></i> ${item.room}
-            </div>
-          `;
-          schedContainer.appendChild(itemEl);
-        });
-      }
+      // Render Quizzes Schedule List
+      renderQuizScheduleList(config.quizzes || []);
 
       // Render Curriculum Cards
       const currContainer = document.getElementById('curriculum-container');
@@ -876,6 +1210,191 @@
           currContainer.appendChild(card);
         });
       }
+
+      // Update Points Display in UI
+      updateQuizPointsUI();
+    }
+
+    function getStudentCompletedQuizzes() {
+      if (!currentStudent) return {};
+      try {
+        const data = localStorage.getItem(`PPDB_QUIZ_COMPLETED_${currentStudent.id}`);
+        return data ? JSON.parse(data) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function getStudentQuizPoints() {
+      if (!currentStudent) return 0;
+      try {
+        const completed = getStudentCompletedQuizzes();
+        let total = 0;
+        for (const quizId in completed) {
+          total += (completed[quizId].score || 0);
+        }
+        return total;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function updateQuizPointsUI() {
+      const points = getStudentQuizPoints();
+      const pointsDisplay = document.getElementById('user-quiz-points-display');
+      if (pointsDisplay) {
+        pointsDisplay.innerText = `${points} Poin`;
+      }
+    }
+
+    function renderQuizScheduleList(quizzes) {
+      const schedContainer = document.getElementById('schedule-container');
+      if (!schedContainer) return;
+      schedContainer.innerHTML = '';
+
+      const completedMap = getStudentCompletedQuizzes();
+
+      quizzes.forEach((quiz) => {
+        const isDone = completedMap[quiz.id];
+        const donePoints = isDone ? isDone.score : 0;
+
+        const itemEl = document.createElement('div');
+        itemEl.style.cssText = `background: var(--bg-tertiary); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;`;
+        
+        itemEl.innerHTML = `
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--school-accent); text-transform: uppercase; margin-bottom: 2px;">
+              <i class="fa-regular fa-clock"></i> ${quiz.day} &bull; ${quiz.room}
+            </div>
+            <div style="font-size: 14.5px; font-weight: 800; color: var(--text-main);">${quiz.title}</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${quiz.questions.length} Pertanyaan Pilihan Ganda</div>
+          </div>
+          <div>
+            ${isDone 
+              ? `<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 8px; font-size: 12.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-circle-check"></i> SELESAI (+${donePoints} Poin)
+                 </span>`
+              : `<button onclick="startSchoolQuiz('${quiz.id}')" class="btn btn-gradient btn-sm" style="font-weight: 700; padding: 8px 18px;">
+                  <i class="fa-solid fa-pen-to-square"></i> Kerjakan Kuis
+                 </button>`
+            }
+          </div>
+        `;
+        schedContainer.appendChild(itemEl);
+      });
+    }
+
+    function startSchoolQuiz(quizId) {
+      if (!currentStudent) {
+        showToast("Silakan login dengan ID Pendaftaran resmi Anda!", "error");
+        return;
+      }
+
+      const sekolahName = currentStudent.sekolahMinecraft || 'Sekolah Redstone Nasional';
+      const config = getSchoolConfig(sekolahName);
+      const quiz = config.quizzes.find(q => q.id === quizId);
+
+      if (!quiz) {
+        showToast("Data kuis tidak ditemukan!", "error");
+        return;
+      }
+
+      activeQuizObj = quiz;
+
+      document.getElementById('quiz-modal-title').innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: var(--school-accent); margin-right: 8px;"></i> ${quiz.title}`;
+      document.getElementById('quiz-questions-body').style.display = 'block';
+      document.getElementById('quiz-result-body').style.display = 'none';
+
+      const form = document.getElementById('form-quiz-questions');
+      form.innerHTML = '';
+
+      quiz.questions.forEach((item, qIdx) => {
+        const qBox = document.createElement('div');
+        qBox.style.cssText = `background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);`;
+        
+        let optionsHtml = '';
+        item.options.forEach((opt, oIdx) => {
+          optionsHtml += `
+            <label class="quiz-option-card">
+              <input type="radio" name="q_${qIdx}" value="${oIdx}" required />
+              <span>${opt}</span>
+            </label>
+          `;
+        });
+
+        qBox.innerHTML = `
+          <div style="font-size: 14px; font-weight: 800; color: var(--text-main); margin-bottom: 12px;">
+            ${qIdx + 1}. ${item.q}
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            ${optionsHtml}
+          </div>
+        `;
+        form.appendChild(qBox);
+      });
+
+      const submitBtn = document.createElement('button');
+      submitBtn.type = 'submit';
+      submitBtn.className = 'btn btn-gradient btn-block';
+      submitBtn.style.cssText = 'height: 46px; font-weight: 800; font-size: 14px; margin-top: 10px;';
+      submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Kirim Jawaban & Hitung Poin`;
+      form.appendChild(submitBtn);
+
+      document.getElementById('modal-quiz').style.display = 'flex';
+    }
+
+    function submitQuizAnswers(e) {
+      e.preventDefault();
+      if (!activeQuizObj || !currentStudent) return;
+
+      const form = e.target;
+      const questions = activeQuizObj.questions;
+      let correctCount = 0;
+
+      questions.forEach((item, qIdx) => {
+        const selected = form.querySelector(`input[name="q_${qIdx}"]:checked`);
+        if (selected && parseInt(selected.value) === item.answer) {
+          correctCount++;
+        }
+      });
+
+      const earnedPoints = correctCount * 100;
+
+      // Save progress to localStorage
+      const completed = getStudentCompletedQuizzes();
+      completed[activeQuizObj.id] = {
+        score: earnedPoints,
+        correct: correctCount,
+        total: questions.length,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem(`PPDB_QUIZ_COMPLETED_${currentStudent.id}`, JSON.stringify(completed));
+
+      // Display results
+      document.getElementById('quiz-questions-body').style.display = 'none';
+      document.getElementById('quiz-result-body').style.display = 'block';
+
+      document.getElementById('quiz-stat-correct').innerText = `${correctCount} / ${questions.length}`;
+      document.getElementById('quiz-stat-points').innerText = `+${earnedPoints} Poin`;
+
+      document.getElementById('quiz-result-text').innerHTML = `
+        Anda menjawab <strong>${correctCount} dari ${questions.length}</strong> pertanyaan dengan benar.<br>
+        Selamat! Anda berhak mendapatkan <strong>+${earnedPoints} Poin Kuis</strong>!
+      `;
+
+      updateQuizPointsUI();
+
+      // Refresh schedule list in portal
+      const sekolahName = currentStudent.sekolahMinecraft || 'Sekolah Redstone Nasional';
+      const config = getSchoolConfig(sekolahName);
+      renderQuizScheduleList(config.quizzes);
+
+      showToast(`Selamat! Anda mendapatkan +${earnedPoints} Poin Kuis!`, 'success');
+    }
+
+    function closeQuizModal() {
+      const modal = document.getElementById('modal-quiz');
+      if (modal) modal.style.display = 'none';
     }
 
     function toggleQuest(el) {
@@ -983,6 +1502,8 @@
         }
         return;
       }
+
+      currentStudent = student;
 
       // STUDENT IS DECLARED LULUS! Populate KTSM & Theme
       const sekolahName = student.sekolahMinecraft || paramSekolah || 'Sekolah Redstone Nasional';
