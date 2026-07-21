@@ -346,6 +346,14 @@ app.get('/ujian.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../ujian.html'));
 });
 
+app.get('/portal.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../portal.html'));
+});
+
+app.get('/verify.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../verify.html'));
+});
+
 // SPA routing fallback (Redirect non-API routes to index.html)
 app.get(/^(?!\/api).*$/, (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));

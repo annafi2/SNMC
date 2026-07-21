@@ -81,7 +81,10 @@
           Peserta di atas secara sah dinyatakan lulus proses seleksi SNM <span class="active-year">2026</span>. Keputusan ini bersifat mutlak dan dikeluarkan langsung oleh Panitia Seleksi Nasional Minecrafter Indonesia.
         </p>
 
-        <a href="index.html" class="btn btn-gradient btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; height: 42px;"><i class="fa-solid fa-house"></i> Kembali ke Beranda</a>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a id="btn-portal-redirect" href="portal.html" class="btn btn-success btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; height: 44px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: var(--radius-sm); border: none; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);"><i class="fa-solid fa-up-right-from-square"></i> Masuk Portal Sekolah Minecraft</a>
+          <a href="index.html" class="btn btn-gradient btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; height: 42px;"><i class="fa-solid fa-house"></i> Kembali ke Beranda</a>
+        </div>
       </div>
 
       <!-- Failure State (Hidden initially) -->
@@ -155,6 +158,11 @@
             document.getElementById('v-track').innerText = student.jalur || '-';
             document.getElementById('v-school').innerText = (student.sekolahMinecraft || '-').toUpperCase();
             document.getElementById('v-role').innerText = (student.roleMinecraft || '-').toUpperCase();
+
+            const portalBtn = document.getElementById('btn-portal-redirect');
+            if (portalBtn) {
+              portalBtn.href = `portal.html?id=${encodeURIComponent(student.id)}&role=${encodeURIComponent(student.roleMinecraft || '')}&sekolah=${encodeURIComponent(student.sekolahMinecraft || '')}`;
+            }
 
             loadingEl.style.display = 'none';
             successEl.style.display = 'block';

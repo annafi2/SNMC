@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <title>Portal Sekolah Minecraft – SNM 2026</title>
+  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, dan komunitas siswa resmi.">
+  <!-- Google Fonts - Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Style CSS -->
+  <link rel="stylesheet" href="style.css?v=6">
+
+  <style>
+    :root {
+      --school-accent: #10b981;
+      --school-glow: rgba(16, 185, 129, 0.2);
+      --school-gradient: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    }
+
+    /* Additional custom styling for portal elements matching design system */
+    .portal-hero {
+      position: relative;
+      padding: 40px 0 32px 0;
+      background: radial-gradient(circle at top center, var(--school-glow) 0%, rgba(0, 0, 0, 0) 70%),
+                  var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 32px;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .portal-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 992px) {
+      .portal-hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .school-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      background: var(--school-glow);
+      border: 1px solid var(--school-accent);
+      color: var(--school-accent);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .portal-hero-title {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .portal-hero-motto {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* KTSM Card (Kartu Tanda Siswa Minecraft) */
+    .ktsm-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--card-shadow-hover);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .ktsm-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--school-gradient);
+    }
+
+    .ktsm-avatar-box {
+      width: 68px;
+      height: 68px;
+      border-radius: var(--radius-sm);
+      background: var(--school-glow);
+      border: 2px solid var(--school-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: var(--school-accent);
+      box-shadow: 0 0 15px var(--school-glow);
+    }
+
+    .ktsm-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--border-color);
+      padding: 10px 0;
+      font-size: 13px;
+    }
+
+    .ktsm-info-label {
+      color: var(--text-muted);
+    }
+
+    .ktsm-info-val {
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: right;
+    }
+
+    /* Main Grid Layout */
+    .portal-main-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 992px) {
+      .portal-main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .portal-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .portal-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .portal-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--school-glow);
+      color: var(--school-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .portal-card-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-main);
+    }
+
+    /* Server IP Copy Box */
+    .server-connect-box {
+      background: var(--bg-tertiary);
+      border: 1.5px solid var(--school-accent);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 0 20px var(--school-glow);
+      flex-wrap: wrap;
+    }
+
+    .server-ip-text {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--school-accent);
+      letter-spacing: 0.5px;
+    }
+
+    .btn-copy-ip {
+      background: var(--school-gradient);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-ip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--school-glow);
+    }
+
+    /* Quest Checklists */
+    .quest-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .quest-item:hover {
+      border-color: var(--border-focus);
+    }
+
+    .quest-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 2px solid var(--school-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: transparent;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .quest-item.completed .quest-check {
+      background: var(--school-accent);
+      color: #ffffff;
+    }
+
+    .quest-item.completed .quest-text {
+      text-decoration: line-through;
+      color: var(--text-light);
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .main-header, .portal-main-grid, .server-connect-box, .btn-print-ktsm, main {
+        display: none !important;
+      }
+      .ktsm-card {
+        border: 2px solid #000000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        max-width: 500px;
+        margin: 40px auto;
+        display: block !important;
+      }
+      .ktsm-info-label {
+        color: #475569 !important;
+      }
+      .ktsm-info-val {
+        color: #0f172a !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Header & Navigation -->
+  <header class="main-header">
+    <div class="container navbar-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+        <span class="logo-text">SNM<span class="active-year">2026</span></span>
+      </a>
+
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="index.html#home" class="nav-link"><i class="fa-solid fa-house"></i> Beranda</a></li>
+          <li><a href="index.html#daftar" class="nav-link"><i class="fa-solid fa-user-plus"></i> Daftar</a></li>
+          <li><a href="index.html#cek-status" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Cek Status</a></li>
+          <li><a href="portal.html" class="nav-link active"><i class="fa-solid fa-graduation-cap"></i> Portal Siswa</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Ganti Tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button id="menu-toggle" class="menu-toggle-btn" aria-label="Buka Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- STATE 1: LOADING -->
+      <div id="portal-loading" style="text-align: center; padding: 90px 20px;">
+        <div style="font-size: 48px; color: var(--school-accent); animation: spin 1.5s infinite linear; margin-bottom: 16px;">
+          <i class="fa-solid fa-spinner"></i>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 700; color: var(--text-main);">Memuat Portal Sekolah Minecraft...</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Menghubungkan data pendaftaran dan kredensial server siswa</p>
+      </div>
+
+      <!-- STATE 2: ACCESS DENIED (WHEN NOT LOGGED IN / NOT LULUS) -->
+      <div id="portal-denied" style="display: none; max-width: 540px; margin: 40px auto; padding: 32px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); text-align: center; box-shadow: var(--card-shadow-hover);">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(239, 68, 68, 0.12); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 10px; color: var(--text-main);">Akses Terbatas Portal Siswa</h2>
+        <p id="denied-reason" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">
+          Halaman portal ini khusus untuk peserta SNM <span class="active-year">2026</span> yang telah dinyatakan <strong>LOLOS SELEKSI</strong>. Masukkan ID Pendaftaran resmi Anda untuk membuka portal.
+        </p>
+
+        <form id="form-portal-login" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+          <input type="text" id="input-portal-id" placeholder="Masukkan ID Pendaftaran (cth: 001-2026-X8BF)..." required style="flex: 1; min-width: 220px; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-main); font-size: 14px;">
+          <button type="submit" class="btn btn-gradient" style="padding: 12px 20px; height: 46px;"><i class="fa-solid fa-key"></i> Buka Portal</button>
+        </form>
+
+        <a href="index.html" class="btn btn-outline btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda Utama</a>
+      </div>
+
+      <!-- STATE 3: MAIN PORTAL CONTENT (SHOWN WHEN LULUS) -->
+      <div id="portal-content" style="display: none;">
+
+        <!-- HERO SECTION CARD -->
+        <div class="portal-hero">
+          <div class="portal-hero-grid">
+            <div>
+              <div class="school-badge-pill" id="hero-school-pill">
+                <i class="fa-solid fa-school" id="hero-school-icon"></i>
+                <span id="hero-school-name">Sekolah Redstone Nasional</span>
+              </div>
+
+              <h1 class="portal-hero-title">Selamat Datang di Portal Resmi<br><span id="hero-school-title" style="color: var(--school-accent);">Sekolah Redstone Nasional</span></h1>
+              <p class="portal-hero-motto" id="hero-school-motto">"Pusat Inovasi Otomasi Redstone, Logika Sirkuit & Command Block Indonesia"</p>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-tertiary); padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 13px;">
+                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
+                  <span><strong>Server Realm:</strong> Online (1,420 Minecrafters)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-tertiary); padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 13px;">
+                  <i class="fa-solid fa-graduation-cap" style="color: var(--school-accent);"></i>
+                  <span><strong>Status:</strong> Siswa Baru Tahun <span class="active-year">2026</span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KTSM CARD (RIGHT COLUMN HERO) -->
+            <div>
+              <div class="ktsm-card" id="ktsm-card-element">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color);">
+                  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
+                  <span class="active-year" style="font-size: 12px; font-weight: 800; color: var(--school-accent);">SNM 2026</span>
+                </div>
+
+                <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
+                  <div class="ktsm-avatar-box" id="ktsm-avatar">
+                    <i class="fa-solid fa-user-ninja"></i>
+                  </div>
+                  <div>
+                    <h3 id="ktsm-student-name" style="margin: 0 0 4px 0; font-size: 17px; font-weight: 800; color: var(--text-main);">Nama Siswa</h3>
+                    <span id="ktsm-student-id" style="font-family: monospace; font-size: 12.5px; color: var(--school-accent); background: var(--school-glow); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 700;">SNM-2026-0000</span>
+                  </div>
+                </div>
+
+                <div class="ktsm-info-row">
+                  <span class="ktsm-info-label">Sekolah Minecraft:</span>
+                  <span class="ktsm-info-val" id="ktsm-school">Redstone Nasional</span>
+                </div>
+                <div class="ktsm-info-row">
+                  <span class="ktsm-info-label">Sertifikasi Role:</span>
+                  <span class="ktsm-info-val" id="ktsm-role" style="color: var(--school-accent);">Redstone Engineer</span>
+                </div>
+                <div class="ktsm-info-row">
+                  <span class="ktsm-info-label">Jalur Pendaftaran:</span>
+                  <span class="ktsm-info-val" id="ktsm-track">Prestasi</span>
+                </div>
+                <div class="ktsm-info-row">
+                  <span class="ktsm-info-label">Status Kelulusan:</span>
+                  <span class="ktsm-info-val" style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> RESMI DITERIMA</span>
+                </div>
+
+                <!-- Mock Barcode SVG & Print CTA -->
+                <div style="margin-top: 16px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-family: monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px;">|||| | ||||| || ||| ||||</div>
+                  <button onclick="window.print()" class="btn-print-ktsm btn btn-outline btn-sm" style="font-size: 11px;">
+                    <i class="fa-solid fa-print"></i> Cetak KTSM
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BODY MAIN GRID SECTION -->
+        <div class="portal-main-grid">
+
+          <!-- LEFT CONTENT COLUMN -->
+          <div>
+
+            <!-- SERVER CONNECT BOX -->
+            <div class="portal-card" style="border: 1.5px solid var(--school-accent);">
+              <div class="portal-card-header" style="border-bottom: none; margin-bottom: 12px; padding-bottom: 0;">
+                <div class="portal-card-icon"><i class="fa-solid fa-network-wired"></i></div>
+                <div>
+                  <h3 class="portal-card-title">Koneksi Server Minecraft Resmi</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Gunakan IP di bawah ini untuk terhubung langsung ke Server Kampus Minecraft Anda.</p>
+                </div>
+              </div>
+
+              <div class="server-connect-box">
+                <div>
+                  <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">SERVER ADDRESS (JAVA & BEDROCK):</div>
+                  <div class="server-ip-text" id="school-server-ip">redstone.snm2026.net</div>
+                </div>
+                <button class="btn-copy-ip" id="btn-copy-server-ip">
+                  <i class="fa-solid fa-copy"></i> Salin Server IP
+                </button>
+              </div>
+            </div>
+
+            <!-- FIRST QUEST CHECKLIST -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <div class="portal-card-icon"><i class="fa-solid fa-list-check"></i></div>
+                <div>
+                  <h3 class="portal-card-title">First Quest: Checklist Siswa Baru</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Selesaikan langkah-langkah di bawah untuk memulai masa studi Anda di sekolah.</p>
+                </div>
+              </div>
+
+              <div id="quest-list">
+                <div class="quest-item completed">
+                  <div class="quest-check" onclick="toggleQuest(this)"><i class="fa-solid fa-check"></i></div>
+                  <div class="quest-text" style="font-size: 13.5px;">Dinyatakan Lulus Seleksi Nasional Minecrafter <span class="active-year">2026</span></div>
+                </div>
+                <div class="quest-item" id="q-ip">
+                  <div class="quest-check" onclick="toggleQuest(this)"><i class="fa-solid fa-check"></i></div>
+                  <div class="quest-text" style="font-size: 13.5px;">Simpan & Masukkan IP Server Minecraft Sekolah ke launcher Anda</div>
+                </div>
+                <div class="quest-item" id="q-discord">
+                  <div class="quest-check" onclick="toggleQuest(this)"><i class="fa-solid fa-check"></i></div>
+                  <div class="quest-text" style="font-size: 13.5px;">Bergabung dengan Guild Discord Resmi Sekolah & lakukan klaim role <span id="quest-role-name">Role</span></div>
+                </div>
+                <div class="quest-item" id="q-starter">
+                  <div class="quest-check" onclick="toggleQuest(this)"><i class="fa-solid fa-check"></i></div>
+                  <div class="quest-text" style="font-size: 13.5px;">Klaim Starter Land Plot di server menggunakan ID Pendaftaran Anda</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ROLE CURRICULUM MODULES -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <div class="portal-card-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                <div>
+                  <h3 class="portal-card-title">Kurikulum & Modul Pembelajaran Role</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Materi pemutakhiran keahlian khusus berdasarkan role pilihan Anda.</p>
+                </div>
+              </div>
+
+              <div id="curriculum-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+                <!-- Dynamic Curriculum Cards Rendered Here -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT SIDEBAR COLUMN -->
+          <div>
+
+            <!-- HEADMASTER ANNOUNCEMENT -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <div class="portal-card-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                <div>
+                  <h3 class="portal-card-title">Pengumuman Sekolah</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 11.5px; color: var(--text-muted);">Dari Kepala Sekolah</p>
+                </div>
+              </div>
+
+              <div style="font-size: 13px; color: var(--text-main); line-height: 1.6; background: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-sm); border-left: 3.5px solid var(--school-accent);" id="headmaster-announcement">
+                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Orientasi server akan dimulai pada awal pekan mendatang. Pastikan kalian telah mengklaim Whitelist dan Land Plot.
+              </div>
+            </div>
+
+            <!-- SCHOOL STATS -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <div class="portal-card-icon"><i class="fa-solid fa-chart-simple"></i></div>
+                <div>
+                  <h3 class="portal-card-title">Statistik Kampus</h3>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+                <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
+                  <span style="color: var(--text-muted);">Total Siswa Diterima:</span>
+                  <strong style="color: var(--text-main);">120 Peserta</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
+                  <span style="color: var(--text-muted);">Versi Protocol:</span>
+                  <strong style="color: var(--school-accent);">1.20.4 - 1.21.x</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
+                  <span style="color: var(--text-muted);">Akreditasi Sekolah:</span>
+                  <strong style="color: #10b981;">UNGGUL (A+)</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- CERTIFICATE / SK SHORTCUT -->
+            <div class="portal-card" style="text-align: center;">
+              <i class="fa-solid fa-file-certificate" style="font-size: 36px; color: var(--school-accent); margin-bottom: 12px;"></i>
+              <h4 style="margin: 0 0 6px 0; font-size: 15px; color: var(--text-main);">Dokumen Kelulusan Official</h4>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Unduh Sertifikat SK Kelulusan resmi Anda dari panitia pusat.</p>
+              <button id="btn-download-sk-portal" class="btn btn-gradient btn-block" style="width: 100%;">
+                <i class="fa-solid fa-download"></i> Cetak SK Kelulusan
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+          <span class="logo-text">SNM<span class="active-year">2026</span></span>
+        </div>
+        <p class="brand-desc">Portal resmi pendaftaran Seleksi Nasional Minecrafter (SNM) <span class="active-year">2026</span>. Wadah bagi para player Minecraft berbakat di seluruh Indonesia.</p>
+      </div>
+
+      <div class="footer-links">
+        <h3>Navigasi Cepat</h3>
+        <ul>
+          <li><a href="index.html#home">Beranda</a></li>
+          <li><a href="index.html#daftar">Formulir Pendaftaran</a></li>
+          <li><a href="index.html#cek-status">Cek Status</a></li>
+          <li><a href="portal.html">Portal Sekolah</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h3>Hubungi Kami</h3>
+        <p><i class="fa-brands fa-discord"></i> discord.gg/snm<span class="active-year">2026</span> (Komunitas Resmi)</p>
+        <p><i class="fa-solid fa-envelope"></i> snm<span class="active-year">2026</span>@minecrafter.id</p>
+      </div>
+    </div>
+    <div class="footer-bottom text-center">
+      <p>&copy; <span class="active-year">2026</span> SNM Indonesia. Hak Cipta Dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    const API_BASE = (window.location.port === '3000' || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.hostname !== '')) ? '' : 'http://localhost:3000';
+
+    // Toast Notification System matching app.js
+    window.showToast = (message, type = 'info') => {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+
+      let iconClass = 'fa-circle-info';
+      if (type === 'success') iconClass = 'fa-circle-check';
+      if (type === 'error') iconClass = 'fa-circle-xmark';
+
+      toast.innerHTML = `
+        <i class="fa-solid ${iconClass}"></i>
+        <div class="toast-message">${message}</div>
+        <button class="toast-close">&times;</button>
+      `;
+
+      container.appendChild(toast);
+      toast.querySelector('.toast-close').addEventListener('click', () => toast.remove());
+
+      setTimeout(() => {
+        toast.style.animation = 'toastSlideIn 0.3s ease reverse forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    };
+
+    // Dark Mode Theme Toggler
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+      showToast(`Mode ${newTheme === 'dark' ? 'Gelap' : 'Terang'} diaktifkan`, 'info');
+    });
+
+    function updateThemeIcon(theme) {
+      themeToggle.innerHTML = theme === 'dark'
+        ? '<i class="fa-solid fa-sun text-warning"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
+    }
+
+    // Mobile Navbar Toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = mainNav.classList.toggle('active');
+        menuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+      });
+    }
+
+    // School Configurations Matrix for Schools
+    const SCHOOL_CONFIGS = {
+      'sekolah redstone nasional': {
+        name: 'Sekolah Redstone Nasional',
+        accent: '#ef4444',
+        glow: 'rgba(239, 68, 68, 0.2)',
+        gradient: 'linear-gradient(135deg, #ef4444, #991b1b)',
+        icon: 'fa-bolt',
+        serverIp: 'redstone.snm2026.net:25565',
+        motto: '"Pusat Inovasi Otomasi Redstone, Logika Sirkuit & Command Block Indonesia"',
+        headmaster: 'Prof. Redstone Master Grian',
+        announcement: 'Selamat datang calon Insinyur Redstone! Laboratorium otomasi kami telah menyiapkan 50+ tantangan sirkuit baru untuk mematangkan logika otomasi Anda.',
+        curriculum: [
+          { title: 'Redstone Logic Gates Masterclass', desc: 'Pemahaman AND, OR, XOR, RS-Latch, dan T-FlipFlop otomasi.' },
+          { title: 'Automated Farm & Item Sorter Engine', desc: 'Sistem klasifikasi item otomatis berkecepatan tinggi tanpa lag.' },
+          { title: 'Command Block & Datapack Scripting', desc: 'Algoritma kustom game mechanic dalam dunia Minecraft.' }
+        ]
+      },
+      'sekolah pertambangan': {
+        name: 'Sekolah Pertambangan',
+        accent: '#f59e0b',
+        glow: 'rgba(245, 158, 11, 0.2)',
+        gradient: 'linear-gradient(135deg, #f59e0b, #b45309)',
+        icon: 'fa-pickaxe',
+        serverIp: 'mining.snm2026.net:25565',
+        motto: '"Menggali Potensi Tersembunyi, Menemukan Kejayaan di Kedalaman Y=-58"',
+        headmaster: 'Ir. Deepslate Ore Prospector',
+        announcement: 'Salam Tambang! Tim peneliti Geologi Nether & Overworld telah siap membimbing eksplorasi mineral langka Anda di zona Deepslate.',
+        curriculum: [
+          { title: 'Y=-58 Diamond & Netherite Prospecting', desc: 'Teknik strip-mining efisien & navigasi gua Deepslate berbahaya.' },
+          { title: 'Metallurgy & Automatic Blast Furnace', desc: 'Pengolahan bijih mineral skala industri berkapasitas tinggi.' },
+          { title: 'Subterranean Infrastructure & Safety', desc: 'Konstruksi terowongan tambang anti-lava dan penopang goa.' }
+        ]
+      },
+      'persatuan farmercraft velixir': {
+        name: 'Persatuan Farmercraft Velixir',
+        accent: '#10b981',
+        glow: 'rgba(16, 185, 129, 0.2)',
+        gradient: 'linear-gradient(135deg, #10b981, #047857)',
+        icon: 'fa-wheat-awn',
+        serverIp: 'farmer.snm2026.net:25565',
+        motto: '"Memanen Masa Depan, Memberi Kehidupan bagi Seluruh Realm Minecraft"',
+        headmaster: 'Dr. Agro Minecraft Velixir',
+        announcement: 'Selamat bergabung para Agronom Velixir! Sektor pertanian bio-automatis siap mendistribusikan kebutuhan pangan seluruh realm.',
+        curriculum: [
+          { title: 'Automatic Crop & Tree Bio-Factory', desc: 'Desain pertanian micro-tick & pengumpul panen otomatis.' },
+          { title: 'Potion Alchemy & Enchanted Brewing', desc: 'Racikan ramuan khusus efek tingkat tinggi untuk kebutuhan realm.' },
+          { title: 'Villager Breeding & Emerald Market', desc: 'Ekosistem perdagangan villager & pengoptimalan harga emerald.' }
+        ]
+      },
+      'institut pvp mojang': {
+        name: 'Institut PvP Mojang',
+        accent: '#06b6d4',
+        glow: 'rgba(6, 182, 212, 0.2)',
+        gradient: 'linear-gradient(135deg, #06b6d4, #0e7490)',
+        icon: 'fa-swords',
+        serverIp: 'pvp.snm2026.net:25565',
+        motto: '"Keberanian, Disiplin, dan Ketangkasan Bertahan di Medan Tempur"',
+        headmaster: 'Grandmaster PvP Sword Legend',
+        announcement: 'Hormat Tempur! Medan pertarungan arena siap menguji refleks, strategi Crystal PvP, dan ketahanan pertahanan armor Anda.',
+        curriculum: [
+          { title: '1.9+ Combat Mechanics & Shield Parrying', desc: 'Penguasaan timing serangan, strafe, dan pertahanan perisai.' },
+          { title: 'End Crystal & Bed PvP Mastery', desc: 'Taktik peledakan instan dalam situasi pertarungan darurat.' },
+          { title: 'Elytra Dogfight & Aerial Combat', desc: 'Navigasi penerbangan cepat dan serangan jarak jauh busur.' }
+        ]
+      },
+      'sekolah builder': {
+        name: 'Sekolah Builder',
+        accent: '#a855f7',
+        glow: 'rgba(168, 85, 247, 0.2)',
+        gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)',
+        icon: 'fa-cubes',
+        serverIp: 'builder.snm2026.net:25565',
+        motto: '"Mewujudkan Imajinasi Menjadi Keajaiban Arsitektur Megah & Detail"',
+        headmaster: 'Master Builder Apex Architect',
+        announcement: 'Kreativitas Tanpa Batas! Dunia plot WorldEdit kami telah disiapkan untuk merealisasikan rancangan mega-konstruksi impian Anda.',
+        curriculum: [
+          { title: 'Mega-Structure Planning & Palette', desc: 'Teori pewarnaan blok, kedalaman dinding, dan struktur megah.' },
+          { title: 'WorldEdit & Axiom Studio Tooling', desc: 'Penggunaan tool pemahat dunia berkecepatan tinggi.' },
+          { title: 'Organic Modeling & Terrain Terraforming', desc: 'Pembuatan patung organik dan lanskap alam realistis.' }
+        ]
+      }
+    };
+
+    function getSchoolConfig(schoolName) {
+      if (!schoolName) return SCHOOL_CONFIGS['sekolah redstone nasional'];
+      const key = schoolName.toLowerCase().trim();
+      for (const k in SCHOOL_CONFIGS) {
+        if (key.includes(k) || k.includes(key)) {
+          return SCHOOL_CONFIGS[k];
+        }
+      }
+      return SCHOOL_CONFIGS['sekolah redstone nasional'];
+    }
+
+    function applySchoolTheme(config) {
+      document.documentElement.style.setProperty('--school-accent', config.accent);
+      document.documentElement.style.setProperty('--school-glow', config.glow);
+      document.documentElement.style.setProperty('--school-gradient', config.gradient);
+
+      document.getElementById('hero-school-name').innerText = config.name;
+      document.getElementById('hero-school-title').innerText = config.name;
+      document.getElementById('hero-school-motto').innerText = config.motto;
+      document.getElementById('school-server-ip').innerText = config.serverIp;
+      document.getElementById('headmaster-announcement').innerText = config.announcement;
+
+      const iconEl = document.getElementById('hero-school-icon');
+      if (iconEl) iconEl.className = `fa-solid ${config.icon}`;
+
+      // Render Curriculum Cards
+      const currContainer = document.getElementById('curriculum-container');
+      if (currContainer) {
+        currContainer.innerHTML = '';
+        config.curriculum.forEach(item => {
+          const card = document.createElement('div');
+          card.style.cssText = `background: var(--bg-tertiary); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);`;
+          card.innerHTML = `
+            <h4 style="margin: 0 0 6px 0; font-size: 14.5px; color: var(--text-main); font-weight: 700;">${item.title}</h4>
+            <p style="margin: 0; font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">${item.desc}</p>
+          `;
+          currContainer.appendChild(card);
+        });
+      }
+    }
+
+    function toggleQuest(el) {
+      const parent = el.closest('.quest-item');
+      if (parent) parent.classList.toggle('completed');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let id = urlParams.get('id');
+      const paramRole = urlParams.get('role');
+      const paramSekolah = urlParams.get('sekolah');
+
+      const loadingEl = document.getElementById('portal-loading');
+      const deniedEl = document.getElementById('portal-denied');
+      const contentEl = document.getElementById('portal-content');
+
+      // Sync active selection year
+      try {
+        const yearRes = await fetch(`${API_BASE}/api/settings/system_config`);
+        if (yearRes.ok) {
+          const cfg = await yearRes.json();
+          if (cfg && cfg.selectionYear) {
+            document.querySelectorAll('.active-year').forEach(el => el.innerText = cfg.selectionYear);
+          }
+        }
+      } catch (e) {}
+
+      // If no ID in params, check localStorage
+      if (!id) {
+        try {
+          const stored = localStorage.getItem('snm_last_checked_student');
+          if (stored) id = stored;
+        } catch(e){}
+      }
+
+      if (!id) {
+        loadingEl.style.display = 'none';
+        deniedEl.style.display = 'block';
+        return;
+      }
+
+      let student = null;
+
+      // Try fetching from API
+      try {
+        const res = await fetch(`${API_BASE}/api/applicants/${id}`);
+        if (res.ok) {
+          student = await res.json();
+        }
+      } catch (err) {
+        console.warn("API fetch error, trying local backup...", err);
+      }
+
+      // Local storage backup fallback
+      if (!student) {
+        try {
+          const localApplicants = JSON.parse(localStorage.getItem('PPDB_APPLICANTS') || '[]');
+          student = localApplicants.find(a => a.id === id);
+        } catch (e) {}
+      }
+
+      if (!student || !(student.status === 'Lolos' || student.status === 'Lulus')) {
+        loadingEl.style.display = 'none';
+        deniedEl.style.display = 'block';
+        if (student) {
+          document.getElementById('denied-reason').innerHTML = `Peserta dengan ID <strong>${id}</strong> ditemukan (${student.nama}), namun status saat ini adalah: "<strong>${student.status}</strong>". Akses portal hanya untuk peserta yang dinyatakan LOLOS.`;
+        }
+        return;
+      }
+
+      // STUDENT IS DECLARED LULUS! Populate KTSM & Theme
+      const sekolahName = student.sekolahMinecraft || paramSekolah || 'Sekolah Redstone Nasional';
+      const roleName = student.roleMinecraft || paramRole || 'Builder';
+      const config = getSchoolConfig(sekolahName);
+
+      applySchoolTheme(config);
+
+      // Populate KTSM info
+      document.getElementById('ktsm-student-name').innerText = student.nama;
+      document.getElementById('ktsm-student-id').innerText = student.id;
+      document.getElementById('ktsm-school').innerText = sekolahName;
+      document.getElementById('ktsm-role').innerText = roleName;
+      document.getElementById('ktsm-track').innerText = student.jalur || 'Prestasi';
+      const qRole = document.getElementById('quest-role-name');
+      if (qRole) qRole.innerText = roleName;
+
+      // Show main content
+      loadingEl.style.display = 'none';
+      contentEl.style.display = 'block';
+
+      // Setup Copy IP Button
+      const btnCopyIp = document.getElementById('btn-copy-server-ip');
+      if (btnCopyIp) {
+        btnCopyIp.addEventListener('click', () => {
+          const ip = config.serverIp;
+          navigator.clipboard.writeText(ip).then(() => {
+            showToast(`Server IP "${ip}" berhasil disalin!`, 'success');
+            const qIp = document.getElementById('q-ip');
+            if (qIp) qIp.classList.add('completed');
+          }).catch(err => {
+            showToast(`Server IP: ${ip}`, 'info');
+          });
+        });
+      }
+
+      // Setup SK print button inside portal
+      const btnSk = document.getElementById('btn-download-sk-portal');
+      if (btnSk) {
+        btnSk.addEventListener('click', () => {
+          window.location.href = `index.html?printSK=${student.id}#cek-status`;
+        });
+      }
+    });
+
+    // Form login handler for manual ID check
+    const formPortalLogin = document.getElementById('form-portal-login');
+    if (formPortalLogin) {
+      formPortalLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = document.getElementById('input-portal-id').value.trim();
+        if (val) {
+          window.location.href = `portal.html?id=${encodeURIComponent(val)}`;
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

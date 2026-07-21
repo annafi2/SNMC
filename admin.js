@@ -1310,9 +1310,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const resSchools = await fetch(`${API_BASE}/api/settings/minecraft_schools`);
       if (resSchools.ok) {
         const schools = await resSchools.json();
-        currentSchoolsList = (schools && Array.isArray(schools)) 
+        currentSchoolsList = (schools && Array.isArray(schools) && schools.length > 0) 
           ? schools 
-          : ['SMP Redstone Indonesia', 'Akademi Builder Nusantara', 'Minecraft High School'];
+          : ['Sekolah Redstone Nasional', 'Sekolah Pertambangan', 'Persatuan Farmercraft Velixir', 'Institut PvP Mojang', 'Sekolah Builder'];
         renderSchoolsList();
       }
 
