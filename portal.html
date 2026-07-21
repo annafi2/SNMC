@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <title>Portal Sekolah Minecraft – SNM 2026</title>
   <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, kuis harian, dan komunitas siswa resmi.">
@@ -25,21 +25,25 @@
       --school-gradient: linear-gradient(135deg, #10b981 0%, #047857 100%);
     }
 
+    body {
+      overflow-x: hidden;
+    }
+
     /* Additional custom styling for portal elements matching design system */
     .portal-hero {
       position: relative;
-      padding: 40px 0 32px 0;
+      padding: 32px 0 24px 0;
       background: radial-gradient(circle at top center, var(--school-glow) 0%, rgba(0, 0, 0, 0) 70%),
                   var(--bg-secondary);
       border-bottom: 1px solid var(--border-color);
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
 
     .portal-hero-grid {
       display: grid;
-      grid-template-columns: 1fr 480px;
-      gap: 32px;
+      grid-template-columns: 1fr 460px;
+      gap: 24px;
       align-items: center;
     }
 
@@ -62,22 +66,22 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .portal-hero-title {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: var(--text-main);
     }
 
     .portal-hero-motto {
-      font-size: 15px;
+      font-size: 14.5px;
       color: var(--text-muted);
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     /* KTSM Physical ID Card Design (LANDSCAPE KTP FORMAT) */
@@ -93,6 +97,7 @@
       max-width: 480px;
       width: 100%;
       margin: 0 auto;
+      box-sizing: border-box;
     }
 
     .ktsm-physical-card::before {
@@ -107,32 +112,48 @@
 
     .ktsm-landscape-grid {
       display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 16px;
+      grid-template-columns: 95px 1fr;
+      gap: 14px;
       align-items: center;
+    }
+
+    @media (max-width: 480px) {
+      .ktsm-physical-card {
+        padding: 16px;
+      }
+      .ktsm-landscape-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .ktsm-info-row {
+        justify-content: space-between;
+      }
+      .portal-hero-title {
+        font-size: 24px;
+      }
     }
 
     /* Smart Chip Icon detail on physical card */
     .ktsm-smart-chip {
-      width: 36px;
-      height: 26px;
+      width: 34px;
+      height: 24px;
       border-radius: 5px;
       background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
       border: 1px solid #d97706;
       box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .ktsm-avatar-box {
-      width: 80px;
-      height: 80px;
+      width: 76px;
+      height: 76px;
       border-radius: var(--radius-sm);
       background: var(--school-glow);
       border: 2px solid var(--school-accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 34px;
       color: var(--school-accent);
       box-shadow: 0 0 18px var(--school-glow);
       overflow: hidden;
@@ -143,7 +164,7 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px dashed var(--border-color);
-      padding: 6px 0;
+      padding: 5px 0;
       font-size: 12px;
     }
 
@@ -157,11 +178,51 @@
       text-align: right;
     }
 
+    /* Portal Sub-Navbar Styling */
+    .portal-subnav-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding: 6px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .portal-subnav-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .portal-nav-tab {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .portal-nav-tab.active {
+      background: var(--school-glow);
+      border-color: var(--school-accent);
+      color: var(--school-accent);
+    }
+
     /* Main Grid Layout */
     .portal-main-grid {
       display: grid;
       grid-template-columns: 1fr 340px;
-      gap: 32px;
+      gap: 24px;
       margin-bottom: 48px;
     }
 
@@ -175,8 +236,8 @@
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 24px;
-      margin-bottom: 24px;
+      padding: 20px;
+      margin-bottom: 20px;
       box-shadow: var(--card-shadow);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -185,14 +246,14 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--border-color);
     }
 
     .portal-card-icon {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: var(--radius-sm);
       background: var(--school-glow);
       color: var(--school-accent);
@@ -200,10 +261,11 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
+      flex-shrink: 0;
     }
 
     .portal-card-title {
-      font-size: 17px;
+      font-size: 16.5px;
       font-weight: 700;
       margin: 0;
       color: var(--text-main);
@@ -213,12 +275,12 @@
     .quest-item {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
+      gap: 12px;
+      padding: 12px 14px;
       background: var(--bg-tertiary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       transition: all 0.2s ease;
     }
 
@@ -227,8 +289,8 @@
     }
 
     .quest-check {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 6px;
       border: 2px solid var(--school-accent);
       display: flex;
@@ -255,12 +317,13 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.78);
       z-index: 99999;
       align-items: center;
       justify-content: center;
       backdrop-filter: blur(8px);
-      padding: 20px;
+      padding: 16px;
+      box-sizing: border-box;
     }
 
     /* Quiz Option Custom Radio Cards */
@@ -336,7 +399,7 @@
       </div>
 
       <!-- STATE 2: ACCESS DENIED (WHEN NOT LOGGED IN / NOT LULUS / TIDAK MEMILIH) -->
-      <div id="portal-denied" style="display: none; max-width: 540px; margin: 40px auto; padding: 32px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); text-align: center; box-shadow: var(--card-shadow-hover);">
+      <div id="portal-denied" style="display: none; max-width: 540px; margin: 40px auto; padding: 28px 20px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); text-align: center; box-shadow: var(--card-shadow-hover);">
         <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(239, 68, 68, 0.12); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
           <i class="fa-solid fa-lock"></i>
         </div>
@@ -346,7 +409,7 @@
         </p>
 
         <form id="form-portal-login" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-          <input type="text" id="input-portal-id" placeholder="Masukkan ID Pendaftaran (cth: 001-2026-X8BF)..." required style="flex: 1; min-width: 220px; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-main); font-size: 14px;">
+          <input type="text" id="input-portal-id" placeholder="Masukkan ID Pendaftaran (cth: 001-2026-X8BF)..." required style="flex: 1; min-width: 200px; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-main); font-size: 14px;">
           <button type="submit" class="btn btn-gradient" style="padding: 12px 20px; height: 46px;"><i class="fa-solid fa-key"></i> Buka Portal</button>
         </form>
 
@@ -368,7 +431,7 @@
               <h1 class="portal-hero-title">Selamat Datang di Portal Resmi<br><span id="hero-school-title" style="color: var(--school-accent);">Sekolah Redstone Nasional</span></h1>
               <p class="portal-hero-motto" id="hero-school-motto">"Pusat Inovasi Otomasi Redstone, Logika Sirkuit & Command Block Indonesia"</p>
 
-              <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+              <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-tertiary); padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 13px;">
                   <i class="fa-solid fa-trophy" style="color: #f59e0b;"></i>
                   <span><strong>Poin Kuis:</strong> <span id="user-quiz-points-display" style="color: var(--school-accent); font-weight: 800;">0 Poin</span></span>
@@ -386,7 +449,7 @@
                 <div class="ktsm-landscape-grid">
                   <!-- LEFT COLUMN: Chip, Avatar & Barcode -->
                   <div style="text-align: center;">
-                    <div class="ktsm-smart-chip"></div>
+                    <div class="ktsm-smart-chip" style="margin: 0 auto 8px auto;"></div>
                     <div class="ktsm-avatar-box" id="ktsm-avatar" style="margin: 0 auto 10px auto;">
                       <i class="fa-solid fa-user-ninja"></i>
                     </div>
@@ -398,16 +461,16 @@
                     <!-- Header Banner -->
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);">
                       <div>
-                        <div style="font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
+                        <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
                         <div style="font-size: 12px; font-weight: 800; color: var(--text-main);" id="ktsm-card-school-title">Sekolah Redstone</div>
                       </div>
                       <span class="active-year" style="font-size: 11px; font-weight: 800; color: var(--school-accent);">SNM 2026</span>
                     </div>
 
                     <!-- Student Name & ID -->
-                    <h3 id="ktsm-student-name" style="margin: 0 0 2px 0; font-size: 16px; font-weight: 800; color: var(--text-main); line-height: 1.2;">Nama Siswa</h3>
+                    <h3 id="ktsm-student-name" style="margin: 0 0 2px 0; font-size: 15.5px; font-weight: 800; color: var(--text-main); line-height: 1.2;">Nama Siswa</h3>
                     <div style="margin-bottom: 8px;">
-                      <span id="ktsm-student-id" style="font-family: monospace; font-size: 11.5px; color: var(--school-accent); background: var(--school-glow); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 800;">SNM-2026-0000</span>
+                      <span id="ktsm-student-id" style="font-family: monospace; font-size: 11px; color: var(--school-accent); background: var(--school-glow); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 800;">SNM-2026-0000</span>
                     </div>
 
                     <!-- Info Table Rows -->
@@ -445,8 +508,68 @@
           </div>
         </div>
 
+        <!-- PORTAL SUB-NAVBAR NAVIGATION TABS -->
+        <nav class="portal-subnav-container" id="portal-subnav">
+          <button onclick="switchPortalTab('dashboard')" class="portal-nav-tab active" id="tab-nav-dashboard">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard & Quest
+          </button>
+          <button onclick="switchPortalTab('quizzes')" class="portal-nav-tab" id="tab-nav-quizzes">
+            <i class="fa-solid fa-clipboard-question"></i> Kuis & Uji Kompetensi
+          </button>
+          <button onclick="switchPortalTab('curriculum')" class="portal-nav-tab" id="tab-nav-curriculum">
+            <i class="fa-solid fa-book-bookmark"></i> Kurikulum & Modul
+          </button>
+          <button onclick="openSkJpgModal()" class="portal-nav-tab" id="tab-nav-sk">
+            <i class="fa-solid fa-file-certificate"></i> Dokumen SK Kelulusan (JPG)
+          </button>
+        </nav>
+
+        <!-- HONOR PROGRESS BAR WIDGET (CUMLAUDE 1500 -> MAGNA 2000 -> SUMMA 2500) -->
+        <div class="portal-card" id="honor-progress-widget" style="margin-bottom: 24px; background: var(--bg-secondary); border: 1.5px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px;" id="honor-progress-title">
+              <i class="fa-solid fa-trophy" style="color: #f59e0b;"></i> Progres Target Kelulusan Honor (Cumlaude / Magna / Summa)
+            </span>
+            <span style="font-size: 12.5px; font-weight: 800; color: var(--school-accent);" id="honor-progress-text">
+              0 / 1.500 Poin
+            </span>
+          </div>
+
+          <!-- Progress Bar Container -->
+          <div style="width: 100%; height: 12px; border-radius: 99px; background: var(--bg-tertiary); border: 1px solid var(--border-color); overflow: hidden; position: relative;">
+            <div id="honor-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #f59e0b 0%, #10b981 50%, #0284c7 100%); transition: width 0.5s ease; border-radius: 99px;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text-muted); font-weight: 700;">
+            <span>0 Poin</span>
+            <span style="color: #d97706;">🏆 1.500 (Cumlaude)</span>
+            <span style="color: #7c3aed;">👑 2.000 (Magna)</span>
+            <span style="color: #0284c7;">💎 2.500 (Summa)</span>
+          </div>
+        </div>
+
+        <!-- STATE 3B: SUMMA CUMLAUDE LOCK OVERLAY (SHOWN WHEN POIN >= 2500) -->
+        <div class="portal-card" id="summa-lock-overlay-card" style="display: none; background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(2, 132, 199, 0.18) 100%); border: 2.5px solid #0284c7; text-align: center; padding: 32px 20px; box-shadow: 0 0 30px rgba(14, 165, 233, 0.35);">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 16px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);">
+            <i class="fa-solid fa-gem"></i>
+          </div>
+
+          <span style="font-size: 12px; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 1.5px;">TINGKAT KEHORMATAN TERTINGGI REALM</span>
+          <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main); margin: 6px 0 12px 0;">🏆 SELAMAT! Anda Telah Lulus dengan Predikat SUMMA CUM LAUDE!</h2>
+          <p style="font-size: 14px; color: var(--text-muted); max-width: 680px; margin: 0 auto 24px auto; line-height: 1.6;">
+            Poin kuis Anda telah mencapai skor maksimum <strong>2.500+ Poin</strong>. Seluruh rangkaian pembelajaran dan kuis harian telah Anda selesaikan dengan nilai sempurna! Portal interaktif kini telah dikunci secara terhormat dan difokuskan pada Pusat Unduhan Sertifikat & Dokumen Resmi Anda.
+          </p>
+
+          <!-- Summa Certificate & Document Download Center -->
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="openCumlaudeModal()" class="btn btn-gradient" style="font-weight: 800; padding: 12px 24px; font-size: 14px;"><i class="fa-solid fa-gem"></i> Unduh Sertifikat Summa Cumlaude (JPG)</button>
+            <button onclick="generateKtsmJpg()" class="btn btn-outline" style="font-weight: 800; padding: 12px 20px;"><i class="fa-solid fa-image"></i> Unduh KTSM Landscape (JPG)</button>
+            <button onclick="openSkJpgModal()" class="btn btn-outline" style="font-weight: 800; padding: 12px 20px;"><i class="fa-solid fa-file-certificate"></i> Unduh SK Kelulusan Resmi (JPG)</button>
+          </div>
+        </div>
+
         <!-- BODY MAIN GRID SECTION -->
-        <div class="portal-main-grid">
+        <div class="portal-main-grid" id="portal-grid-body">
 
           <!-- LEFT CONTENT COLUMN -->
           <div>
@@ -470,8 +593,8 @@
               </div>
             </div>
 
-            <!-- FIRST QUEST CHECKLIST -->
-            <div class="portal-card">
+            <!-- SECTION 1: FIRST QUEST CHECKLIST -->
+            <div class="portal-card" id="section-quest">
               <div class="portal-card-header">
                 <div class="portal-card-icon"><i class="fa-solid fa-list-check"></i></div>
                 <div>
@@ -500,8 +623,8 @@
               </div>
             </div>
 
-            <!-- JADWAL KUIS & UJI KOMPETENSI KAMPUS (DYNAMIC PER SCHOOL) -->
-            <div class="portal-card">
+            <!-- SECTION 2: JADWAL KUIS & UJI KOMPETENSI KAMPUS (DYNAMIC PER SCHOOL) -->
+            <div class="portal-card" id="section-quizzes">
               <div class="portal-card-header">
                 <div class="portal-card-icon"><i class="fa-solid fa-clipboard-question"></i></div>
                 <div>
@@ -515,8 +638,8 @@
               </div>
             </div>
 
-            <!-- ROLE CURRICULUM MODULES -->
-            <div class="portal-card">
+            <!-- SECTION 3: ROLE CURRICULUM MODULES -->
+            <div class="portal-card" id="section-curriculum">
               <div class="portal-card-header">
                 <div class="portal-card-icon"><i class="fa-solid fa-book-bookmark"></i></div>
                 <div>
@@ -525,7 +648,7 @@
                 </div>
               </div>
 
-              <div id="curriculum-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+              <div id="curriculum-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
                 <!-- Dynamic Curriculum Cards Rendered Here -->
               </div>
             </div>
@@ -576,8 +699,8 @@
               <i class="fa-solid fa-file-certificate" style="font-size: 36px; color: var(--school-accent); margin-bottom: 12px;"></i>
               <h4 style="margin: 0 0 6px 0; font-size: 15px; color: var(--text-main);">Dokumen Kelulusan Official</h4>
               <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Unduh Sertifikat SK Kelulusan resmi Anda dari panitia pusat.</p>
-              <button id="btn-download-sk-portal" class="btn btn-outline btn-block" style="width: 100%;">
-                <i class="fa-solid fa-file-invoice"></i> Lihat SK Kelulusan
+              <button onclick="openSkJpgModal()" class="btn btn-outline btn-block" style="width: 100%;">
+                <i class="fa-solid fa-file-invoice"></i> Lihat SK Kelulusan (JPG)
               </button>
             </div>
 
@@ -589,6 +712,96 @@
 
     </div>
   </main>
+
+  <!-- MODAL PREVIEW & DOWNLOAD SK KELULUSAN FORMAT JPG -->
+  <div id="modal-sk-jpg" class="modal-wrapper">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 760px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: center; position: relative; max-height: 95vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+        <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main);"><i class="fa-solid fa-file-invoice" style="color: var(--school-accent); margin-right: 8px;"></i> Surat Keputusan (SK) Kelulusan Resmi</h3>
+        <button onclick="closeSkJpgModal()" style="background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+
+      <!-- Printable SK Document Area -->
+      <div id="sk-document-area" style="background: #ffffff; color: #0f172a; padding: 36px 32px; border: 3px double #0284c7; border-radius: 8px; text-align: left; font-family: 'Plus Jakarta Sans', sans-serif; position: relative; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <!-- Watermark Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 14px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 44px; height: 44px; border-radius: 8px; background: #0284c7; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800;">
+              <i class="fa-solid fa-cube"></i>
+            </div>
+            <div>
+              <div style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px;">PANITIA SELEKSI NASIONAL MINECRAFTER (SNM)</div>
+              <div style="font-size: 11px; color: #64748b;">Sekretariat Pusat Pengembangan Talenta Minecraft Indonesia &bull; Tahun <span class="active-year">2026</span></div>
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 11px; color: #64748b; font-family: monospace;">
+            SK/SNM-2026/LULUS
+          </div>
+        </div>
+
+        <h2 style="text-align: center; font-size: 18px; font-weight: 800; color: #0284c7; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">
+          SURAT KEPUTUSAN KELULUSAN RESMI
+        </h2>
+        <div style="text-align: center; font-size: 12px; color: #64748b; margin-bottom: 20px;">
+          Nomor: <span id="sk-cert-number">SNM/SK/2026/0000</span>
+        </div>
+
+        <p style="font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 16px;">
+          Berdasarkan hasil evaluasi seleksi portofolio, uji kompetensi teknis, dan verifikasi berkas pendaftaran Seleksi Nasional Minecrafter Tahun <span class="active-year">2026</span>, Panitia Pusat menetapkan bahwa:
+        </p>
+
+        <!-- Student Specs Box -->
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 20px; font-size: 13px;">
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; margin-bottom: 6px;">
+            <span style="color: #64748b;">Nama Lengkap:</span>
+            <strong style="color: #0f172a;" id="sk-student-name">Nama Siswa</strong>
+          </div>
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; margin-bottom: 6px;">
+            <span style="color: #64748b;">ID Pendaftaran:</span>
+            <strong style="color: #0284c7; font-family: monospace;" id="sk-student-id">SNM-2026-0000</strong>
+          </div>
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; margin-bottom: 6px;">
+            <span style="color: #64748b;">Sekolah Pilihan:</span>
+            <strong style="color: #0f172a;" id="sk-student-school">Sekolah Redstone Nacional</strong>
+          </div>
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; margin-bottom: 6px;">
+            <span style="color: #64748b;">Role Keahlian:</span>
+            <strong style="color: #0f172a;" id="sk-student-role">Redstone Engineer</strong>
+          </div>
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px;">
+            <span style="color: #64748b;">Status Kelulusan:</span>
+            <strong style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> DINYATAKAN LOLOS & RESMI DITERIMA</strong>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 24px;">
+          Surat Keputusan ini diterbitkan secara sah dan berlaku sebagai bukti pendaftaran ulang peserta pada server sekolah resmi SNM <span class="active-year">2026</span>.
+        </p>
+
+        <!-- Signature Footer -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 14px; border-top: 1px dashed #cbd5e1;">
+          <div>
+            <div style="font-size: 10px; color: #94a3b8; font-family: monospace;">VERIFIED OFFICIAL QR</div>
+            <div style="width: 48px; height: 48px; background: #e2e8f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #0284c7; margin-top: 4px;">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: #64748b;">Ditetapkan di Jakarta</div>
+            <div style="font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 8px;" id="sk-date">21 Juli 2026</div>
+            <div style="font-family: cursive; font-size: 18px; color: #0284c7; font-weight: 700; margin-bottom: 2px;">Ketua Panitia SNM</div>
+            <div style="font-size: 11px; font-weight: 800; color: #0f172a;">Dewan Seleksi Nasional</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button onclick="downloadSkJpg()" class="btn btn-gradient" style="padding: 10px 24px; font-weight: 800;"><i class="fa-solid fa-download"></i> Unduh SK Kelulusan (JPG)</button>
+        <button onclick="closeSkJpgModal()" class="btn btn-outline">Tutup</button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL PERSONALISASI AVATAR KTSM -->
   <div id="modal-avatar-picker" class="modal-wrapper">
@@ -841,6 +1054,79 @@
         const isOpen = mainNav.classList.toggle('active');
         menuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
       });
+    }
+
+    // Portal Sub-Navbar Switcher
+    function switchPortalTab(tabName) {
+      document.querySelectorAll('.portal-nav-tab').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-nav-${tabName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const secQuest = document.getElementById('section-quest');
+      const secQuizzes = document.getElementById('section-quizzes');
+      const secCurriculum = document.getElementById('section-curriculum');
+
+      if (tabName === 'dashboard') {
+        if (secQuest) secQuest.style.display = 'block';
+        if (secQuizzes) secQuizzes.style.display = 'block';
+        if (secCurriculum) secCurriculum.style.display = 'block';
+      } else if (tabName === 'quizzes') {
+        if (secQuest) secQuest.style.display = 'none';
+        if (secQuizzes) secQuizzes.style.display = 'block';
+        if (secCurriculum) secCurriculum.style.display = 'none';
+      } else if (tabName === 'curriculum') {
+        if (secQuest) secQuest.style.display = 'none';
+        if (secQuizzes) secQuizzes.style.display = 'none';
+        if (secCurriculum) secCurriculum.style.display = 'block';
+      }
+    }
+
+    // SK Kelulusan Official Preview Modal & JPG Download
+    function openSkJpgModal() {
+      if (!currentStudent) return;
+      document.getElementById('sk-student-name').innerText = currentStudent.nama.toUpperCase();
+      document.getElementById('sk-student-id').innerText = currentStudent.id;
+      document.getElementById('sk-student-school').innerText = currentStudent.sekolahMinecraft || 'Sekolah Redstone Nacional';
+      document.getElementById('sk-student-role').innerText = currentStudent.roleMinecraft || 'Builder';
+      document.getElementById('sk-cert-number').innerText = `SNM/SK/2026/${currentStudent.id.replace(/[^0-9A-Z]/g, '')}`;
+
+      const now = new Date();
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      document.getElementById('sk-date').innerText = now.toLocaleDateString('id-ID', options);
+
+      const modal = document.getElementById('modal-sk-jpg');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeSkJpgModal() {
+      const modal = document.getElementById('modal-sk-jpg');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function downloadSkJpg() {
+      const skEl = document.getElementById('sk-document-area');
+      if (!skEl) return;
+      const studentId = currentStudent ? currentStudent.id : 'SK';
+      showToast("Menggenerasi SK Kelulusan Resmi (JPG)...", "info");
+
+      try {
+        const canvas = await html2canvas(skEl, {
+          scale: 2.5,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        });
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = `SK_Kelulusan_SNM_${studentId}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("Surat Keputusan (JPG) berhasil diunduh!", "success");
+      } catch (err) {
+        console.error("Gagal mengunduh gambar SK Kelulusan:", err);
+        showToast("Gagal mengunduh gambar SK!", "error");
+      }
     }
 
     // Avatar Personalization Functions for KTSM Profile
@@ -1445,7 +1731,7 @@
         });
       }
 
-      // Update Points Display in UI & Cumlaude Check
+      // Update Points Display in UI & Honor Progress
       updateQuizPointsUI();
     }
 
@@ -1502,10 +1788,49 @@
 
       if (pointsCardVal) pointsCardVal.innerText = `${points} Poin`;
 
+      // Update Honor Progress Bar Widget
+      const progressTitle = document.getElementById('honor-progress-title');
+      const progressText = document.getElementById('honor-progress-text');
+      const progressFill = document.getElementById('honor-progress-fill');
+
+      if (progressFill) {
+        let percent = 0;
+        if (points < 1500) {
+          percent = Math.min(100, Math.max(0, (points / 1500) * 100));
+          if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-trophy" style="color: #f59e0b;"></i> Target Cumlaude (1.500 Poin)`;
+          if (progressText) progressText.innerText = `${points} / 1.500 Poin (${1500 - points} poin lagi)`;
+        } else if (points < 2000) {
+          percent = Math.min(100, Math.max(0, ((points - 1500) / 500) * 100));
+          if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-crown" style="color: #7c3aed;"></i> Target Magna Cumlaude (2.000 Poin)`;
+          if (progressText) progressText.innerText = `${points} / 2.000 Poin (${2000 - points} poin lagi)`;
+        } else if (points < 2500) {
+          percent = Math.min(100, Math.max(0, ((points - 2000) / 500) * 100));
+          if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-gem" style="color: #0284c7;"></i> Target Summa Cumlaude (2.500 Poin)`;
+          if (progressText) progressText.innerText = `${points} / 2.500 Poin (${2500 - points} poin lagi)`;
+        } else {
+          percent = 100;
+          if (progressTitle) progressTitle.innerHTML = `<i class="fa-solid fa-gem" style="color: #0284c7;"></i> 🏆 SUMMA CUM LAUDE REACHED!`;
+          if (progressText) progressText.innerText = `${points} Poin (Maksimum)`;
+        }
+        progressFill.style.width = `${percent}%`;
+      }
+
+      // CHECK IF SUMMA CUMLAUDE (>= 2500 POIN) LOCK OVERLAY
+      const summaLockCard = document.getElementById('summa-lock-overlay-card');
+      const gridBody = document.getElementById('portal-grid-body');
+
+      if (points >= 2500) {
+        if (summaLockCard) summaLockCard.style.display = 'block';
+        if (gridBody) gridBody.style.display = 'none';
+      } else {
+        if (summaLockCard) summaLockCard.style.display = 'none';
+        if (gridBody) gridBody.style.display = 'grid';
+      }
+
       const tierInfo = getHonorTierInfo(points);
 
       if (tierInfo) {
-        if (cumlaudeBanner) {
+        if (cumlaudeBanner && points < 2500) {
           cumlaudeBanner.style.display = 'block';
           cumlaudeBanner.style.background = tierInfo.bannerBg;
           cumlaudeBanner.style.border = `2px solid ${tierInfo.bannerBorder}`;
@@ -1529,6 +1854,8 @@
           if (btnCert) {
             btnCert.innerHTML = `<i class="fa-solid ${tierInfo.icon}"></i> Lihat Sertifikat ${tierInfo.title} (JPG)`;
           }
+        } else if (cumlaudeBanner) {
+          cumlaudeBanner.style.display = 'none';
         }
 
         if (ktsmStatusVal) {
@@ -1610,6 +1937,11 @@
     function startSchoolQuiz(quizId) {
       if (!currentStudent) {
         showToast("Silakan login dengan ID Pendaftaran resmi Anda!", "error");
+        return;
+      }
+
+      if (getStudentQuizPoints() >= 2500) {
+        showToast("Anda telah mencapai Summa Cumlaude (2500+ Poin)! Studi Anda telah selesai.", "info");
         return;
       }
 
@@ -1952,14 +2284,6 @@
       // Show main content
       loadingEl.style.display = 'none';
       contentEl.style.display = 'block';
-
-      // Setup SK print button inside portal
-      const btnSk = document.getElementById('btn-download-sk-portal');
-      if (btnSk) {
-        btnSk.addEventListener('click', () => {
-          window.location.href = `index.html?printSK=${student.id}#cek-status`;
-        });
-      }
     });
 
     // Form login handler for manual ID check
