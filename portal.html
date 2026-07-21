@@ -13,6 +13,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2canvas library for JPG export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- Style CSS -->
   <link rel="stylesheet" href="style.css?v=6">
 
@@ -36,7 +38,7 @@
 
     .portal-hero-grid {
       display: grid;
-      grid-template-columns: 1fr 380px;
+      grid-template-columns: 1fr 400px;
       gap: 32px;
       align-items: center;
     }
@@ -78,40 +80,64 @@
       margin-bottom: 24px;
     }
 
-    /* KTSM Card (Kartu Tanda Siswa Minecraft) */
-    .ktsm-card {
+    /* KTSM Physical ID Card Design */
+    .ktsm-physical-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
+      border-radius: 20px;
       padding: 24px;
-      box-shadow: var(--card-shadow-hover);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
       position: relative;
       overflow: hidden;
       transition: all 0.3s ease;
+      max-width: 420px;
+      margin: 0 auto;
     }
 
-    .ktsm-card::before {
+    .ktsm-physical-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 5px;
+      height: 6px;
       background: var(--school-gradient);
     }
 
+    /* Smart Chip Icon detail on physical card */
+    .ktsm-smart-chip {
+      width: 38px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+      border: 1px solid #d97706;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6);
+      position: relative;
+    }
+
+    .ktsm-smart-chip::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
     .ktsm-avatar-box {
-      width: 68px;
-      height: 68px;
+      width: 76px;
+      height: 76px;
       border-radius: var(--radius-sm);
       background: var(--school-glow);
       border: 2px solid var(--school-accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
+      font-size: 34px;
       color: var(--school-accent);
-      box-shadow: 0 0 15px var(--school-glow);
+      box-shadow: 0 0 18px var(--school-glow);
+      flex-shrink: 0;
     }
 
     .ktsm-info-row {
@@ -119,8 +145,8 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px dashed var(--border-color);
-      padding: 10px 0;
-      font-size: 13px;
+      padding: 8px 0;
+      font-size: 12.5px;
     }
 
     .ktsm-info-label {
@@ -185,48 +211,6 @@
       color: var(--text-main);
     }
 
-    /* Server IP Copy Box */
-    .server-connect-box {
-      background: var(--bg-tertiary);
-      border: 1.5px solid var(--school-accent);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      box-shadow: 0 0 20px var(--school-glow);
-      flex-wrap: wrap;
-    }
-
-    .server-ip-text {
-      font-family: monospace;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--school-accent);
-      letter-spacing: 0.5px;
-    }
-
-    .btn-copy-ip {
-      background: var(--school-gradient);
-      color: #ffffff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: var(--radius-sm);
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-copy-ip:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px var(--school-glow);
-    }
-
     /* Quest Checklists */
     .quest-item {
       display: flex;
@@ -268,29 +252,17 @@
       color: var(--text-light);
     }
 
-    @media print {
-      body {
-        background: #ffffff !important;
-        color: #000000 !important;
-      }
-      .main-header, .portal-main-grid, .server-connect-box, .btn-print-ktsm, main {
-        display: none !important;
-      }
-      .ktsm-card {
-        border: 2px solid #000000 !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        box-shadow: none !important;
-        max-width: 500px;
-        margin: 40px auto;
-        display: block !important;
-      }
-      .ktsm-info-label {
-        color: #475569 !important;
-      }
-      .ktsm-info-val {
-        color: #0f172a !important;
-      }
+    /* Modal Wrapper styling */
+    .modal-wrapper {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      padding: 20px;
     }
   </style>
 </head>
@@ -386,24 +358,33 @@
               </div>
             </div>
 
-            <!-- KTSM CARD (RIGHT COLUMN HERO) -->
+            <!-- KTSM PHYSICAL CARD (RIGHT COLUMN HERO) -->
             <div>
-              <div class="ktsm-card" id="ktsm-card-element">
+              <div class="ktsm-physical-card" id="ktsm-card-element">
+                <!-- Physical Card Header & Chip -->
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color);">
-                  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="ktsm-smart-chip"></div>
+                    <div>
+                      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
+                      <div style="font-size: 11px; font-weight: 700; color: var(--text-main);" id="ktsm-card-school-title">Sekolah Redstone</div>
+                    </div>
+                  </div>
                   <span class="active-year" style="font-size: 12px; font-weight: 800; color: var(--school-accent);">SNM 2026</span>
                 </div>
 
+                <!-- Avatar & Identity -->
                 <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
                   <div class="ktsm-avatar-box" id="ktsm-avatar">
                     <i class="fa-solid fa-user-ninja"></i>
                   </div>
                   <div>
-                    <h3 id="ktsm-student-name" style="margin: 0 0 4px 0; font-size: 17px; font-weight: 800; color: var(--text-main);">Nama Siswa</h3>
-                    <span id="ktsm-student-id" style="font-family: monospace; font-size: 12.5px; color: var(--school-accent); background: var(--school-glow); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 700;">SNM-2026-0000</span>
+                    <h3 id="ktsm-student-name" style="margin: 0 0 4px 0; font-size: 18px; font-weight: 800; color: var(--text-main);">Nama Siswa</h3>
+                    <span id="ktsm-student-id" style="font-family: monospace; font-size: 12.5px; color: var(--school-accent); background: var(--school-glow); padding: 3px 10px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 800; letter-spacing: 0.5px;">SNM-2026-0000</span>
                   </div>
                 </div>
 
+                <!-- Info Rows -->
                 <div class="ktsm-info-row">
                   <span class="ktsm-info-label">Sekolah Minecraft:</span>
                   <span class="ktsm-info-val" id="ktsm-school">Redstone Nasional</span>
@@ -413,7 +394,7 @@
                   <span class="ktsm-info-val" id="ktsm-role" style="color: var(--school-accent);">Redstone Engineer</span>
                 </div>
                 <div class="ktsm-info-row">
-                  <span class="ktsm-info-label">Jalur Pendaftaran:</span>
+                  <span class="ktsm-info-label">Jalur Seleksi:</span>
                   <span class="ktsm-info-val" id="ktsm-track">Prestasi</span>
                 </div>
                 <div class="ktsm-info-row">
@@ -421,13 +402,23 @@
                   <span class="ktsm-info-val" style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> RESMI DITERIMA</span>
                 </div>
 
-                <!-- Mock Barcode SVG & Print CTA -->
-                <div style="margin-top: 16px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                  <div style="font-family: monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px;">|||| | ||||| || ||| ||||</div>
-                  <button onclick="window.print()" class="btn-print-ktsm btn btn-outline btn-sm" style="font-size: 11px;">
-                    <i class="fa-solid fa-print"></i> Cetak KTSM
-                  </button>
+                <!-- Barcode & Stamp Footer -->
+                <div style="margin-top: 14px; padding-top: 10px; display: flex; justify-content: space-between; align-items: flex-end;">
+                  <div>
+                    <div style="font-family: monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 3px;">|||| | ||||| || ||| ||||</div>
+                    <div style="font-size: 9px; color: var(--text-light); margin-top: 2px;">OFFICIAL MINECRAFT STUDENT CARD</div>
+                  </div>
+                  <div style="text-align: right; font-size: 10px; color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px;">
+                    VERIFIED CHIP
+                  </div>
                 </div>
+              </div>
+
+              <!-- CTA Button outside card for downloading JPG -->
+              <div style="margin-top: 16px; text-align: center;">
+                <button onclick="generateKtsmJpg()" class="btn btn-gradient btn-block" style="width: 100%; max-width: 420px; font-weight: 700; height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                  <i class="fa-solid fa-image"></i> Cetak / Unduh KTSM (JPG)
+                </button>
               </div>
             </div>
 
@@ -439,27 +430,6 @@
 
           <!-- LEFT CONTENT COLUMN -->
           <div>
-
-            <!-- SERVER CONNECT BOX -->
-            <div class="portal-card" style="border: 1.5px solid var(--school-accent);">
-              <div class="portal-card-header" style="border-bottom: none; margin-bottom: 12px; padding-bottom: 0;">
-                <div class="portal-card-icon"><i class="fa-solid fa-network-wired"></i></div>
-                <div>
-                  <h3 class="portal-card-title">Koneksi Server Minecraft Resmi</h3>
-                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Gunakan IP di bawah ini untuk terhubung langsung ke Server Kampus Minecraft Anda.</p>
-                </div>
-              </div>
-
-              <div class="server-connect-box">
-                <div>
-                  <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">SERVER ADDRESS (JAVA & BEDROCK):</div>
-                  <div class="server-ip-text" id="school-server-ip">redstone.snm2026.net</div>
-                </div>
-                <button class="btn-copy-ip" id="btn-copy-server-ip">
-                  <i class="fa-solid fa-copy"></i> Salin Server IP
-                </button>
-              </div>
-            </div>
 
             <!-- FIRST QUEST CHECKLIST -->
             <div class="portal-card">
@@ -526,23 +496,19 @@
               </div>
             </div>
 
-            <!-- SCHOOL STATS -->
+            <!-- SCHOOL STATS (CLEANED UP) -->
             <div class="portal-card">
               <div class="portal-card-header">
                 <div class="portal-card-icon"><i class="fa-solid fa-chart-simple"></i></div>
                 <div>
-                  <h3 class="portal-card-title">Statistik Kampus</h3>
+                  <h3 class="portal-card-title">Status Kampus</h3>
                 </div>
               </div>
 
               <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
                 <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
-                  <span style="color: var(--text-muted);">Total Siswa Diterima:</span>
-                  <strong style="color: var(--text-main);">120 Peserta</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
-                  <span style="color: var(--text-muted);">Versi Protocol:</span>
-                  <strong style="color: var(--school-accent);">1.20.4 - 1.21.x</strong>
+                  <span style="color: var(--text-muted);">Tahun Ajaran:</span>
+                  <strong style="color: var(--text-main);"><span class="active-year">2026</span> / 2027</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
                   <span style="color: var(--text-muted);">Akreditasi Sekolah:</span>
@@ -556,8 +522,8 @@
               <i class="fa-solid fa-file-certificate" style="font-size: 36px; color: var(--school-accent); margin-bottom: 12px;"></i>
               <h4 style="margin: 0 0 6px 0; font-size: 15px; color: var(--text-main);">Dokumen Kelulusan Official</h4>
               <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Unduh Sertifikat SK Kelulusan resmi Anda dari panitia pusat.</p>
-              <button id="btn-download-sk-portal" class="btn btn-gradient btn-block" style="width: 100%;">
-                <i class="fa-solid fa-download"></i> Cetak SK Kelulusan
+              <button id="btn-download-sk-portal" class="btn btn-outline btn-block" style="width: 100%;">
+                <i class="fa-solid fa-file-invoice"></i> Lihat SK Kelulusan
               </button>
             </div>
 
@@ -569,6 +535,26 @@
 
     </div>
   </main>
+
+  <!-- MODAL PREVIEW GAMBAR JPG KTSM -->
+  <div id="modal-ktsm-jpg" class="modal-wrapper">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 500px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: center; position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-image" style="color: var(--school-accent); margin-right: 8px;"></i> Pratinjau KTSM (Format JPG)</h3>
+        <button onclick="closeKtsmJpgModal()" style="background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+      <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">Kartu KTSM berhasil digenerasi dalam format gambar JPG. Klik tombol di bawah untuk mengunduh ke perangkat Anda.</p>
+      
+      <div style="margin-bottom: 20px; background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+        <img id="ktsm-jpg-preview-img" src="" alt="Pratinjau KTSM JPG" style="max-width: 100%; border-radius: var(--radius-sm); box-shadow: var(--card-shadow); display: block; margin: 0 auto;" />
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a id="btn-download-ktsm-jpg" href="" download="KTSM-Minecraft.jpg" class="btn btn-gradient" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;"><i class="fa-solid fa-download"></i> Unduh Gambar JPG</a>
+        <button onclick="closeKtsmJpgModal()" class="btn btn-outline">Tutup</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer Section -->
   <footer class="main-footer">
@@ -765,8 +751,10 @@
       document.getElementById('hero-school-name').innerText = config.name;
       document.getElementById('hero-school-title').innerText = config.name;
       document.getElementById('hero-school-motto').innerText = config.motto;
-      document.getElementById('school-server-ip').innerText = config.serverIp;
       document.getElementById('headmaster-announcement').innerText = config.announcement;
+
+      const cardSchoolTitle = document.getElementById('ktsm-card-school-title');
+      if (cardSchoolTitle) cardSchoolTitle.innerText = config.name;
 
       const iconEl = document.getElementById('hero-school-icon');
       if (iconEl) iconEl.className = `fa-solid ${config.icon}`;
@@ -790,6 +778,43 @@
     function toggleQuest(el) {
       const parent = el.closest('.quest-item');
       if (parent) parent.classList.toggle('completed');
+    }
+
+    // Generate KTSM JPG using html2canvas & open Preview Modal
+    async function generateKtsmJpg() {
+      const cardEl = document.getElementById('ktsm-card-element');
+      if (!cardEl) return;
+      showToast("Menggenerasi Kartu KTSM (JPG)...", "info");
+
+      try {
+        const canvas = await html2canvas(cardEl, {
+          scale: 2.5,
+          useCORS: true,
+          backgroundColor: null
+        });
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+        const previewImg = document.getElementById('ktsm-jpg-preview-img');
+        const downloadBtn = document.getElementById('btn-download-ktsm-jpg');
+        const studentId = document.getElementById('ktsm-student-id').innerText || 'STUDENT';
+
+        if (previewImg) previewImg.src = dataUrl;
+        if (downloadBtn) {
+          downloadBtn.href = dataUrl;
+          downloadBtn.download = `KTSM-${studentId}.jpg`;
+        }
+
+        const modal = document.getElementById('modal-ktsm-jpg');
+        if (modal) modal.style.display = 'flex';
+      } catch (err) {
+        console.error("Gagal mengenerasi JPG KTSM:", err);
+        showToast("Gagal mengonversi kartu ke JPG!", "error");
+      }
+    }
+
+    function closeKtsmJpgModal() {
+      const modal = document.getElementById('modal-ktsm-jpg');
+      if (modal) modal.style.display = 'none';
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -875,21 +900,6 @@
       // Show main content
       loadingEl.style.display = 'none';
       contentEl.style.display = 'block';
-
-      // Setup Copy IP Button
-      const btnCopyIp = document.getElementById('btn-copy-server-ip');
-      if (btnCopyIp) {
-        btnCopyIp.addEventListener('click', () => {
-          const ip = config.serverIp;
-          navigator.clipboard.writeText(ip).then(() => {
-            showToast(`Server IP "${ip}" berhasil disalin!`, 'success');
-            const qIp = document.getElementById('q-ip');
-            if (qIp) qIp.classList.add('completed');
-          }).catch(err => {
-            showToast(`Server IP: ${ip}`, 'info');
-          });
-        });
-      }
 
       // Setup SK print button inside portal
       const btnSk = document.getElementById('btn-download-sk-portal');
