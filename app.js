@@ -1311,13 +1311,15 @@ document.addEventListener('DOMContentLoaded', () => {
         Silakan cetak Surat Keputusan Kelulusan resmi di samping untuk digunakan sebagai berkas daftar ulang.
       `;
 
-      // Render SK print button & Portal Sekolah Minecraft redirect button
-      let buttonsHtml = `
-        <button id="btn-print-sk" class="btn btn-primary" style="margin-right: 8px;"><i class="fa-solid fa-file-pdf"></i> Cetak SK Kelulusan</button>
-        <a href="portal.html?id=${encodeURIComponent(student.id)}&role=${encodeURIComponent(student.roleMinecraft || '')}&sekolah=${encodeURIComponent(student.sekolahMinecraft || '')}" class="btn btn-success" style="margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 10px 18px; border-radius: 8px; font-weight: 700; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); transition: all 0.3s ease;">
-          <i class="fa-solid fa-up-right-from-square"></i> Masuk Portal Sekolah Minecraft
-        </a>
-      `;
+      // Render SK print button & Portal Sekolah Minecraft redirect button (only if school is selected!)
+      let buttonsHtml = `<button id="btn-print-sk" class="btn btn-primary" style="margin-right: 8px;"><i class="fa-solid fa-file-pdf"></i> Cetak SK Kelulusan</button>`;
+      if (showSekolah) {
+        buttonsHtml += `
+          <a href="portal.html?id=${encodeURIComponent(student.id)}&role=${encodeURIComponent(student.roleMinecraft || '')}&sekolah=${encodeURIComponent(student.sekolahMinecraft || '')}" class="btn btn-success" style="margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 10px 18px; border-radius: 8px; font-weight: 700; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); transition: all 0.3s ease;">
+            <i class="fa-solid fa-up-right-from-square"></i> Masuk Portal Sekolah Minecraft
+          </a>
+        `;
+      }
       infoAction.innerHTML = buttonsHtml;
 
       document.getElementById('btn-print-sk').addEventListener('click', () => {

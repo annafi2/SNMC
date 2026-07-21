@@ -135,6 +135,7 @@
       font-size: 36px;
       color: var(--school-accent);
       box-shadow: 0 0 18px var(--school-glow);
+      overflow: hidden;
     }
 
     .ktsm-info-row {
@@ -334,7 +335,7 @@
         <p style="color: var(--text-muted); font-size: 14px;">Menghubungkan data pendaftaran dan kredensial server siswa</p>
       </div>
 
-      <!-- STATE 2: ACCESS DENIED (WHEN NOT LOGGED IN / NOT LULUS) -->
+      <!-- STATE 2: ACCESS DENIED (WHEN NOT LOGGED IN / NOT LULUS / TIDAK MEMILIH) -->
       <div id="portal-denied" style="display: none; max-width: 540px; margin: 40px auto; padding: 32px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); text-align: center; box-shadow: var(--card-shadow-hover);">
         <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(239, 68, 68, 0.12); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
           <i class="fa-solid fa-lock"></i>
@@ -352,7 +353,7 @@
         <a href="index.html" class="btn btn-outline btn-block" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda Utama</a>
       </div>
 
-      <!-- STATE 3: MAIN PORTAL CONTENT (SHOWN WHEN LULUS) -->
+      <!-- STATE 3: MAIN PORTAL CONTENT (SHOWN WHEN LULUS & CHOSE A SCHOOL) -->
       <div id="portal-content" style="display: none;">
 
         <!-- HERO SECTION CARD -->
@@ -430,10 +431,13 @@
                 </div>
               </div>
 
-              <!-- CTA Button outside card for downloading JPG -->
-              <div style="margin-top: 14px; text-align: center;">
+              <!-- CTA Buttons outside card for downloading JPG & Personalizing Avatar -->
+              <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
                 <button onclick="generateKtsmJpg()" class="btn btn-gradient btn-block" style="width: 100%; max-width: 480px; font-weight: 700; height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
                   <i class="fa-solid fa-image"></i> Cetak / Unduh KTSM Landscape (JPG)
+                </button>
+                <button onclick="openAvatarModal()" class="btn btn-outline btn-block" style="width: 100%; max-width: 480px; font-weight: 700; height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                  <i class="fa-solid fa-paintbrush"></i> Personalisasi Avatar Profile KTSM
                 </button>
               </div>
             </div>
@@ -585,6 +589,44 @@
 
     </div>
   </main>
+
+  <!-- MODAL PERSONALISASI AVATAR KTSM -->
+  <div id="modal-avatar-picker" class="modal-wrapper">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 580px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: center; position: relative; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+        <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main);"><i class="fa-solid fa-paintbrush" style="color: var(--school-accent); margin-right: 8px;"></i> Personalisasi Avatar KTSM</h3>
+        <button onclick="closeAvatarModal()" style="background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Pilih preset avatar Minecraft kesukaan Anda atau unggah foto/skin kustom untuk ditampilkan pada Kartu Tanda Siswa Minecraft (KTSM).</p>
+
+      <!-- Preset Avatars Grid -->
+      <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); text-align: left; margin-bottom: 10px;">Pilih Preset Avatar Minecraft:</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 12px; margin-bottom: 24px;">
+        <button type="button" onclick="selectPresetAvatar('fa-user-ninja')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Ninja Master"><i class="fa-solid fa-user-ninja"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-bolt')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Redstone Engineer"><i class="fa-solid fa-bolt"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-hammer')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Miner Prospector"><i class="fa-solid fa-hammer"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-wheat-awn')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Velixir Farmer"><i class="fa-solid fa-wheat-awn"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-shield-halved')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="PvP Gladiator"><i class="fa-solid fa-shield-halved"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-cubes')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Architect Builder"><i class="fa-solid fa-cubes"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-crown')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Crown Legend"><i class="fa-solid fa-crown"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-wand-magic-sparkles')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Wizard Alchemist"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-dragon')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Dragon Slayer"><i class="fa-solid fa-dragon"></i></button>
+        <button type="button" onclick="selectPresetAvatar('fa-robot')" class="btn btn-outline" style="height: 60px; font-size: 26px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" title="Cyber Golem"><i class="fa-solid fa-robot"></i></button>
+      </div>
+
+      <!-- Custom Upload Section -->
+      <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); text-align: left; margin-bottom: 8px;">Atau Unggah Foto / Skin Kustom:</h4>
+      <div style="background: var(--bg-tertiary); border: 1px dashed var(--border-color); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 20px; text-align: center;">
+        <input type="file" id="input-custom-avatar-file" accept="image/*" style="display: none;" onchange="handleCustomAvatarUpload(event)" />
+        <button type="button" onclick="document.getElementById('input-custom-avatar-file').click()" class="btn btn-outline" style="font-weight: 700;">
+          <i class="fa-solid fa-upload"></i> Pilih File Foto / Minecraft Skin (JPG, PNG)
+        </button>
+      </div>
+
+      <button onclick="closeAvatarModal()" class="btn btn-gradient btn-block" style="width: 100%;">Selesai & Simpan Avatar</button>
+    </div>
+  </div>
 
   <!-- MODAL PREVIEW GAMBAR JPG KTSM -->
   <div id="modal-ktsm-jpg" class="modal-wrapper">
@@ -799,6 +841,68 @@
         const isOpen = mainNav.classList.toggle('active');
         menuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
       });
+    }
+
+    // Avatar Personalization Functions for KTSM Profile
+    function openAvatarModal() {
+      const modal = document.getElementById('modal-avatar-picker');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeAvatarModal() {
+      const modal = document.getElementById('modal-avatar-picker');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function applyAvatarToKtsm(avatarConfig) {
+      const avatarBox = document.getElementById('ktsm-avatar');
+      if (!avatarBox) return;
+
+      if (avatarConfig.type === 'image' && avatarConfig.data) {
+        avatarBox.innerHTML = `<img src="${avatarConfig.data}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm);" />`;
+      } else {
+        const iconClass = avatarConfig.icon || 'fa-user-ninja';
+        avatarBox.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+      }
+    }
+
+    function selectPresetAvatar(iconClass) {
+      if (!currentStudent) return;
+      const avatarConfig = { type: 'icon', icon: iconClass };
+      localStorage.setItem(`PPDB_KTSM_AVATAR_${currentStudent.id}`, JSON.stringify(avatarConfig));
+      applyAvatarToKtsm(avatarConfig);
+      showToast("Avatar KTSM berhasil diperbarui!", "success");
+    }
+
+    function handleCustomAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !currentStudent) return;
+
+      if (file.size > 3 * 1024 * 1024) {
+        showToast("Ukuran file foto maksimal 3 MB!", "error");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        const avatarConfig = { type: 'image', data: dataUrl };
+        localStorage.setItem(`PPDB_KTSM_AVATAR_${currentStudent.id}`, JSON.stringify(avatarConfig));
+        applyAvatarToKtsm(avatarConfig);
+        showToast("Foto avatar kustom KTSM berhasil diunggah!", "success");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadSavedKtsmAvatar() {
+      if (!currentStudent) return;
+      try {
+        const saved = localStorage.getItem(`PPDB_KTSM_AVATAR_${currentStudent.id}`);
+        if (saved) {
+          const avatarConfig = JSON.parse(saved);
+          applyAvatarToKtsm(avatarConfig);
+        }
+      } catch (e) {}
     }
 
     // School Quiz Databases for all 5 schools (CLEAN WITHOUT DATES/DAYS)
@@ -1815,9 +1919,18 @@
         return;
       }
 
+      // CHECK IF APPLICANT DID NOT CHOOSE A SCHOOL ("Tidak memilih")
+      const sekolahVal = (student.sekolahMinecraft || '').trim().toUpperCase();
+      if (sekolahVal === 'TIDAK MEMILIH' || sekolahVal === 'TIDAK-MEMILIH' || sekolahVal === '') {
+        loadingEl.style.display = 'none';
+        deniedEl.style.display = 'block';
+        document.getElementById('denied-reason').innerHTML = `Peserta dengan ID <strong>${id}</strong> (${student.nama}) mendaftar tanpa memilih Spesialisasi Sekolah Minecraft (<strong>Tidak Memilih</strong>).<br><br>Portal Khusus Sekolah hanya tersedia bagi peserta yang mendaftar pada spesialisasi sekolah resmi.`;
+        return;
+      }
+
       currentStudent = student;
 
-      // STUDENT IS DECLARED LULUS! Populate KTSM & Theme
+      // STUDENT IS DECLARED LULUS & CHOSE A SCHOOL! Populate KTSM, Avatar & Theme
       const sekolahName = student.sekolahMinecraft || paramSekolah || 'Sekolah Redstone Nasional';
       const roleName = student.roleMinecraft || paramRole || 'Builder';
       const config = getSchoolConfig(sekolahName);
@@ -1832,6 +1945,9 @@
       document.getElementById('ktsm-track').innerText = student.jalur || 'Prestasi';
       const qRole = document.getElementById('quest-role-name');
       if (qRole) qRole.innerText = roleName;
+
+      // Load saved KTSM Avatar profile
+      loadSavedKtsmAvatar();
 
       // Show main content
       loadingEl.style.display = 'none';

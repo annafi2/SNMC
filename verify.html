@@ -160,8 +160,15 @@
             document.getElementById('v-role').innerText = (student.roleMinecraft || '-').toUpperCase();
 
             const portalBtn = document.getElementById('btn-portal-redirect');
+            const sekolahVal = (student.sekolahMinecraft || '').trim();
+            const showSekolah = sekolahVal && sekolahVal.toUpperCase() !== 'TIDAK MEMILIH';
             if (portalBtn) {
-              portalBtn.href = `portal.html?id=${encodeURIComponent(student.id)}&role=${encodeURIComponent(student.roleMinecraft || '')}&sekolah=${encodeURIComponent(student.sekolahMinecraft || '')}`;
+              if (showSekolah) {
+                portalBtn.href = `portal.html?id=${encodeURIComponent(student.id)}&role=${encodeURIComponent(student.roleMinecraft || '')}&sekolah=${encodeURIComponent(student.sekolahMinecraft || '')}`;
+                portalBtn.style.display = 'inline-flex';
+              } else {
+                portalBtn.style.display = 'none';
+              }
             }
 
             loadingEl.style.display = 'none';
