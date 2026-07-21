@@ -733,28 +733,72 @@
     };
 
     function getSchoolConfig(schoolName) {
-      if (!schoolName) return SCHOOL_CONFIGS['sekolah redstone nasional'];
+      if (!schoolName) return { ...SCHOOL_CONFIGS['sekolah redstone nasional'], name: 'Sekolah Redstone Nasional' };
       const key = schoolName.toLowerCase().trim();
+
+      // 1. Exact or partial dictionary match
       for (const k in SCHOOL_CONFIGS) {
         if (key.includes(k) || k.includes(key)) {
-          return SCHOOL_CONFIGS[k];
+          return { ...SCHOOL_CONFIGS[k], name: schoolName };
         }
       }
-      return SCHOOL_CONFIGS['sekolah redstone nasional'];
+
+      // 2. Keyword-based matching for all 5 school types
+      if (key.includes('tambang') || key.includes('miner') || key.includes('mining') || key.includes('prospect')) {
+        return { ...SCHOOL_CONFIGS['sekolah pertambangan'], name: schoolName };
+      }
+      if (key.includes('farmer') || key.includes('farm') || key.includes('velixir') || key.includes('tani')) {
+        return { ...SCHOOL_CONFIGS['persatuan farmercraft velixir'], name: schoolName };
+      }
+      if (key.includes('pvp') || key.includes('mojang') || key.includes('combat') || key.includes('sword')) {
+        return { ...SCHOOL_CONFIGS['institut pvp mojang'], name: schoolName };
+      }
+      if (key.includes('builder') || key.includes('build') || key.includes('arsitek') || key.includes('kreatif')) {
+        return { ...SCHOOL_CONFIGS['sekolah builder'], name: schoolName };
+      }
+      if (key.includes('redstone') || key.includes('sirkuit') || key.includes('logic')) {
+        return { ...SCHOOL_CONFIGS['sekolah redstone nasional'], name: schoolName };
+      }
+
+      // 3. Fallback dynamic config for any custom school name
+      return {
+        name: schoolName,
+        accent: '#38bdf8',
+        glow: 'rgba(56, 189, 248, 0.2)',
+        gradient: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
+        icon: 'fa-graduation-cap',
+        serverIp: 'campus.snm2026.net:25565',
+        motto: '"Pusat Keunggulan & Inovasi Pembelajaran Minecraft Indonesia"',
+        headmaster: 'Kepala Sekolah Minecraft',
+        announcement: `Selamat datang siswa baru di ${schoolName}! Kurikulum pembelajaran telah disiapkan secara khusus untuk mengasah keahlian Minecraft Anda.`,
+        curriculum: [
+          { title: 'Modul Eksplorasi & Dasar Realm', desc: 'Pemahaman mendalam mengenai fondasi dan eksplorasi realm Minecraft.' },
+          { title: 'Spesialisasi Keahlian & Kolaborasi', desc: 'Pengembangan kemampuan teknis dan kolaborasi antar minecrafter.' },
+          { title: 'Proyek Akhir & Kelayakan Sertifikasi', desc: 'Penerapan ilmu dalam proyek nyata untuk sertifikasi resmi.' }
+        ]
+      };
     }
 
-    function applySchoolTheme(config) {
+    function applySchoolTheme(config, actualSchoolName) {
+      const displayName = actualSchoolName || config.name || 'Sekolah Minecraft';
       document.documentElement.style.setProperty('--school-accent', config.accent);
       document.documentElement.style.setProperty('--school-glow', config.glow);
       document.documentElement.style.setProperty('--school-gradient', config.gradient);
 
-      document.getElementById('hero-school-name').innerText = config.name;
-      document.getElementById('hero-school-title').innerText = config.name;
-      document.getElementById('hero-school-motto').innerText = config.motto;
-      document.getElementById('headmaster-announcement').innerText = config.announcement;
+      const elName = document.getElementById('hero-school-name');
+      if (elName) elName.innerText = displayName;
+
+      const elTitle = document.getElementById('hero-school-title');
+      if (elTitle) elTitle.innerText = displayName;
+
+      const elMotto = document.getElementById('hero-school-motto');
+      if (elMotto) elMotto.innerText = config.motto;
+
+      const elAnnounce = document.getElementById('headmaster-announcement');
+      if (elAnnounce) elAnnounce.innerText = config.announcement;
 
       const cardSchoolTitle = document.getElementById('ktsm-card-school-title');
-      if (cardSchoolTitle) cardSchoolTitle.innerText = config.name;
+      if (cardSchoolTitle) cardSchoolTitle.innerText = displayName;
 
       const iconEl = document.getElementById('hero-school-icon');
       if (iconEl) iconEl.className = `fa-solid ${config.icon}`;
@@ -886,7 +930,7 @@
       const roleName = student.roleMinecraft || paramRole || 'Builder';
       const config = getSchoolConfig(sekolahName);
 
-      applySchoolTheme(config);
+      applySchoolTheme(config, sekolahName);
 
       // Populate KTSM info
       document.getElementById('ktsm-student-name').innerText = student.nama;
