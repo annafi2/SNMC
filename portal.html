@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <title>Portal Sekolah Minecraft – SNM 2026</title>
-  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, dan komunitas siswa resmi.">
+  <meta name="description" content="Portal resmi Sekolah Minecraft SNM 2026. Kredensial server, KTSM, modul kurikulum, jadwal pelajaran, dan komunitas siswa resmi.">
   <!-- Google Fonts - Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
 
     .portal-hero-grid {
       display: grid;
-      grid-template-columns: 1fr 400px;
+      grid-template-columns: 1fr 480px;
       gap: 32px;
       align-items: center;
     }
@@ -80,17 +80,18 @@
       margin-bottom: 24px;
     }
 
-    /* KTSM Physical ID Card Design */
+    /* KTSM Physical ID Card Design (LANDSCAPE KTP FORMAT) */
     .ktsm-physical-card {
       background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      border: 1.5px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px 22px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
       position: relative;
       overflow: hidden;
       transition: all 0.3s ease;
-      max-width: 420px;
+      max-width: 480px;
+      width: 100%;
       margin: 0 auto;
     }
 
@@ -104,40 +105,36 @@
       background: var(--school-gradient);
     }
 
+    .ktsm-landscape-grid {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
     /* Smart Chip Icon detail on physical card */
     .ktsm-smart-chip {
-      width: 38px;
-      height: 28px;
-      border-radius: 6px;
+      width: 36px;
+      height: 26px;
+      border-radius: 5px;
       background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
       border: 1px solid #d97706;
       box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6);
-      position: relative;
-    }
-
-    .ktsm-smart-chip::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
     }
 
     .ktsm-avatar-box {
-      width: 76px;
-      height: 76px;
+      width: 80px;
+      height: 80px;
       border-radius: var(--radius-sm);
       background: var(--school-glow);
       border: 2px solid var(--school-accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 34px;
+      font-size: 36px;
       color: var(--school-accent);
       box-shadow: 0 0 18px var(--school-glow);
-      flex-shrink: 0;
     }
 
     .ktsm-info-row {
@@ -145,8 +142,8 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px dashed var(--border-color);
-      padding: 8px 0;
-      font-size: 12.5px;
+      padding: 6px 0;
+      font-size: 12px;
     }
 
     .ktsm-info-label {
@@ -358,66 +355,61 @@
               </div>
             </div>
 
-            <!-- KTSM PHYSICAL CARD (RIGHT COLUMN HERO) -->
+            <!-- KTSM PHYSICAL LANDSCAPE KTP CARD (RIGHT COLUMN HERO) -->
             <div>
               <div class="ktsm-physical-card" id="ktsm-card-element">
-                <!-- Physical Card Header & Chip -->
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color);">
-                  <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="ktsm-landscape-grid">
+                  <!-- LEFT COLUMN: Chip, Avatar & Barcode -->
+                  <div style="text-align: center;">
                     <div class="ktsm-smart-chip"></div>
-                    <div>
-                      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
-                      <div style="font-size: 11px; font-weight: 700; color: var(--text-main);" id="ktsm-card-school-title">Sekolah Redstone</div>
+                    <div class="ktsm-avatar-box" id="ktsm-avatar" style="margin: 0 auto 10px auto;">
+                      <i class="fa-solid fa-user-ninja"></i>
                     </div>
+                    <div style="font-family: monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px;">|||| ||| ||||</div>
                   </div>
-                  <span class="active-year" style="font-size: 12px; font-weight: 800; color: var(--school-accent);">SNM 2026</span>
-                </div>
 
-                <!-- Avatar & Identity -->
-                <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
-                  <div class="ktsm-avatar-box" id="ktsm-avatar">
-                    <i class="fa-solid fa-user-ninja"></i>
-                  </div>
+                  <!-- RIGHT COLUMN: Identity Details -->
                   <div>
-                    <h3 id="ktsm-student-name" style="margin: 0 0 4px 0; font-size: 18px; font-weight: 800; color: var(--text-main);">Nama Siswa</h3>
-                    <span id="ktsm-student-id" style="font-family: monospace; font-size: 12.5px; color: var(--school-accent); background: var(--school-glow); padding: 3px 10px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 800; letter-spacing: 0.5px;">SNM-2026-0000</span>
-                  </div>
-                </div>
+                    <!-- Header Banner -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--border-color);">
+                      <div>
+                        <div style="font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 800;">KARTU TANDA SISWA MINECRAFT</div>
+                        <div style="font-size: 12px; font-weight: 800; color: var(--text-main);" id="ktsm-card-school-title">Sekolah Redstone</div>
+                      </div>
+                      <span class="active-year" style="font-size: 11px; font-weight: 800; color: var(--school-accent);">SNM 2026</span>
+                    </div>
 
-                <!-- Info Rows -->
-                <div class="ktsm-info-row">
-                  <span class="ktsm-info-label">Sekolah Minecraft:</span>
-                  <span class="ktsm-info-val" id="ktsm-school">Redstone Nasional</span>
-                </div>
-                <div class="ktsm-info-row">
-                  <span class="ktsm-info-label">Sertifikasi Role:</span>
-                  <span class="ktsm-info-val" id="ktsm-role" style="color: var(--school-accent);">Redstone Engineer</span>
-                </div>
-                <div class="ktsm-info-row">
-                  <span class="ktsm-info-label">Jalur Seleksi:</span>
-                  <span class="ktsm-info-val" id="ktsm-track">Prestasi</span>
-                </div>
-                <div class="ktsm-info-row">
-                  <span class="ktsm-info-label">Status Kelulusan:</span>
-                  <span class="ktsm-info-val" style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> RESMI DITERIMA</span>
-                </div>
+                    <!-- Student Name & ID -->
+                    <h3 id="ktsm-student-name" style="margin: 0 0 2px 0; font-size: 16px; font-weight: 800; color: var(--text-main); line-height: 1.2;">Nama Siswa</h3>
+                    <div style="margin-bottom: 8px;">
+                      <span id="ktsm-student-id" style="font-family: monospace; font-size: 11.5px; color: var(--school-accent); background: var(--school-glow); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--school-accent); font-weight: 800;">SNM-2026-0000</span>
+                    </div>
 
-                <!-- Barcode & Stamp Footer -->
-                <div style="margin-top: 14px; padding-top: 10px; display: flex; justify-content: space-between; align-items: flex-end;">
-                  <div>
-                    <div style="font-family: monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 3px;">|||| | ||||| || ||| ||||</div>
-                    <div style="font-size: 9px; color: var(--text-light); margin-top: 2px;">OFFICIAL MINECRAFT STUDENT CARD</div>
-                  </div>
-                  <div style="text-align: right; font-size: 10px; color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px;">
-                    VERIFIED CHIP
+                    <!-- Info Table Rows -->
+                    <div class="ktsm-info-row">
+                      <span class="ktsm-info-label">Sekolah:</span>
+                      <span class="ktsm-info-val" id="ktsm-school">Redstone Nasional</span>
+                    </div>
+                    <div class="ktsm-info-row">
+                      <span class="ktsm-info-label">Sertifikasi Role:</span>
+                      <span class="ktsm-info-val" id="ktsm-role" style="color: var(--school-accent);">Redstone Engineer</span>
+                    </div>
+                    <div class="ktsm-info-row">
+                      <span class="ktsm-info-label">Jalur Seleksi:</span>
+                      <span class="ktsm-info-val" id="ktsm-track">Prestasi</span>
+                    </div>
+                    <div class="ktsm-info-row" style="border-bottom: none; padding-bottom: 0;">
+                      <span class="ktsm-info-label">Status:</span>
+                      <span class="ktsm-info-val" style="color: #10b981; font-weight: 800;"><i class="fa-solid fa-circle-check"></i> RESMI DITERIMA</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- CTA Button outside card for downloading JPG -->
-              <div style="margin-top: 16px; text-align: center;">
-                <button onclick="generateKtsmJpg()" class="btn btn-gradient btn-block" style="width: 100%; max-width: 420px; font-weight: 700; height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-                  <i class="fa-solid fa-image"></i> Cetak / Unduh KTSM (JPG)
+              <div style="margin-top: 14px; text-align: center;">
+                <button onclick="generateKtsmJpg()" class="btn btn-gradient btn-block" style="width: 100%; max-width: 480px; font-weight: 700; height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                  <i class="fa-solid fa-image"></i> Cetak / Unduh KTSM Landscape (JPG)
                 </button>
               </div>
             </div>
@@ -461,6 +453,21 @@
               </div>
             </div>
 
+            <!-- JADWAL PELAJARAN & ORIENTASI KAMPUS (DYNAMIC PER SCHOOL) -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <div class="portal-card-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                <div>
+                  <h3 class="portal-card-title">Jadwal Pelajaran & Orientasi Kampus</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Agenda perkuliahan & pelatihan khusus sekolah pilihan Anda.</p>
+                </div>
+              </div>
+
+              <div id="schedule-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Dynamic Schedules Rendered Here -->
+              </div>
+            </div>
+
             <!-- ROLE CURRICULUM MODULES -->
             <div class="portal-card">
               <div class="portal-card-header">
@@ -496,7 +503,7 @@
               </div>
             </div>
 
-            <!-- SCHOOL STATS (CLEANED UP) -->
+            <!-- SCHOOL STATS -->
             <div class="portal-card">
               <div class="portal-card-header">
                 <div class="portal-card-icon"><i class="fa-solid fa-chart-simple"></i></div>
@@ -538,12 +545,12 @@
 
   <!-- MODAL PREVIEW GAMBAR JPG KTSM -->
   <div id="modal-ktsm-jpg" class="modal-wrapper">
-    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 500px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: center; position: relative;">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 520px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: center; position: relative;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
-        <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-image" style="color: var(--school-accent); margin-right: 8px;"></i> Pratinjau KTSM (Format JPG)</h3>
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-image" style="color: var(--school-accent); margin-right: 8px;"></i> Pratinjau KTSM Landscape (JPG)</h3>
         <button onclick="closeKtsmJpgModal()" style="background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer;">&times;</button>
       </div>
-      <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">Kartu KTSM berhasil digenerasi dalam format gambar JPG. Klik tombol di bawah untuk mengunduh ke perangkat Anda.</p>
+      <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">Kartu KTSM Landscape berhasil digenerasi dalam format JPG. Klik tombol di bawah untuk mengunduh ke perangkat Anda.</p>
       
       <div style="margin-bottom: 20px; background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
         <img id="ktsm-jpg-preview-img" src="" alt="Pratinjau KTSM JPG" style="max-width: 100%; border-radius: var(--radius-sm); box-shadow: var(--card-shadow); display: block; margin: 0 auto;" />
@@ -648,7 +655,7 @@
       });
     }
 
-    // School Configurations Matrix for Schools
+    // School Configurations Matrix for Schools with Class Schedules
     const SCHOOL_CONFIGS = {
       'sekolah redstone nasional': {
         name: 'Sekolah Redstone Nasional',
@@ -664,6 +671,11 @@
           { title: 'Redstone Logic Gates Masterclass', desc: 'Pemahaman AND, OR, XOR, RS-Latch, dan T-FlipFlop otomasi.' },
           { title: 'Automated Farm & Item Sorter Engine', desc: 'Sistem klasifikasi item otomatis berkecepatan tinggi tanpa lag.' },
           { title: 'Command Block & Datapack Scripting', desc: 'Algoritma kustom game mechanic dalam dunia Minecraft.' }
+        ],
+        schedule: [
+          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Redstone Logic Gates & Sirkuit Dasar', room: 'Lab Redstone Utama' },
+          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Otomasi Micro-Tick Farm & Item Sorter Engine', room: 'Sektor Otomasi' },
+          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Command Block & Datapack Scripting', room: 'Auditorium Algoritma' }
         ]
       },
       'sekolah pertambangan': {
@@ -680,6 +692,11 @@
           { title: 'Y=-58 Diamond & Netherite Prospecting', desc: 'Teknik strip-mining efisien & navigasi gua Deepslate berbahaya.' },
           { title: 'Metallurgy & Automatic Blast Furnace', desc: 'Pengolahan bijih mineral skala industri berkapasitas tinggi.' },
           { title: 'Subterranean Infrastructure & Safety', desc: 'Konstruksi terowongan tambang anti-lava dan penopang goa.' }
+        ],
+        schedule: [
+          { day: 'Senin, 08:30 - 11:00 WIB', subject: 'Eksplorasi Deepslate Y=-58 & Geologi Netherite', room: 'Zona Tambang Deepslate' },
+          { day: 'Rabu, 13:30 - 16:00 WIB', subject: 'Metalurgi & Automatic Blast Furnace Skala Industri', room: 'Pengolahan Bijih Utama' },
+          { day: 'Jumat, 14:00 - 16:30 WIB', subject: 'Konstruksi Terowongan Anti-Lava & Keselamatan Tambang', room: 'Lab Geologi Subterranean' }
         ]
       },
       'persatuan farmercraft velixir': {
@@ -696,6 +713,11 @@
           { title: 'Automatic Crop & Tree Bio-Factory', desc: 'Desain pertanian micro-tick & pengumpul panen otomatis.' },
           { title: 'Potion Alchemy & Enchanted Brewing', desc: 'Racikan ramuan khusus efek tingkat tinggi untuk kebutuhan realm.' },
           { title: 'Villager Breeding & Emerald Market', desc: 'Ekosistem perdagangan villager & pengoptimalan harga emerald.' }
+        ],
+        schedule: [
+          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Bio-Factory Tanaman & Pohon Otomatis', room: 'Rumah Kaca Bio-Velixir' },
+          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Alkimia Ramuan & Enchanted Brewing Efek Tinggi', room: 'Laboratorium Alkimia' },
+          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Manajemen Villager Breeding & Emerald Market', room: 'Pusat Perdagangan Realm' }
         ]
       },
       'institut pvp mojang': {
@@ -712,6 +734,11 @@
           { title: '1.9+ Combat Mechanics & Shield Parrying', desc: 'Penguasaan timing serangan, strafe, dan pertahanan perisai.' },
           { title: 'End Crystal & Bed PvP Mastery', desc: 'Taktik peledakan instan dalam situasi pertarungan darurat.' },
           { title: 'Elytra Dogfight & Aerial Combat', desc: 'Navigasi penerbangan cepat dan serangan jarak jauh busur.' }
+        ],
+        schedule: [
+          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Refleks Serangan 1.9+ Combat & Shield Parrying', room: 'Arena Utama Mojang' },
+          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Crystal & Bed PvP Tactics di Medan Tempur', room: 'Colosseum Taktis' },
+          { day: 'Jumat, 15:30 - 18:00 WIB', subject: 'Elytra Aerial Combat & Dogfight Busur', room: 'Sky Arena Realm' }
         ]
       },
       'sekolah builder': {
@@ -728,6 +755,11 @@
           { title: 'Mega-Structure Planning & Palette', desc: 'Teori pewarnaan blok, kedalaman dinding, dan struktur megah.' },
           { title: 'WorldEdit & Axiom Studio Tooling', desc: 'Penggunaan tool pemahat dunia berkecepatan tinggi.' },
           { title: 'Organic Modeling & Terrain Terraforming', desc: 'Pembuatan patung organik dan lanskap alam realistis.' }
+        ],
+        schedule: [
+          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Teori Komposisi Arsitektur & Pewarnaan Palet Blok', room: 'Studio Desain Builder' },
+          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Axiom Studio & WorldEdit Tooling Mega-Structure', room: 'Plot Kreatif Server' },
+          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Organic Sculpting & Realistic Terrain Terraforming', room: 'Dunia Pahat Alam' }
         ]
       }
     };
@@ -775,6 +807,11 @@
           { title: 'Modul Eksplorasi & Dasar Realm', desc: 'Pemahaman mendalam mengenai fondasi dan eksplorasi realm Minecraft.' },
           { title: 'Spesialisasi Keahlian & Kolaborasi', desc: 'Pengembangan kemampuan teknis dan kolaborasi antar minecrafter.' },
           { title: 'Proyek Akhir & Kelayakan Sertifikasi', desc: 'Penerapan ilmu dalam proyek nyata untuk sertifikasi resmi.' }
+        ],
+        schedule: [
+          { day: 'Senin, 09:00 - 11:30 WIB', subject: 'Orientasi Dasar & Pengenalan Realm Sekolah', room: 'Ruang Teori Utama' },
+          { day: 'Rabu, 13:00 - 15:30 WIB', subject: 'Spesialisasi Keahlian & Praktik Lapangan', room: 'Sektor Praktik' },
+          { day: 'Jumat, 15:00 - 17:30 WIB', subject: 'Evaluasi Proyek & Sertifikasi Keahlian', room: 'Auditorium Kampus' }
         ]
       };
     }
@@ -803,6 +840,28 @@
       const iconEl = document.getElementById('hero-school-icon');
       if (iconEl) iconEl.className = `fa-solid ${config.icon}`;
 
+      // Render Schedule List
+      const schedContainer = document.getElementById('schedule-container');
+      if (schedContainer && config.schedule) {
+        schedContainer.innerHTML = '';
+        config.schedule.forEach(item => {
+          const itemEl = document.createElement('div');
+          itemEl.style.cssText = `background: var(--bg-tertiary); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;`;
+          itemEl.innerHTML = `
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--school-accent); text-transform: uppercase; margin-bottom: 2px;">
+                <i class="fa-regular fa-clock"></i> ${item.day}
+              </div>
+              <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">${item.subject}</div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-secondary); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color); font-weight: 600;">
+              <i class="fa-solid fa-location-dot" style="color: var(--school-accent);"></i> ${item.room}
+            </div>
+          `;
+          schedContainer.appendChild(itemEl);
+        });
+      }
+
       // Render Curriculum Cards
       const currContainer = document.getElementById('curriculum-container');
       if (currContainer) {
@@ -828,7 +887,7 @@
     async function generateKtsmJpg() {
       const cardEl = document.getElementById('ktsm-card-element');
       if (!cardEl) return;
-      showToast("Menggenerasi Kartu KTSM (JPG)...", "info");
+      showToast("Menggenerasi Kartu KTSM Landscape (JPG)...", "info");
 
       try {
         const canvas = await html2canvas(cardEl, {
