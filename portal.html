@@ -447,19 +447,19 @@
           <!-- LEFT CONTENT COLUMN -->
           <div>
 
-            <!-- CUMLAUDE ACHIEVEMENT BANNER CARD (DISPLAYED WHEN >= 1500 POINTS) -->
-            <div class="portal-card" id="cumlaude-achievement-card" style="display: none; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%); border: 2px solid #f59e0b; box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);">
+            <!-- CUMLAUDE ACHIEVEMENT BANNER CARD (DYNAMIC PER TIER: CUMLAUDE / MAGNA / SUMMA) -->
+            <div class="portal-card" id="cumlaude-achievement-card" style="display: none; transition: all 0.3s ease;">
               <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #fcd34d, #f59e0b); color: #78350f; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); flex-shrink: 0;">
-                  <i class="fa-solid fa-trophy"></i>
+                <div id="cumlaude-card-icon-box" style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0;">
+                  <i class="fa-solid fa-trophy" id="cumlaude-card-icon"></i>
                 </div>
                 <div style="flex: 1; min-width: 240px;">
-                  <span style="font-size: 11px; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 1px;">PRESTASI KEHORMATAN TINGGI</span>
-                  <h3 style="margin: 2px 0; font-size: 18px; font-weight: 800; color: var(--text-main);">Selamat! Anda Lulus dengan Predikat CUMLAUDE!</h3>
-                  <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Poin kuis Anda telah mencapai <strong style="color: #d97706;" id="cumlaude-card-points">1,500+ Poin</strong>. Sertifikat kehormatan Cumlaude resmi telah diterbitkan.</p>
+                  <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;" id="cumlaude-card-tag">PRESTASI KEHORMATAN TINGGI</span>
+                  <h3 style="margin: 2px 0; font-size: 18px; font-weight: 800; color: var(--text-main);" id="cumlaude-card-title">Selamat! Anda Lulus dengan Predikat CUMLAUDE!</h3>
+                  <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Poin kuis Anda telah mencapai <strong id="cumlaude-card-points">1,500+ Poin</strong>. Sertifikat kehormatan resmi telah diterbitkan.</p>
                 </div>
                 <div>
-                  <button onclick="openCumlaudeModal()" class="btn btn-gradient" style="font-weight: 800; padding: 10px 20px; white-space: nowrap;">
+                  <button onclick="openCumlaudeModal()" class="btn btn-gradient" id="btn-open-cumlaude-cert" style="font-weight: 800; padding: 10px 20px; white-space: nowrap;">
                     <i class="fa-solid fa-award"></i> Lihat & Unduh Sertifikat JPG
                   </button>
                 </div>
@@ -502,7 +502,7 @@
                 <div class="portal-card-icon"><i class="fa-solid fa-clipboard-question"></i></div>
                 <div>
                   <h3 class="portal-card-title">Kuis Harian & Uji Kompetensi Kampus</h3>
-                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Kerjakan kuis harian interaktif sesuai spesialisasi sekolah Anda untuk mengumpulkan poin (capai 1.500+ poin untuk lulus Cumlaude).</p>
+                  <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Kerjakan kuis harian interaktif (1.500=Cumlaude, 2.000=Magna Cumlaude, 2.500=Summa Cumlaude).</p>
                 </div>
               </div>
 
@@ -542,7 +542,7 @@
               </div>
 
               <div style="font-size: 13px; color: var(--text-main); line-height: 1.6; background: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-sm); border-left: 3.5px solid var(--school-accent);" id="headmaster-announcement">
-                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Kuis harian & pelatihan server telah dibuka secara resmi. Kumpulkan 1.500 poin untuk penghargaan Cumlaude!
+                Selamat kepada seluruh siswa baru yang telah lolos persaingan ketat SNM 2026. Kumpulkan 1.500 Poin (Cumlaude), 2.000 Poin (Magna Cumlaude), dan 2.500 Poin (Summa Cumlaude)!
               </div>
             </div>
 
@@ -646,28 +646,28 @@
     </div>
   </div>
 
-  <!-- MODAL SERTIFIKAT CUMLAUDE -->
+  <!-- MODAL SERTIFIKAT CUMLAUDE (DYNAMIC THEME: CUMLAUDE / MAGNA CUMLAUDE / SUMMA CUMLAUDE) -->
   <div id="modal-cert-cumlaude" class="modal-wrapper">
     <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); max-width: 850px; width: 100%; padding: 24px; box-shadow: var(--card-shadow-hover); text-align: center; position: relative; max-height: 95vh; overflow-y: auto;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
-        <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main);"><i class="fa-solid fa-trophy" style="color: #f59e0b; margin-right: 8px;"></i> Sertifikat Kehormatan Cumlaude</h3>
+        <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main);" id="cert-cumlaude-modal-title"><i class="fa-solid fa-trophy" style="color: #f59e0b; margin-right: 8px;"></i> Sertifikat Kehormatan</h3>
         <button onclick="closeCumlaudeModal()" style="background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer;">&times;</button>
       </div>
 
       <!-- Printable Certificate Container -->
-      <div id="cumlaude-cert-area" style="background: #ffffff; color: #0f172a; padding: 40px 36px; border: 8px double #d97706; border-radius: 12px; position: relative; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 10px 30px rgba(217, 119, 6, 0.15); margin-bottom: 20px;">
-        <!-- Gold Seal Watermark Accent -->
-        <div style="position: absolute; top: 15px; right: 20px; width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%); border: 2px solid #b45309; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #78350f; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);">
-          <i class="fa-solid fa-award"></i>
+      <div id="cumlaude-cert-area" style="background: #ffffff; color: #0f172a; padding: 40px 36px; border: 8px double #d97706; border-radius: 12px; position: relative; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 10px 30px rgba(217, 119, 6, 0.15); margin-bottom: 20px; transition: all 0.3s ease;">
+        <!-- Dynamic Seal Watermark Accent -->
+        <div id="cert-cumlaude-seal" style="position: absolute; top: 15px; right: 20px; width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%); border: 2px solid #b45309; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #78350f; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);">
+          <i class="fa-solid fa-award" id="cert-cumlaude-seal-icon"></i>
         </div>
 
         <div style="font-size: 11px; letter-spacing: 2px; font-weight: 800; color: #b45309; text-transform: uppercase; margin-bottom: 6px;">
           SELEKSI NASIONAL MINECRAFTER <span class="active-year">2026</span>
         </div>
-        <h1 style="font-size: 26px; font-weight: 800; color: #78350f; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">
+        <h1 style="font-size: 25px; font-weight: 800; color: #78350f; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;" id="cert-cumlaude-title">
           SERTIFIKAT PENGHARGAAN CUMLAUDE
         </h1>
-        <p style="font-size: 13px; color: #475569; margin-bottom: 20px; font-style: italic;">
+        <p style="font-size: 13px; color: #475569; margin-bottom: 20px; font-style: italic;" id="cert-cumlaude-subtitle">
           Diberikan dengan kehormatan tinggi atas kelulusan akademis & pencapaian skor kuis luar biasa kepada:
         </p>
 
@@ -680,8 +680,8 @@
           ID Pendaftaran: <span id="cert-cumlaude-id" style="font-family: monospace;">SNM-2026-0000</span>
         </div>
 
-        <p style="font-size: 14px; color: #334155; line-height: 1.6; max-width: 680px; margin: 0 auto 24px auto;">
-          Dinyatakan <strong>LULUS DENGAN PREDIKAT CUMLAUDE (MAGNA CUM LAUDE)</strong> pada spesialisasi <strong id="cert-cumlaude-school">Sekolah Redstone Nacional</strong> sebagai <strong id="cert-cumlaude-role">Redstone Engineer</strong> dengan total akumulasi prestasi sebesar <strong id="cert-cumlaude-points" style="color: #d97706;">1,500+ Poin Kuis Harian</strong>.
+        <p style="font-size: 14px; color: #334155; line-height: 1.6; max-width: 680px; margin: 0 auto 24px auto;" id="cert-cumlaude-statement">
+          Dinyatakan <strong id="cert-cumlaude-tier-bold">LULUS DENGAN PREDIKAT CUMLAUDE</strong> pada spesialisasi <strong id="cert-cumlaude-school">Sekolah Redstone Nacional</strong> sebagai <strong id="cert-cumlaude-role">Redstone Engineer</strong> dengan total akumulasi prestasi sebesar <strong id="cert-cumlaude-points" style="color: #d97706;">1,500+ Poin Kuis Harian</strong>.
         </p>
 
         <!-- Signatures & Stempel -->
@@ -693,7 +693,7 @@
           </div>
           
           <div style="text-align: center;">
-            <div style="font-family: cursive; font-size: 20px; color: #d97706; font-weight: 700; margin-bottom: 2px;">Panitia SNM 2026</div>
+            <div style="font-family: cursive; font-size: 20px; color: #d97706; font-weight: 700; margin-bottom: 2px;" id="cert-cumlaude-sign-title">Panitia SNM 2026</div>
             <div style="border-top: 1.5px solid #334155; font-size: 12px; font-weight: 800; color: #0f172a; padding-top: 2px;">
               Dewan Pembina Seleksi Nasional
             </div>
@@ -703,7 +703,7 @@
 
       <!-- Action Buttons -->
       <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-        <button onclick="downloadCumlaudeJpg()" class="btn btn-gradient" style="padding: 10px 24px; font-weight: 800;"><i class="fa-solid fa-download"></i> Unduh Sertifikat Cumlaude (JPG)</button>
+        <button onclick="downloadCumlaudeJpg()" class="btn btn-gradient" id="btn-download-cumlaude-jpg" style="padding: 10px 24px; font-weight: 800;"><i class="fa-solid fa-download"></i> Unduh Sertifikat Cumlaude (JPG)</button>
         <button onclick="closeCumlaudeModal()" class="btn btn-outline">Tutup</button>
       </div>
     </div>
@@ -1144,6 +1144,76 @@
       }
     };
 
+    // Honor Tiers Evaluator: 1500 (Cumlaude), 2000 (Magna Cumlaude), 2500+ (Summa Cumlaude)
+    function getHonorTierInfo(points) {
+      if (points >= 2500) {
+        return {
+          key: 'summa',
+          title: 'SUMMA CUM LAUDE',
+          subtitle: 'PREDIKAT KEHORMATAN TERTINGGI REALM MINECRAFT',
+          certHeader: 'SERTIFIKAT KEHORMATAN TERTINGGI SUMMA CUM LAUDE',
+          badgeText: '💎 LULUS SUMMA CUMLAUDE',
+          icon: 'fa-gem',
+          sealBg: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 50%, #f59e0b 100%)',
+          sealColor: '#ffffff',
+          sealBorder: '#0284c7',
+          borderStyle: '8px double #0284c7',
+          bgColor: '#f8fafc',
+          accentColor: '#0284c7',
+          titleColor: '#0369a1',
+          bannerBg: 'linear-gradient(135deg, rgba(14, 165, 233, 0.18) 0%, rgba(2, 132, 199, 0.18) 100%)',
+          bannerBorder: '#0ea5e9',
+          bannerGlow: 'rgba(14, 165, 233, 0.3)',
+          bannerText: 'Selamat! Anda Lulus dengan Predikat TERTINGGI SUMMA CUM LAUDE!',
+          tag: 'PREDIKAT KEHORMATAN TERTINGGI REALM'
+        };
+      } else if (points >= 2000) {
+        return {
+          key: 'magna',
+          title: 'MAGNA CUM LAUDE',
+          subtitle: 'PREDIKAT KEHORMATAN BESAR AKADEMIK MINECRAFT',
+          certHeader: 'SERTIFIKAT KEHORMATAN MAGNA CUM LAUDE',
+          badgeText: '👑 LULUS MAGNA CUMLAUDE',
+          icon: 'fa-crown',
+          sealBg: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
+          sealColor: '#fcd34d',
+          sealBorder: '#6d28d9',
+          borderStyle: '8px double #7c3aed',
+          bgColor: '#faf5ff',
+          accentColor: '#7c3aed',
+          titleColor: '#5b21b6',
+          bannerBg: 'linear-gradient(135deg, rgba(168, 85, 247, 0.18) 0%, rgba(124, 58, 237, 0.18) 100%)',
+          bannerBorder: '#7c3aed',
+          bannerGlow: 'rgba(124, 58, 237, 0.3)',
+          bannerText: 'Selamat! Anda Lulus dengan Predikat UTAMA MAGNA CUM LAUDE!',
+          tag: 'PREDIKAT KEHORMATAN BESAR AKADEMIK'
+        };
+      } else if (points >= 1500) {
+        return {
+          key: 'cumlaude',
+          title: 'CUMLAUDE',
+          subtitle: 'PREDIKAT KEHORMATAN AKADEMIK MINECRAFT',
+          certHeader: 'SERTIFIKAT PENGHARGAAN CUMLAUDE',
+          badgeText: '🏆 LULUS CUMLAUDE',
+          icon: 'fa-award',
+          sealBg: 'linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%)',
+          sealColor: '#78350f',
+          sealBorder: '#b45309',
+          borderStyle: '8px double #d97706',
+          bgColor: '#fffbeb',
+          accentColor: '#d97706',
+          titleColor: '#78350f',
+          bannerBg: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%)',
+          bannerBorder: '#f59e0b',
+          bannerGlow: 'rgba(245, 158, 11, 0.25)',
+          bannerText: 'Selamat! Anda Lulus dengan Predikat CUMLAUDE!',
+          tag: 'PRESTASI KEHORMATAN AKADEMIK'
+        };
+      } else {
+        return null;
+      }
+    }
+
     function getSchoolConfig(schoolName) {
       if (!schoolName) return { ...SCHOOL_CONFIGS['sekolah redstone nasional'], name: 'Sekolah Redstone Nasional' };
       const key = schoolName.toLowerCase().trim();
@@ -1322,17 +1392,43 @@
         pointsDisplay.innerText = `${points} Poin`;
       }
 
-      // Cumlaude Check (>= 1500 Points)
       const cumlaudeBanner = document.getElementById('cumlaude-achievement-card');
       const ktsmStatusVal = document.querySelector('#ktsm-card-element .ktsm-info-row:last-child .ktsm-info-val');
       const pointsCardVal = document.getElementById('cumlaude-card-points');
 
       if (pointsCardVal) pointsCardVal.innerText = `${points} Poin`;
 
-      if (points >= 1500) {
-        if (cumlaudeBanner) cumlaudeBanner.style.display = 'block';
+      const tierInfo = getHonorTierInfo(points);
+
+      if (tierInfo) {
+        if (cumlaudeBanner) {
+          cumlaudeBanner.style.display = 'block';
+          cumlaudeBanner.style.background = tierInfo.bannerBg;
+          cumlaudeBanner.style.border = `2px solid ${tierInfo.bannerBorder}`;
+          cumlaudeBanner.style.boxShadow = `0 0 25px ${tierInfo.bannerGlow}`;
+
+          document.getElementById('cumlaude-card-tag').innerText = tierInfo.tag;
+          document.getElementById('cumlaude-card-tag').style.color = tierInfo.accentColor;
+          document.getElementById('cumlaude-card-title').innerText = tierInfo.bannerText;
+
+          const iconBox = document.getElementById('cumlaude-card-icon-box');
+          if (iconBox) {
+            iconBox.style.background = tierInfo.sealBg;
+            iconBox.style.color = tierInfo.sealColor;
+          }
+          const cardIcon = document.getElementById('cumlaude-card-icon');
+          if (cardIcon) {
+            cardIcon.className = `fa-solid ${tierInfo.icon}`;
+          }
+
+          const btnCert = document.getElementById('btn-open-cumlaude-cert');
+          if (btnCert) {
+            btnCert.innerHTML = `<i class="fa-solid ${tierInfo.icon}"></i> Lihat Sertifikat ${tierInfo.title} (JPG)`;
+          }
+        }
+
         if (ktsmStatusVal) {
-          ktsmStatusVal.innerHTML = `<i class="fa-solid fa-award" style="color: #f59e0b;"></i> LULUS CUMLAUDE`;
+          ktsmStatusVal.innerHTML = `${tierInfo.badgeText}`;
         }
       } else {
         if (cumlaudeBanner) cumlaudeBanner.style.display = 'none';
@@ -1527,12 +1623,49 @@
       const points = getStudentQuizPoints();
       const sekolahName = currentStudent.sekolahMinecraft || 'Sekolah Redstone Nasional';
       const roleName = currentStudent.roleMinecraft || 'Builder';
+      const tierInfo = getHonorTierInfo(points) || getHonorTierInfo(1500);
+
+      // Customize Certificate Modal for this specific Tier
+      document.getElementById('cert-cumlaude-modal-title').innerHTML = `<i class="fa-solid ${tierInfo.icon}" style="color: ${tierInfo.accentColor}; margin-right: 8px;"></i> ${tierInfo.certHeader}`;
+      
+      const certArea = document.getElementById('cumlaude-cert-area');
+      if (certArea) {
+        certArea.style.border = tierInfo.borderStyle;
+        certArea.style.background = tierInfo.bgColor;
+      }
+
+      const sealEl = document.getElementById('cert-cumlaude-seal');
+      if (sealEl) {
+        sealEl.style.background = tierInfo.sealBg;
+        sealEl.style.color = tierInfo.sealColor;
+        sealEl.style.border = `2px solid ${tierInfo.sealBorder}`;
+      }
+
+      const sealIcon = document.getElementById('cert-cumlaude-seal-icon');
+      if (sealIcon) sealIcon.className = `fa-solid ${tierInfo.icon}`;
+
+      const titleEl = document.getElementById('cert-cumlaude-title');
+      if (titleEl) {
+        titleEl.innerText = tierInfo.certHeader;
+        titleEl.style.color = tierInfo.titleColor;
+      }
+
+      const subtitleEl = document.getElementById('cert-cumlaude-subtitle');
+      if (subtitleEl) subtitleEl.innerText = `${tierInfo.subtitle} kepada:`;
 
       document.getElementById('cert-cumlaude-name').innerText = currentStudent.nama.toUpperCase();
       document.getElementById('cert-cumlaude-id').innerText = currentStudent.id;
       document.getElementById('cert-cumlaude-school').innerText = sekolahName;
       document.getElementById('cert-cumlaude-role').innerText = roleName;
       document.getElementById('cert-cumlaude-points').innerText = `${points} Poin Kuis Harian`;
+      document.getElementById('cert-cumlaude-points').style.color = tierInfo.accentColor;
+
+      document.getElementById('cert-cumlaude-tier-bold').innerText = `LULUS DENGAN PREDIKAT ${tierInfo.title}`;
+
+      const btnDownload = document.getElementById('btn-download-cumlaude-jpg');
+      if (btnDownload) {
+        btnDownload.innerHTML = `<i class="fa-solid fa-download"></i> Unduh Sertifikat ${tierInfo.title} (JPG)`;
+      }
 
       const now = new Date();
       const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -1550,8 +1683,11 @@
     async function downloadCumlaudeJpg() {
       const certEl = document.getElementById('cumlaude-cert-area');
       if (!certEl) return;
-      const studentId = currentStudent ? currentStudent.id : 'CUMLAUDE';
-      showToast("Menggenerasi Sertifikat Cumlaude (JPG)...", "info");
+      const studentId = currentStudent ? currentStudent.id : 'HONOR';
+      const points = getStudentQuizPoints();
+      const tierInfo = getHonorTierInfo(points) || { key: 'cumlaude', title: 'CUMLAUDE' };
+      
+      showToast(`Menggenerasi Sertifikat ${tierInfo.title} (JPG)...`, "info");
 
       try {
         const canvas = await html2canvas(certEl, {
@@ -1562,14 +1698,14 @@
         const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = `Sertifikat_Cumlaude_${studentId}.jpg`;
+        link.download = `Sertifikat_${tierInfo.key.toUpperCase()}_${studentId}.jpg`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        showToast("Sertifikat Cumlaude JPG berhasil diunduh!", "success");
+        showToast(`Sertifikat ${tierInfo.title} (JPG) berhasil diunduh!`, "success");
       } catch (err) {
-        console.error("Gagal mengunduh sertifikat Cumlaude:", err);
-        showToast("Gagal mengunduh gambar sertifikat Cumlaude!", "error");
+        console.error("Gagal mengunduh sertifikat kehormatan:", err);
+        showToast("Gagal mengunduh gambar sertifikat!", "error");
       }
     }
 
