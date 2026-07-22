@@ -3491,16 +3491,21 @@ textarea.form-control {
 @media (max-width: 768px) {
   .admin-tab-chat-el {
     flex-direction: column !important;
-    min-height: 550px !important;
+    min-height: 520px !important;
+    width: 100% !important;
   }
-  /* On mobile, left list takes full width by default */
+  /* On mobile, left list takes full width and full height by default */
   .admin-tab-chat-el > div:first-child {
     width: 100% !important;
+    min-height: 520px !important;
+    flex: 1 0 auto !important;
     display: flex !important;
   }
-  /* Right panel: Active Chat Window full width */
+  /* Right panel: Active Chat Window full width and full height */
   .admin-tab-chat-el > div:last-child {
     width: 100% !important;
+    min-height: 520px !important;
+    flex: 1 0 auto !important;
     display: flex !important;
   }
   

@@ -2005,8 +2005,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Name beautification
       let displayName = session.sessionId;
-      if (session.sessionId.startsWith('google-')) {
+      if (session.lastSender && session.lastSender !== 'Panitia SNM' && session.lastSender !== 'User' && session.lastSender !== 'Guest User') {
+        displayName = session.lastSender;
+      } else if (session.sessionId.startsWith('google-')) {
         displayName = session.sessionId.replace('google-', '').replace(/_/g, '.');
+      } else if (session.sessionId.startsWith('student-')) {
+        displayName = `Peserta (${session.sessionId.replace('student-', '').toUpperCase()})`;
       } else if (session.sessionId.startsWith('guest-')) {
         displayName = `Guest (${session.sessionId.replace('guest-', '').toUpperCase()})`;
       }
