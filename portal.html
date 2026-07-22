@@ -2464,7 +2464,217 @@
         }
       });
     }
+
+    // ==========================================
+    // CUSTOMER SERVICE FLOATING CHAT LOGIC (PORTAL)
+    // ==========================================
+    const chatBubble = document.getElementById('cs-chat-bubble');
+    const chatPanel = document.getElementById('cs-chat-panel');
+    const chatCloseBtn = document.getElementById('cs-chat-close-btn');
+    const chatInput = document.getElementById('cs-chat-input');
+    const chatSendBtn = document.getElementById('cs-chat-send-btn');
+    const chatBody = document.getElementById('cs-chat-body');
+    const chatUnreadBadge = document.getElementById('cs-chat-unread-badge');
+
+    let chatPollInterval = null;
+    let isChatOpen = false;
+    let lastReadTimestamp = localStorage.getItem('PPDB_CS_LAST_READ') ? parseInt(localStorage.getItem('PPDB_CS_LAST_READ'), 10) : 0;
+    let localMessagesCount = 0;
+
+    const getChatSessionId = () => {
+      if (currentStudent && currentStudent.id) {
+        return `student-${currentStudent.id.replace(/[@.]/g, '_')}`;
+      }
+      let guestId = localStorage.getItem('PPDB_CS_GUEST_ID');
+      if (!guestId) {
+        guestId = `guest-${Math.random().toString(36).substr(2, 9)}`;
+        localStorage.setItem('PPDB_CS_GUEST_ID', guestId);
+      }
+      return guestId;
+    };
+
+    const getChatSenderName = () => {
+      if (currentStudent && currentStudent.nama) {
+        return currentStudent.nama + ' (Portal)';
+      }
+      return 'Guest Student';
+    };
+
+    const loadChatMessages = async () => {
+      const sessionId = getChatSessionId();
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/${sessionId}`);
+        if (response.ok) {
+          const messages = await response.json();
+          renderChatMessages(messages);
+        }
+      } catch (error) {
+        console.error("Gagal memuat pesan chat:", error);
+      }
+    };
+
+    const renderChatMessages = (messages) => {
+      if (messages.length > localMessagesCount) {
+        localMessagesCount = messages.length;
+        if (!isChatOpen) {
+          let unreadCount = 0;
+          messages.forEach(msg => {
+            if (msg.sender === 'admin' && msg.timestamp > lastReadTimestamp) {
+              unreadCount++;
+            }
+          });
+          if (unreadCount > 0) {
+            chatUnreadBadge.innerText = unreadCount;
+            chatUnreadBadge.classList.remove('hidden');
+          }
+        }
+      }
+
+      const welcomeHTML = `<div class="cs-chat-welcome">Halo! Ada yang bisa kami bantu seputar portal sekolah? silakan kirim pesan di bawah ini.</div>`;
+      let html = welcomeHTML;
+
+      messages.forEach(msg => {
+        const isUser = msg.sender === 'user';
+        html += `
+          <div class="cs-chat-bubble-msg ${isUser ? 'user' : 'admin'}">
+            ${msg.message}
+          </div>
+        `;
+      });
+
+      const scrollHeightBefore = chatBody.scrollHeight;
+      chatBody.innerHTML = html;
+
+      if (chatBody.scrollHeight > scrollHeightBefore) {
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+    };
+
+    const sendChatMessage = async () => {
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      chatInput.value = '';
+      chatSendBtn.disabled = true;
+
+      const sessionId = getChatSessionId();
+      const senderName = getChatSenderName();
+
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/${sessionId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sender: 'user',
+            senderName: senderName,
+            message: message
+          })
+        });
+        if (response.ok) {
+          const messages = await response.json();
+          renderChatMessages(messages);
+        }
+      } catch (error) {
+        console.error("Gagal mengirim pesan chat:", error);
+      } finally {
+        chatSendBtn.disabled = false;
+        chatInput.focus();
+      }
+    };
+
+    if (chatBubble && chatPanel) {
+      chatBubble.addEventListener('click', () => {
+        isChatOpen = !isChatOpen;
+        chatPanel.classList.toggle('active', isChatOpen);
+
+        if (isChatOpen) {
+          if (window.innerWidth <= 480) {
+            document.body.style.overflow = 'hidden';
+          }
+          chatUnreadBadge.classList.add('hidden');
+          chatUnreadBadge.innerText = '0';
+          lastReadTimestamp = Date.now();
+          localStorage.setItem('PPDB_CS_LAST_READ', lastReadTimestamp);
+
+          loadChatMessages();
+          if (chatPollInterval) clearInterval(chatPollInterval);
+          chatPollInterval = setInterval(loadChatMessages, 3000);
+        } else {
+          document.body.style.overflow = '';
+          if (chatPollInterval) clearInterval(chatPollInterval);
+          chatPollInterval = setInterval(loadChatMessages, 15000);
+        }
+      });
+    }
+
+    if (chatCloseBtn) {
+      chatCloseBtn.addEventListener('click', () => {
+        isChatOpen = false;
+        chatPanel.classList.remove('active');
+        document.body.style.overflow = '';
+        if (chatPollInterval) clearInterval(chatPollInterval);
+        chatPollInterval = setInterval(loadChatMessages, 15000);
+      });
+    }
+
+    if (chatInput) {
+      chatInput.addEventListener('input', () => {
+        chatSendBtn.disabled = !chatInput.value.trim();
+      });
+
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !chatSendBtn.disabled) {
+          sendChatMessage();
+        }
+      });
+    }
+
+    if (chatSendBtn) {
+      chatSendBtn.addEventListener('click', sendChatMessage);
+    }
+
+    // Initial checks
+    setTimeout(() => {
+      loadChatMessages();
+      chatPollInterval = setInterval(loadChatMessages, 15000);
+    }, 2000);
   </script>
+
+  <!-- FLOATING CUSTOMER SERVICE CHAT WIDGET -->
+  <div id="cs-chat-widget" class="cs-chat-widget">
+    <button id="cs-chat-bubble" class="cs-chat-bubble" aria-label="Chat Customer Service">
+      <i class="fa-solid fa-comments"></i>
+      <span id="cs-chat-unread-badge" class="unread-badge hidden">0</span>
+    </button>
+    <div id="cs-chat-panel" class="cs-chat-panel">
+      <div class="cs-chat-header">
+        <div class="cs-chat-header-info">
+          <div class="cs-chat-avatar">
+            <i class="fa-solid fa-user-tie"></i>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="cs-chat-header-text">
+            <h4>Customer Service</h4>
+            <span><i class="fa-solid fa-circle" style="font-size: 6px; color: #10b981;"></i> Online</span>
+          </div>
+        </div>
+        <button id="cs-chat-close-btn" class="cs-chat-close-btn" aria-label="Tutup Chat">&times;</button>
+      </div>
+      <div id="cs-chat-body" class="cs-chat-body">
+        <div class="cs-chat-welcome">
+          Halo! Ada yang bisa kami bantu seputar portal sekolah? silakan kirim pesan di bawah ini.
+        </div>
+        <!-- Chat bubbles render here dynamically -->
+      </div>
+      <div class="cs-chat-footer">
+        <input type="text" id="cs-chat-input" class="cs-chat-input" placeholder="Tulis pesan Anda..."
+          aria-label="Tulis pesan">
+        <button id="cs-chat-send-btn" class="cs-chat-send-btn" disabled aria-label="Kirim Pesan">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
