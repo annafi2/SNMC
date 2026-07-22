@@ -566,17 +566,121 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. HOME STATS ANIMATOR
   // ==========================================
 
-  function updateHomeStats() {
+  const SCHOOL_META_LIST = [
+    { name: 'Sekolah Redstone Nasional', key: 'redstone', icon: 'fa-bolt', gradient: 'linear-gradient(135deg, #ef4444, #991b1b)', color: '#ef4444' },
+    { name: 'Sekolah Pertambangan', key: 'pertambangan', icon: 'fa-hammer', gradient: 'linear-gradient(135deg, #f59e0b, #b45309)', color: '#f59e0b' },
+    { name: 'Persatuan Farmercraft Velixir', key: 'farmer', icon: 'fa-wheat-awn', gradient: 'linear-gradient(135deg, #10b981, #047857)', color: '#10b981' },
+    { name: 'Institut PvP Mojang', key: 'pvp', icon: 'fa-shield-halved', gradient: 'linear-gradient(135deg, #06b6d4, #0e7490)', color: '#06b6d4' },
+    { name: 'Sekolah Builder', key: 'builder', icon: 'fa-cubes', gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)', color: '#a855f7' }
+  ];
+
+  async function getSchoolQuotasConfig() {
+    let savedQuotas = null;
+    try {
+      const res = await fetch(`${API_BASE}/api/settings/school_quotas`);
+      if (res.ok) {
+        savedQuotas = await res.json();
+      }
+    } catch(e) {}
+
+    if (!savedQuotas) {
+      try {
+        savedQuotas = JSON.parse(localStorage.getItem('PPDB_SCHOOL_QUOTAS') || '{}');
+      } catch(e) {}
+    }
+
+    const defaultQuotas = {
+      'Sekolah Redstone Nasional': 70,
+      'Sekolah Pertambangan': 70,
+      'Persatuan Farmercraft Velixir': 70,
+      'Institut PvP Mojang': 70,
+      'Sekolah Builder': 70
+    };
+
+    return { ...defaultQuotas, ...(savedQuotas || {}) };
+  }
+
+  async function updateHomeStats() {
     const applicants = getApplicants();
     const total = applicants.length;
-    const accepted = applicants.filter(a => a.status === 'Lolos').length;
-    const maxQuota = parseInt(localStorage.getItem('PPDB_QUOTA') || '350', 10);
-    const quotaLeft = Math.max(0, maxQuota - accepted);
+    const accepted = applicants.filter(a => a.status === 'Lolos' || a.status === 'Lulus').length;
+    const schoolQuotas = await getSchoolQuotasConfig();
+
+    // Calculate total allocated quotas from all 5 schools
+    let totalMaxQuota = 0;
+    SCHOOL_META_LIST.forEach(s => {
+      totalMaxQuota += parseInt(schoolQuotas[s.name] || 70, 10);
+    });
+
+    const quotaLeft = Math.max(0, totalMaxQuota - accepted);
 
     animateCounter('stat-total', total);
     animateCounter('stat-accepted', accepted);
     animateCounter('stat-quota', quotaLeft);
     animateCounter('stat-verified', accepted);
+
+    renderSchoolQuotaCards(applicants, schoolQuotas);
+  }
+
+  function renderSchoolQuotaCards(applicants, schoolQuotas) {
+    const grid = document.getElementById('school-quotas-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    SCHOOL_META_LIST.forEach(school => {
+      const schoolName = school.name;
+      const quota = parseInt(schoolQuotas[schoolName] || 70, 10);
+      
+      // Match applicants for this school
+      const schoolApplicants = applicants.filter(a => {
+        const sName = (a.sekolahMinecraft || '').toLowerCase().trim();
+        const target = schoolName.toLowerCase().trim();
+        return sName.includes(target) || target.includes(sName);
+      });
+
+      const acceptedCount = schoolApplicants.filter(a => a.status === 'Lolos' || a.status === 'Lulus').length;
+      const remaining = Math.max(0, quota - acceptedCount);
+      const percent = Math.min(100, Math.round((acceptedCount / quota) * 100)) || 0;
+
+      const card = document.createElement('div');
+      card.className = 'school-quota-card';
+      card.style.setProperty('--school-card-accent', school.color);
+
+      card.innerHTML = `
+        <div class="school-quota-card-header">
+          <div class="school-quota-card-icon" style="background: ${school.gradient};">
+            <i class="fa-solid ${school.icon}"></i>
+          </div>
+          <div class="school-quota-card-title">${schoolName}</div>
+        </div>
+        
+        <div class="school-quota-stats-row">
+          <span style="color: var(--text-muted);">Kuota Bangku:</span>
+          <span class="school-quota-stat-val">${quota} Kursi</span>
+        </div>
+
+        <div class="school-quota-stats-row">
+          <span style="color: var(--text-muted);">Siswa Lolos:</span>
+          <span class="school-quota-stat-val" style="color: ${school.color};">${acceptedCount} Siswa</span>
+        </div>
+
+        <div class="school-quota-progress-bg">
+          <div class="school-quota-progress-fill" style="width: ${percent}%; background: ${school.gradient};"></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+          <span class="school-quota-tag" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+            Terisi ${percent}%
+          </span>
+          <span class="school-quota-tag" style="background: ${remaining > 0 ? 'rgba(56, 189, 248, 0.12)' : 'rgba(239, 68, 68, 0.12)'}; color: ${remaining > 0 ? '#0284c7' : '#ef4444'}; font-weight: 800;">
+            ${remaining > 0 ? `Sisa ${remaining} Bangku` : 'Kuota Penuh'}
+          </span>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
   }
 
   function animateCounter(id, targetValue) {

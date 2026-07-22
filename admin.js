@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch all applicants from the Prisma backend API
   const fetchApplicantsFromServer = async () => {
     try {
+      await fetchAdminSchoolQuotas();
       const response = await fetch(`${API_BASE}/api/applicants`);
       if (response.ok) {
         // Hide warning if successful
@@ -325,7 +326,131 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const tableSearch = document.getElementById('admin-table-search');
   const filterStatus = document.getElementById('admin-filter-status');
+  const filterSekolah = document.getElementById('admin-filter-sekolah');
   const applicantsTableBody = document.getElementById('applicants-table-body');
+
+  const ADMIN_SCHOOL_META_LIST = [
+    { name: 'Sekolah Redstone Nasional', key: 'redstone', icon: 'fa-bolt', color: '#ef4444', gradient: 'linear-gradient(135deg, #ef4444, #991b1b)' },
+    { name: 'Sekolah Pertambangan', key: 'pertambangan', icon: 'fa-hammer', color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b, #b45309)' },
+    { name: 'Persatuan Farmercraft Velixir', key: 'farmer', icon: 'fa-wheat-awn', color: '#10b981', gradient: 'linear-gradient(135deg, #10b981, #047857)' },
+    { name: 'Institut PvP Mojang', key: 'pvp', icon: 'fa-shield-halved', color: '#06b6d4', gradient: 'linear-gradient(135deg, #06b6d4, #0e7490)' },
+    { name: 'Sekolah Builder', key: 'builder', icon: 'fa-cubes', color: '#a855f7', gradient: 'linear-gradient(135deg, #a855f7, #6b21a8)' }
+  ];
+
+  let adminSchoolQuotas = {
+    'Sekolah Redstone Nasional': 70,
+    'Sekolah Pertambangan': 70,
+    'Persatuan Farmercraft Velixir': 70,
+    'Institut PvP Mojang': 70,
+    'Sekolah Builder': 70
+  };
+
+  async function fetchAdminSchoolQuotas() {
+    try {
+      const res = await fetch(`${API_BASE}/api/settings/school_quotas`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          adminSchoolQuotas = { ...adminSchoolQuotas, ...data };
+        }
+      }
+    } catch(e) {}
+
+    try {
+      const localQuotas = JSON.parse(localStorage.getItem('PPDB_SCHOOL_QUOTAS') || '{}');
+      adminSchoolQuotas = { ...adminSchoolQuotas, ...localQuotas };
+    } catch(e) {}
+  }
+
+  async function saveAdminSchoolQuotas(newQuotas) {
+    adminSchoolQuotas = { ...adminSchoolQuotas, ...newQuotas };
+    localStorage.setItem('PPDB_SCHOOL_QUOTAS', JSON.stringify(adminSchoolQuotas));
+
+    try {
+      await fetch(`${API_BASE}/api/settings/school_quotas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value: adminSchoolQuotas })
+      });
+    } catch(e) {
+      console.error("Gagal menyimpan kuota sekolah ke API server:", e);
+    }
+  }
+
+  function renderAdminSchoolQuotaCards() {
+    const container = document.getElementById('admin-school-quotas-container');
+    if (!container) return;
+
+    const allApplicants = getApplicants();
+    container.innerHTML = '';
+
+    ADMIN_SCHOOL_META_LIST.forEach(school => {
+      const schoolName = school.name;
+      const quotaVal = adminSchoolQuotas[schoolName] !== undefined ? adminSchoolQuotas[schoolName] : 70;
+
+      // Filter applicants belonging to this school
+      const schoolApps = allApplicants.filter(a => {
+        const sName = (a.sekolahMinecraft || '').toLowerCase().trim();
+        const target = schoolName.toLowerCase().trim();
+        return sName.includes(target) || target.includes(sName);
+      });
+
+      // Sort descending by IRT / CBT score
+      schoolApps.sort((a, b) => (b.scoreIRT || b.scoreCBT || 0) - (a.scoreIRT || a.scoreCBT || 0));
+
+      const totalCount = schoolApps.length;
+      const acceptedCount = schoolApps.filter(a => a.status === 'Lolos' || a.status === 'Lulus').length;
+      const highestScore = schoolApps.length > 0 ? (schoolApps[0].scoreIRT !== null && schoolApps[0].scoreIRT !== undefined ? schoolApps[0].scoreIRT : (schoolApps[0].scoreCBT || 0)) : 0;
+      
+      // Passing cutoff (the score of the applicant at index quotaVal - 1)
+      let cutoffScore = '-';
+      if (schoolApps.length > 0) {
+        const cutoffApplicant = schoolApps[Math.min(quotaVal - 1, schoolApps.length - 1)];
+        if (cutoffApplicant && cutoffApplicant.scoreIRT !== null && cutoffApplicant.scoreIRT !== undefined) {
+          cutoffScore = `${cutoffApplicant.scoreIRT} Poin`;
+        }
+      }
+
+      const card = document.createElement('div');
+      card.style.cssText = `background: var(--bg-secondary); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow); border-top: 4px solid ${school.color};`;
+
+      card.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: ${school.gradient}; color: white; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+            <i class="fa-solid ${school.icon}"></i>
+          </div>
+          <div>
+            <h5 style="margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main);">${schoolName}</h5>
+            <span style="font-size: 11px; color: var(--text-muted);">${totalCount} Pendaftar Terdaftar</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; background: var(--bg-tertiary); padding: 10px; border-radius: var(--radius-sm);">
+          <div style="flex: 1;">
+            <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">Alokasi Kuota</label>
+            <input type="number" class="form-control admin-school-quota-input" data-school="${schoolName}" value="${quotaVal}" min="1" style="height: 32px; font-size: 13px; font-weight: 800;">
+          </div>
+          <div style="flex: 1; text-align: right;">
+            <span style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">Pendaftar Lolos</span>
+            <span style="font-size: 14px; font-weight: 800; color: ${school.color};">${acceptedCount} / ${quotaVal}</span>
+          </div>
+        </div>
+
+        <div style="font-size: 11.5px; line-height: 1.6; color: var(--text-main);">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px; margin-bottom: 4px;">
+            <span><i class="fa-solid fa-trophy" style="color: #f59e0b; margin-right: 4px;"></i> Skor IRT Tertinggi:</span>
+            <strong>${highestScore > 0 ? highestScore + ' Poin' : '-'}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span><i class="fa-solid fa-chart-line" style="color: #0284c7; margin-right: 4px;"></i> Cutoff Passing Grade:</span>
+            <strong>${cutoffScore}</strong>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
 
   function loadAdminDashboardData() {
     const applicants = getApplicants();
@@ -341,14 +466,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Stats Count
     const total = applicants.length;
-    const accepted = applicants.filter(a => a.status === 'Lolos').length;
-    const rejected = applicants.filter(a => a.status === 'Tidak Diterima').length;
+    const accepted = applicants.filter(a => a.status === 'Lolos' || a.status === 'Lulus').length;
+    const rejected = applicants.filter(a => a.status === 'Tidak Diterima' || a.status === 'Tidak Lulus').length;
 
     document.getElementById('astat-total').innerText = total;
     document.getElementById('astat-accepted').innerText = accepted;
     document.getElementById('astat-rejected').innerText = rejected;
 
     renderAdminCharts(applicants);
+    renderAdminSchoolQuotaCards();
     renderApplicantsTable(applicants);
     loadAdminQuestionsTable();
   }
@@ -431,19 +557,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const searchVal = tableSearch?.value.toLowerCase().trim() || '';
     const statusVal = filterStatus?.value || '';
+    const sekolahVal = (filterSekolah?.value || '').toLowerCase().trim();
 
     const sorted = [...applicants].sort((a, b) => (b.scoreIRT || 0) - (a.scoreIRT || 0));
 
     const filtered = sorted.filter(a => {
       const matchesSearch = a.nama.toLowerCase().includes(searchVal) || a.id.toLowerCase().includes(searchVal);
-      const matchesStatus = statusVal === '' || a.status === statusVal;
-      return matchesSearch && matchesStatus;
+      const matchesStatus = statusVal === '' || a.status === statusVal || (statusVal === 'Lolos' && a.status === 'Lulus') || (statusVal === 'Tidak Diterima' && a.status === 'Tidak Lulus');
+      const sName = (a.sekolahMinecraft || '').toLowerCase().trim();
+      const matchesSekolah = sekolahVal === '' || sName.includes(sekolahVal) || sekolahVal.includes(sName);
+      return matchesSearch && matchesStatus && matchesSekolah;
     });
 
     if (filtered.length === 0) {
       applicantsTableBody.innerHTML = `
         <tr>
-          <td colspan="6" class="text-center py-4 text-muted">Data pendaftar tidak ditemukan dengan filter saat ini.</td>
+          <td colspan="7" class="text-center py-4 text-muted">Data pendaftar tidak ditemukan dengan filter saat ini.</td>
         </tr>
       `;
       return;
@@ -454,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let badgeClass = 'status-rejected';
       let displayStatus = 'Tidak Lulus';
       
-      if (applicant.status === 'Lolos') {
+      if (applicant.status === 'Lolos' || applicant.status === 'Lulus') {
         badgeClass = 'status-accepted';
         displayStatus = 'Lulus';
       } else if (applicant.status === 'Dalam Proses') {
@@ -462,11 +591,13 @@ document.addEventListener('DOMContentLoaded', () => {
         displayStatus = 'Dalam Proses';
       }
       
-      const scoreText = applicant.scoreIRT !== null ? `${applicant.scoreIRT} Poin` : '<span style="color:#ef4444; font-weight: 600;">Belum Ujian</span>';
+      const scoreText = applicant.scoreIRT !== null && applicant.scoreIRT !== undefined ? `${applicant.scoreIRT} Poin` : '<span style="color:#ef4444; font-weight: 600;">Belum Ujian</span>';
+      const schoolText = applicant.sekolahMinecraft || '<span class="text-muted">-</span>';
 
       tr.innerHTML = `
         <td><strong>${applicant.id}</strong></td>
         <td>${applicant.nama}</td>
+        <td><span style="font-weight: 700; color: var(--school-accent, #0284c7);">${schoolText}</span></td>
         <td>${formatDateIndo(applicant.tanggalLahir)}</td>
         <td><span class="badge badge-secondary-soft" style="font-weight: 700;">${scoreText}</span></td>
         <td><span class="status-badge ${badgeClass}">${displayStatus}</span></td>
@@ -675,11 +806,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (tableSearch) tableSearch.addEventListener('input', loadAdminDashboardData);
   if (filterStatus) filterStatus.addEventListener('change', loadAdminDashboardData);
+  if (filterSekolah) filterSekolah.addEventListener('change', loadAdminDashboardData);
 
   // ==========================================
   // 7. BATCH OPERATIONAL ACTIONS (QUOTA / PASSING GRADE / RESET)
   // ==========================================
   
+  const schoolQuotaApplyBtn = document.getElementById('btn-apply-school-quotas');
+  if (schoolQuotaApplyBtn) {
+    schoolQuotaApplyBtn.addEventListener('click', async () => {
+      // 1. Read input values for each school
+      const quotaInputs = document.querySelectorAll('.admin-school-quota-input');
+      const updatedQuotas = {};
+
+      quotaInputs.forEach(input => {
+        const sName = input.getAttribute('data-school');
+        const val = parseInt(input.value, 10);
+        if (sName && !isNaN(val) && val > 0) {
+          updatedQuotas[sName] = val;
+        }
+      });
+
+      await saveAdminSchoolQuotas(updatedQuotas);
+
+      // 2. Fetch all applicants
+      let allApplicants = getApplicants();
+
+      // 3. For each school, sort by IRT score and assign top N to Lolos, rest to Tidak Diterima
+      ADMIN_SCHOOL_META_LIST.forEach(school => {
+        const schoolName = school.name;
+        const quotaVal = updatedQuotas[schoolName] !== undefined ? updatedQuotas[schoolName] : 70;
+
+        const schoolApps = allApplicants.filter(a => {
+          const sName = (a.sekolahMinecraft || '').toLowerCase().trim();
+          const target = schoolName.toLowerCase().trim();
+          return sName.includes(target) || target.includes(sName);
+        });
+
+        // Sort descending by scoreIRT / scoreCBT
+        schoolApps.sort((a, b) => (b.scoreIRT || b.scoreCBT || 0) - (a.scoreIRT || a.scoreCBT || 0));
+
+        // Assign statuses based on rank within this school
+        schoolApps.forEach((applicant, index) => {
+          applicant.status = index < quotaVal ? 'Lolos' : 'Tidak Diterima';
+        });
+      });
+
+      saveApplicants(allApplicants);
+      loadAdminDashboardData();
+      showToast(`Berhasil menerapkan kelulusan kuota untuk seluruh spesialisasi sekolah!`, 'success');
+
+      // Sync batch to server API Prisma DB
+      const updates = allApplicants.map(applicant => ({ id: applicant.id, status: applicant.status }));
+      try {
+        await fetch(`${API_BASE}/api/applicants/batch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates })
+        });
+        fetchApplicantsFromServer();
+      } catch (err) {
+        console.error("Gagal menerapkan kuota sekolah di server Prisma:", err);
+      }
+    });
+  }
+
   const quotaApplyBtn = document.getElementById('btn-apply-quota');
   if (quotaApplyBtn) {
     quotaApplyBtn.addEventListener('click', () => {

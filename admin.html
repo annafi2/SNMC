@@ -226,6 +226,26 @@
                   <button id="btn-apply-passing-grade" class="btn btn-outline" style="height: 38px;"><i
                       class="fa-solid fa-sliders"></i> Terapkan Passing Grade</button>
                 </div>
+            <!-- School Quota & Highest Score Filter Section -->
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border-color);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+                <div>
+                  <h4 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">
+                    <i class="fa-solid fa-school-flag" style="color: #10b981; margin-right: 6px;"></i> 
+                    Penentuan Kuota & Pemecahan Nilai Tertinggi per Sekolah
+                  </h4>
+                  <p style="font-size: 12.5px; color: var(--text-muted); margin: 0;">
+                    Atur kuota khusus untuk masing-masing sekolah dan tentukan kelulusan berdasarkan peringkat skor IRT tertinggi di setiap spesialisasi sekolah secara otomatis.
+                  </p>
+                </div>
+                <button id="btn-apply-school-quotas" class="btn btn-gradient" style="height: 38px;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Terapkan Kelulusan Kuota Semua Sekolah
+                </button>
+              </div>
+
+              <!-- Grid of 5 School Quota Input & Summary Cards -->
+              <div id="admin-school-quotas-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
+                <!-- Rendered dynamically by admin.js -->
               </div>
             </div>
           </div>
@@ -591,7 +611,15 @@
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" id="admin-table-search" placeholder="Cari Nama / ID Pendaftar...">
                 </div>
-                <div class="filter-dropdowns">
+                <div class="filter-dropdowns" style="display: flex; gap: 8px;">
+                  <select id="admin-filter-sekolah" class="form-control form-control-sm" style="min-width: 170px;">
+                    <option value="">Semua Sekolah</option>
+                    <option value="Sekolah Redstone Nasional">Sekolah Redstone</option>
+                    <option value="Sekolah Pertambangan">Sekolah Pertambangan</option>
+                    <option value="Persatuan Farmercraft Velixir">Farmercraft Velixir</option>
+                    <option value="Institut PvP Mojang">Institut PvP Mojang</option>
+                    <option value="Sekolah Builder">Sekolah Builder</option>
+                  </select>
                   <select id="admin-filter-status" class="form-control form-control-sm">
                     <option value="">Semua Status</option>
                     <option value="Lolos">Lulus</option>
@@ -611,6 +639,7 @@
                   <tr>
                     <th>ID Pendaftaran</th>
                     <th>Nama Pendaftar</th>
+                    <th>Sekolah Minecraft</th>
                     <th>Tanggal Lahir</th>
                     <th>Skor IRT</th>
                     <th>Status</th>
