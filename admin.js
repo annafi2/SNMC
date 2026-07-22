@@ -1871,6 +1871,10 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCbtMonitorTable();
       }
 
+      if (btn.getAttribute('data-target') === 'admin-tab-school-quotas') {
+        renderAdminSchoolQuotaCards();
+      }
+
       // Live chat toggles
       if (btn.getAttribute('data-target') === 'admin-tab-chat') {
         startAdminChatPolling();
