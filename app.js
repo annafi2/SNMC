@@ -1574,6 +1574,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sekolahEl) sekolahEl.innerText = student.sekolahMinecraft || '-';
     if (roleEl) roleEl.innerText = student.roleMinecraft || '-';
 
+    // Set Customized Avatar / Profile Photo
+    const avatarEl = document.getElementById('print-p-avatar');
+    if (avatarEl) {
+      const googleUser = getGoogleUser();
+      let photoUrl = '';
+      if (googleUser && googleUser.photoURL) {
+        photoUrl = googleUser.photoURL;
+      } else if (student.photoURL || student.customAvatar) {
+        photoUrl = student.photoURL || student.customAvatar;
+      } else {
+        photoUrl = `https://mc-heads.net/avatar/${encodeURIComponent(student.nama)}/150`;
+      }
+      avatarEl.src = photoUrl;
+    }
+
+    // Set dynamic QR code for Kartu Peserta
+    const cardQrEl = document.getElementById('print-p-qr');
+    if (cardQrEl) {
+      const qrContent = `${window.location.origin}/verify.html?id=${student.id}`;
+      cardQrEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(qrContent)}`;
+    }
+
     // Trigger open
     document.getElementById('print-slip-modal').classList.add('active');
   }
@@ -1813,10 +1835,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.getElementById('btn-download-slip-pdf').addEventListener('click', () => {
-    const id = document.getElementById('print-p-id').innerText || 'slip';
-    downloadPdfFromElement('print-slip-area', `Kartu_Peserta_${id}.pdf`, 'portrait');
-  });
+  const btnDownloadSlipJpg = document.getElementById('btn-download-slip-jpg') || document.getElementById('btn-download-slip-pdf');
+  if (btnDownloadSlipJpg) {
+    btnDownloadSlipJpg.addEventListener('click', () => {
+      const id = document.getElementById('print-p-id').innerText || 'slip';
+      downloadJpgFromElement('print-slip-area', `Kartu_Peserta_SNM2026_${id}.jpg`, 'landscape');
+    });
+  }
 
   document.getElementById('btn-download-cbt-pdf').addEventListener('click', () => {
     const id = document.getElementById('cbt-cert-id').innerText || 'cbt';

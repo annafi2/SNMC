@@ -2441,6 +2441,41 @@ textarea.form-control {
   line-height: 1.4;
 }
 
+/* --- MODERN LANDSCAPE PARTICIPANT CARD --- */
+.participant-card-landscape-container {
+  width: 920px;
+  min-width: 920px;
+  height: 480px;
+  min-height: 480px;
+  flex-shrink: 0;
+  background-color: #faf9f5 !important;
+  background-image: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.03) 0%, rgba(37, 99, 235, 0.08) 100%) !important;
+  border: 10px double #2563eb !important;
+  border-radius: 16px !important;
+  box-sizing: border-box !important;
+  padding: 30px 36px !important;
+  position: relative !important;
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif !important;
+  color: #1e293b !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+}
+
+.participant-card-landscape-container::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 2px solid rgba(37, 99, 235, 0.3);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
 /* --- PREMIUM LANDSCAPE CERTIFICATE --- */
 .certificate-landscape-container {
   width: 1000px;
