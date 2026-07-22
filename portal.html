@@ -1554,7 +1554,7 @@
         accent: '#f59e0b',
         glow: 'rgba(245, 158, 11, 0.2)',
         gradient: 'linear-gradient(135deg, #f59e0b, #b45309)',
-        icon: 'fa-pickaxe',
+        icon: 'fa-hammer',
         serverIp: 'mining.snm2026.net:25565',
         motto: '"Menggali Potensi Tersembunyi, Menemukan Kejayaan di Kedalaman Y=-58"',
         headmaster: 'Ir. Deepslate Ore Prospector',
@@ -1586,7 +1586,7 @@
         accent: '#06b6d4',
         glow: 'rgba(6, 182, 212, 0.2)',
         gradient: 'linear-gradient(135deg, #06b6d4, #0e7490)',
-        icon: 'fa-swords',
+        icon: 'fa-shield-halved',
         serverIp: 'pvp.snm2026.net:25565',
         motto: '"Keberanian, Disiplin, dan Ketangkasan Bertahan di Medan Tempur"',
         headmaster: 'Grandmaster PvP Sword Legend',
@@ -1815,6 +1815,19 @@
       // Update brand logo text to school name
       document.querySelectorAll('.logo-text').forEach(el => {
         el.innerText = displayName;
+      });
+
+      // Update brand logo icon & styling to match school concentration icon
+      const schoolIconClass = config.icon || 'fa-cube';
+      document.querySelectorAll('.logo-icon').forEach(el => {
+        el.innerHTML = `<i class="fa-solid ${schoolIconClass}"></i>`;
+        if (config.gradient) el.style.background = config.gradient;
+        if (config.glow) el.style.boxShadow = `0 0 12px ${config.glow}`;
+      });
+
+      // Update 3D rotating loader cube faces icon if visible
+      document.querySelectorAll('.cube-face').forEach(el => {
+        el.innerHTML = `<i class="fa-solid ${schoolIconClass}"></i>`;
       });
 
       // Update Points Display in UI & Honor Progress
