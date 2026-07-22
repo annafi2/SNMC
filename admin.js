@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="number" class="form-control admin-school-quota-input" data-school="${schoolName}" value="${quotaVal}" min="1" style="height: 32px; font-size: 13px; font-weight: 800;">
           </div>
           <div style="flex: 1; text-align: right;">
-            <span style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">Pendaftar Lolos</span>
+            <span style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">Player Lolos</span>
             <span style="font-size: 14px; font-weight: 800; color: ${school.color};">${acceptedCount} / ${quotaVal}</span>
           </div>
         </div>

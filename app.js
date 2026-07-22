@@ -661,8 +661,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="school-quota-stats-row">
-          <span style="color: var(--text-muted);">Siswa Lolos:</span>
-          <span class="school-quota-stat-val" style="color: ${school.color};">${acceptedCount} Siswa</span>
+          <span style="color: var(--text-muted);">Player Lolos:</span>
+          <span class="school-quota-stat-val" style="color: ${school.color};">${acceptedCount} Player</span>
         </div>
 
         <div class="school-quota-progress-bg">
